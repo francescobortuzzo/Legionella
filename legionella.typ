@@ -34,12 +34,9 @@ In particolare, i sistemi di basi di dati a grafo sembrano particolarmente adatt
 #parbreak()
 Questo documento mira a condurre un'analisi critica di un database relazionale nell'ambito delineato e a proporre un'alternativa attraverso l'impiego di un database a grafo. In particolare, si illustrerà il processo di modellazione, creazione e popolamento di un database a grafo utilizzando Neo4j per l'analisi dei dati sulla diffusione della legionella nella nostra regione.
 
-
-= Introduzione al batterio Legionella
-
-#parbreak()
-
-
+== Requisiti non strutturati
+== Requisiti strutturati
+== Glossario
 
 = Confronto tra modelli di basi di dati
 == Basi di dati relazionali
@@ -50,11 +47,7 @@ Questo documento mira a condurre un'analisi critica di un database relazionale n
 == Specifica di implementazione dei nodi
 == Specifica di implementazione delle relazioni
 (cypher)
-= Legionella
-== Introduzione al batterio
-== Requisiti non strutturati
-== Requisiti strutturati
-== Glossario
+
 
 = implementazione su base di dati a grafo
 == descrizione della struttura dei nodi
@@ -64,18 +57,10 @@ Questo documento mira a condurre un'analisi critica di un database relazionale n
 == operazioni
 == popolamento
 
-= Soluzione tradizionale vs soluzione a grafo
-confronto in termini di spazio occupato
-#linebreak()
-confronto tra complessità delle query
-#linebreak()
-confronto dei tempi
-
 = grafici
 = bibliografia
 
 = appunti
-sono reperibili i file sorgente del db relazionale? Se no lo implemento io?
 #linebreak()
 utilizzo la stessa notazione iden1x per la sezione dedicata al db relazionale
 #linebreak()
