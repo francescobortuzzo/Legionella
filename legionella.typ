@@ -45,22 +45,48 @@ In questo contesto, i sistemi di basi di dati giocano un ruolo fondamentale, in 
 In particolare, i sistemi di basi di dati a grafo sembrano particolarmente adatti per la modellazione e l'analisi di dati complessi, come quelli relativi alla diffusione della legionella poichè permettono di rappresentare le relazioni tra i dati in modo naturale e di effettuare ricerche complesse in modo efficiente.
 #parbreak()
 Questo documento mira a condurre un'analisi critica di un database relazionale nell'ambito delineato e a proporre un'alternativa attraverso l'impiego di un database a grafo. In particolare, si illustrerà il processo di modellazione, creazione e popolamento di un database a grafo, utilizzando Neo4j, per l'analisi dei dati sulla diffusione della legionella nella nostra regione.
+
 #pagebreak()
-= Analisi dei requisiti
-== Requisiti non strutturati
-Prima di poter procedere con la modellazione e l'implementazione del database, è necessario definire i requisiti non strutturati del sistema informativo. Questi requisiti sono di natura qualitativa e descrivono le caratteristiche che il sistema deve possedere per soddisfare le esigenze degli utenti e degli stakeholder. Nel nostro ambito i requisiti non strutturati riguardano l'intera fase di acquisizione dei dati relativi alla legionella. In particolare, i requisiti non strutturati del sistema informativo sono i seguenti:
+
+= Analisi critica del database relazionale
+Questa sezione è dedicata all'analisi critica di un database relazionale utilizzato per memorizzare i dati relativi alla diffusione della legionella. Il database oggetto di analisi è stato progettato dal dottor Dario Garlatti nell'ambito della sua tesi di laurea triennale in informatica, intitolata "Base di dati e applicazione web per il monitoraggio del batterio della legionella".
+
+==  Analisi dei requisiti
+Prima di procedere con lo studio del database, è necessario definire i requisiti del sistema informativo. Questi requisiti sono di natura qualitativa e descrivono le caratteristiche che il sistema deve possedere per soddisfare le esigenze degli utenti e degli stakeholder. Nel nostro contesto, i requisiti riguardano l'intera fase di acquisizione dei dati relativi alle e indagini ambientali per il monitoraggio del batterio legionella.
+
+=== Requisiti non strutturati
+In particolare, i requisiti non strutturati del sistema informativo sono i seguenti:
 
 Il sistema deve permettere la registrazione di indagini ambientali relative alla presenza di Legionella nei sistemi di aduzione e conservazione dell'acqua.
 #linebreak()
-Un'indagine ambientale consiste nel prelievo di campioni in un sito specifico, in una data stabilita, per analizzarli alla ricerca della presenza di Legionella.
+Un'indagine ambientale è caratterizzata dal tipo, dalla data e dal sito presso cui viene condotta ed è associata al richiedente, qualora si tratti di un'indagine di follow-up.
 #linebreak()
-Ognuno dei campioni prelevati deve essere associato a un sito specifico, a una data di prelievo e ad un codice identificativo univoco.
+Un sito è caratterizzato da un indirizzo e da una categoria.
+#linebreak()
+L'indagine consiste nel prelievo di campioni per analizzarli alla ricerca del batterio Legionella. Ognuno dei campioni prelevati è associato a una specifica indagine, è caratterizzato dal punto di prelievo all'interno del sito ed è identificato da un codice univoco.
 Tutti i campioni prelevati devono essere sottoposti a diverse analisi per determinare la presenza o l'assenza di Legionella:
 + PCR#footnote("Polymerase Chain Reaction, tecnica che consiste nell'amplificazione dei frammenti di acidi nucleici") qualitativa: permette di identificare la presenza del DNA di Legionella nei campioni prelevati.
-+ PCR quantitativa: permette di quantificare il numero di copie di DNA di Legionella presenti nei campioni prelevati.
-+ Coltura: permette di isolare e identificare le colonie di Legionella presenti nei campioni prelevati. 
++ PCR quantitativa: permette di quantificare la quantità di Legionella presente nei campioni prelevati (in µg/l.).
++ Analise colturale: permette di isolare e identificare le unità formanti colonia UFC_L e, nel caso in cui il campione risulti positivo al batterio, di determinare il sierogruppo.
 
-I risultati delle analisi devono essere registrati nel sistema informativo e associati ai campioni prelevati.
+
+=== Requisiti strutturati
+I requisiti strutturati del sistema informativo sono i seguenti:
+
+==== Frasi riguardanti l'indagine ambientale
+L'indagine ambientale è caratterizzata dal tipo, dalla data e dal sito presso cui viene condotta ed è associata al richiedente, qualora si tratti di un'indagine di follow-up. L'indagine consiste nel prelievo di campioni per analizzarli alla ricerca della presenza di Legionella.
+
+==== Frasi riguardanti i campioni
+Ognuno dei campioni prelevati deve essere associato a una specifica indagine ed è identificato da un codice univoco. Tutti i campioni prelevati devono essere sottoposti a diverse analisi per determinare la presenza o l'assenza di Legionella.
+
+==== Frasi riguardanti le analisi
+Tutti i campioni prelevati devono essere sottoposti a diverse analisi per determinare la presenza o l'assenza di Legionella:
++ PCR qualitativa: permette di identificare la presenza del DNA di Legionella nei campioni prelevati.
++ PCR quantitativa: permette di quantificare la quantità di Legionella presente nei campioni prelevati (in µg/l.).
++ Analise colturale: permette di isolare e identificare le unità formanti colonia UFC_L e, nel caso in cui il campione risulti positivo al batterio, di determinare il sierogruppo.
+
+
+
 
 
 == Requisiti strutturati
