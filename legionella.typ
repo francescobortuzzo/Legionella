@@ -85,14 +85,65 @@ Tutti i campioni prelevati devono essere sottoposti a diverse analisi per determ
 + PCR quantitativa: permette di quantificare la quantità di Legionella presente nei campioni prelevati (in µg/l.).
 + Analise colturale: permette di isolare e identificare le unità formanti colonia UFC_L e, nel caso in cui il campione risulti positivo al batterio, di determinare il sierogruppo.
 
+==== Frasi riguardanti i siti
+Un sito è caratterizzato da un indirizzo e da una categoria.
 
-
-
-
-== Requisiti strutturati
+#pagebreak()
 == Glossario
+Per facilitare la comprensione dei requisiti, è stato redatto un glossario contenente le definizioni dei termini tecnici utilizzati nel documento.
 
-= Confronto tra modelli di basi di dati
+#set par(justify: false)
+
+#figure(
+  supplement: "Tabella",
+  table(
+    columns: (auto, auto),
+    inset: 8pt,
+      
+    [*Termine*], [*Descrizione*],
+    [Campione], [Piccola quantità di acqua prelevata durante un'indagine ambientale],
+    [Campione Positivo], [Campione in cui è stata riscontrata una quantità misurabile di batteri della legionella],
+    [Categoria], [Categoria di appartenenza di un sito (es. ospedaliero termale, alberghiero)],
+    [Indagine Ambientale], [Indagine condotta per verificare la presenza di Legionella in un sito],
+    [PCR Qualitativa], [Esito dell'analisi che permette di identificare la presenza del DNA di Legionella],
+    [PCR Quantitativa], [ Esito dell'analisi che permette di quantificare la quantità di Legionella presente nei campioni],
+    [Analisi Colturale], [ Esito dell'analisi che permette di isolare e identificare le unità formanti colonia UFC_L],
+    [Richiedente], [Ente che richiede l'indagine ambientale],
+    [Sieogruppo], [Gruppo di sierotipi di Legionella. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2–15 e sierotipo sp],
+    [Sito], [Struttura presso cui viene condotta un'indagine ambientale], 
+    [indirizzo], [indirizzo del sito presso cui viene condotta un'indagine ambientale. Segue modello ANNCSU#footnote("Archivio Nazionale dei Numeri Civici e delle Strade Urbane")],
+  ),
+  caption: "Glossario delle entità",
+) <dictionary>
+
+
+//////////////////////////////////////////////////////////////////////////
+
+
+#figure(
+  supplement: "Tabella",
+  table(
+    columns: (auto, auto),
+    inset: 8pt,
+      
+    [*Termine*], [*Descrizione*],
+    [Esito], [Esito qualitativo dell'analisi di un campione di acqua prelevato durante un'indagine ambientale],
+    [FollowUp Clinico], [Dominio booleano che indica il tipo dell'indagine, ovvero se l'indagine è di follow-up clinico oppure se è avviata nell'ambito del normale piano di monitoraggio.],
+    [IDIndirizzo], [Segue modello ANNCSU],
+    [Indagine Ambientale], [Indagine condotta per verificare la presenza di Legionella in un sito],
+    [MetodoPrelievo], [Metodo utilizzato per prelevare i campioni di acqua durante un'indagine ambientale (istantaneo o quantitativo)],
+    [UFC_L], [valore numerico espresso in UFC per litro],
+    [UG_L], [valore numerico espresso in µg/l],
+    [Temperatura], [Dominio di due valori (caldo o freddo) che esprime la temperatura dell'acqua in cui è stato prelevato un campione ],
+  ),
+  caption: "Glossario dei domini",
+) <dictionary>
+
+#set par(justify: true)
+
+
+
+
 == Basi di dati relazionali
 == Basi di dati a grafo
 
