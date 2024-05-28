@@ -42,9 +42,9 @@ Sebbene la presenza del batterio abbia mostrato un trend crescente nel periodo c
 Al fine di analizzare i dati acquisiti e studiare la diffusione del batterio, è opportuno utilizzare un sistema informativo che permetta di memorizzare, gestire e interrogare i dati in modo efficiente. Tuttavia, in regione, il vasto numero di dati già raccolti non è stato organizzato in modo efficace e pertanto non è possibile effettuare ricerche senza prima ristrutturare e connettere i vari dataset.
 #linebreak()
 In questo contesto, i sistemi di basi di dati giocano un ruolo fondamentale, in quanto permettono di memorizzare grandi quantità di dati e di effettuare ricerche complesse in modo rapido ed efficiente.
-In particolare, i sistemi di basi di dati a grafo sembrano particolarmente adatti per la modellazione e l'analisi di dati complessi, come quelli relativi alla diffusione della legionella poichè permettono di rappresentare le relazioni tra i dati in modo naturale e di effettuare ricerche complesse in modo efficiente.
 #parbreak()
-Questo documento mira a condurre un'analisi critica di un database relazionale nell'ambito delineato e a proporre un'alternativa attraverso l'impiego di un database a grafo. In particolare, si illustrerà il processo di modellazione, creazione e popolamento di un database a grafo, utilizzando Neo4j, per l'analisi dei dati sulla diffusione della legionella nella nostra regione.
+// da rivedere quando si avrà chiara idea del modello di base di dati da implementare
+Questo documento ha l'obiettivo di condurre un'analisi critica di un database relazionale nel contesto delineato e di discuterne l'applicazione in un nuovo scenario derivante dall'ampliamento del dominio originale. In particolare, verranno esaminati i requisiti del sistema originali e quelli nuovi forniti da ARPA FVG, e sarà proposta una nuova implementazione del database per soddisfare tali requisiti.
 
 #pagebreak()
 
@@ -89,8 +89,6 @@ Tutti i campioni prelevati devono essere sottoposti a diverse analisi per determ
 Un sito è caratterizzato da un indirizzo e da una categoria.
 
 == Schema relazionale
-
-// Rifare lo schema relazionale con un software di modellazione ER e inserire l'immagine
 Per rappresentare i dati relativi alle indagini ambientali e alle analisi effettuate sui campioni prelevati, è stato progettato il seguente schema relazionale.
 
 #figure(
@@ -99,9 +97,37 @@ Per rappresentare i dati relativi alle indagini ambientali e alle analisi effett
   caption: [Diagramma ER],
 )
 
+#linebreak()
+== Notazione IDEF1X
+Lo schema è modellato tramite il linguaggio IDEF1X#footnote("Integration DEFinition for information modeling "). Tale linguaggio fa parte della famiglia dei linguaggi di modellazione IDEF#footnote("https://www.idef.com/").
+#linebreak()
+Alcune importanti caratteristiche della notazione IDEF1X sono le seguenti:
+
+==== Entità
+Le entità sono rappresentate da tabelle e contengono attributi che ne descrivono le proprietà. Ogni entità è identificata da una chiave primaria, che è un attributo o una combinazione di attributi che identifica univocamente ogni riga della tabella.
+Un'entità può essere indipendente, se è identificata senza determinare relazioni con altre entità, o dipendente se è priva di significatosenza un'altra istanza di entità associata.
+
+==== Relazioni di connessione
+Le relazioni di connessione, o associazioni, sono rappresentate da linee che collegano due entità e indicano l'esistenza di un legame tra di esse. In particolare si distinguonno due tipi di relazioni di connessione:
++ Associazioni identificative: indicano che l'entità figlia è identificata in relazione all'entità genitore, ovvero la chiave primaria dell'entità figlia contiene la chiave primaria dell'entità genitore. La relazione è rappresentata da una linea continua.
++ Associazioni non identificative: indicano che l'entità figlia è identificata in relazione all'entità genitore, ma la chiave primaria dell'entità figlia non contiene la chiave primaria dell'entità genitore. La relazione è rappresentata da una linea tratteggiata.
+La cardinalità delle associazioni è indicata con una lettera, nel seguente modo:
+- p indica una relazione uno a uno o molti
+- z identifica una relazione uno a zero o uno
+- n indica una relazione uno a esattamente n
+
+
+==== Relazioni di categorizzazione
+Le relazioni di categorizzazione sono rappresentate da linee che collegano un'entità genitore a una o più entità figlie. Queste relazioni indicano che le entità figlie condividono le proprietà dell'entità genitore, ma possiedono anche attributi specifici che le distinguono. Le entità di categoria sono mutuamente esclusive, pertanto sono contraddistinte da un attributo discriminatore che deve avere un valore unico per ciascuna entità di categoria.
+Si distinguono categorizzazioni complete, in cui ogni entità genitore deve essere associata a una entità figlia, indicate da un pallino vuoto e due linee e categorizzazioni incomplete, in cui un'entità genitore può non essere associata a nessuna entità figlia, indicate da un pallino pieno e una linea.
+
+
+
+
+
 #pagebreak()
 == Glossario
-Per facilitare la comprensione dello schema relazionale, è stato redatto un glossario contenente le definizioni dei termini tecnici utilizzati nel documento.
+Per facilitare la comprensione dello schema, è redatto il seguente glossario contenente le definizioni dei termini tecnici utilizzati nel documento.
 
 #set par(justify: false)
 
@@ -151,26 +177,9 @@ Per facilitare la comprensione dello schema relazionale, è stato redatto un glo
 
 #set par(justify: true)
 
-== Analisi critica del database
-L'analisi critica del database relazionale è finalizzata a valutare i punti di forza e di debolezza del sistema informativo progettato dal dottor Dario Garlatti. In particolare, si analizzeranno i seguenti aspetti:
 
-=== Struttura del database
-La struttura del database è stata progettata in modo da rappresentare le entità coinvolte nel processo di monitoraggio della legionella e le relazioni tra di esse. Tuttavia, la struttura del database presenta alcune criticità, tra cui:
+//necessario implementare un vincolo di integrità che assicuri che a un campione positivo sia associato un valore UG_L positivo.
 
-+ Ridondanza dei dati: A causa delle relazioni molti a molti nei database relazionali, alcune informazioni sono duplicate in più tabelle, aumentando la complessità del sistema e il rischio di errori. Per garantire la consistenza dei dati, è necessario implementare vincoli di integrità referenziale e procedure di aggiornamento specifiche.
-+ Schema poco flessibile: Lo schema del database è poco flessibile e non permette di gestire facilmente nuove entità o relazioni tra le entità.
-+ Complessità della gestione dei vincoli di integrità referenziale: Non solo la ridondanza dei dati, ma anche i legami indiretti tra alcune tabelle rendono difficile la gestione dei vincoli di integrità referenziale. Ad esempio, per garantire la consistenza dei dati registrati nelle tabelle PCR Qualitativa e PCR Quantitativa, è necessario implementare un vincolo di integrità che assicuri che a un campione positivo sia associato un valore UG_L positivo.
-/* + Difficile gestione di domini spaziali: La presenza di campioni prelevati in diversi punti all'interno di un sito e la necessità di associare un indirizzo a ciascun sito rendono difficile la gestione di domini spaziali nel database relazionale. */
-
-
-=== Interrogazioni
-Le relazioni tra le entità coinvolte nel processo di monitoraggio della legionella sono complesse e possono rendere difficile l'interrogazione del database e l'estrazione di informazioni significative. Ad esempio, per estrarre il livello di contaminazione dei campioni positivi è necessario effettuare una serie di join tra le tabelle coinvolte, aumentando esponenzialmente la complessità delle interrogazioni.
-
-
-== Conclusioni
-L'analisi ha evidenziato alcune criticità nella struttura del sistema informativo relazionale. In particolare, la ridondanza dei dati, la rigidezza dello schema, la complessità della gestione dei vincoli di integrità referenziale e la complessità delle interrogazioni possono rappresentare dei limiti per l'efficace gestione e analisi dei dati relativi alla diffusione della legionella.
-#linebreak()
-Al fine di superare queste criticità e migliorare l'efficienza del sistema informativo, si propone di implementare un database a grafo per la memorizzazione e l'analisi dei dati sulla diffusione della legionella. In particolare, si utilizzerà Neo4j, un database a grafo open source, per modellare, creare e popolare il database e per effettuare interrogazioni complesse in modo efficiente.
 
 
 
