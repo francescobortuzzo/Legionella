@@ -175,6 +175,7 @@ Al fine di superare queste criticità e migliorare l'efficienza del sistema info
 
 
 = Neo4j
+@GraphDatabases 
 == Specifica di implementazione dei nodi
 == Specifica di implementazione delle relazioni
 (cypher)
@@ -193,10 +194,5 @@ Al fine di superare queste criticità e migliorare l'efficienza del sistema info
 #bibliography("bibliografia.bib", title: "Bibliografia", style: "apa")
 
 = appunti
-#linebreak()
-utilizzo la stessa notazione iden1x per la sezione dedicata al db relazionale
-#linebreak()
-come popolare il db relazionale
-#linebreak()
-genero qualche grafico per studiare i dati del db o faccio il confronto solamente tra gli aspetti principali dei due modelli
+
 
