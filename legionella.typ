@@ -52,7 +52,7 @@ Questo documento ha l'obiettivo di condurre un'analisi critica di un database re
 Questa sezione è dedicata all'analisi critica di un database relazionale utilizzato per memorizzare i dati relativi alla diffusione della legionella. Il database oggetto di analisi è stato progettato dal dottor Dario Garlatti nell'ambito della sua tesi di laurea triennale in informatica, intitolata "Base di dati e applicazione web per il monitoraggio del batterio della legionella".
 
 ==  Analisi dei requisiti
-Prima di procedere con lo studio del database, è necessario definire i requisiti del sistema informativo. Questi requisiti sono di natura qualitativa e descrivono le caratteristiche che il sistema deve possedere per soddisfare le esigenze degli utenti e degli stakeholder. Nel nostro contesto, i requisiti riguardano l'intera fase di acquisizione dei dati relativi alle e indagini ambientali per il monitoraggio del batterio legionella.
+Prima di procedere con lo studio del database, è necessario definire i requisiti del sistema informativo. Questi requisiti sono di natura qualitativa e descrivono le caratteristiche che il sistema deve possedere per soddisfare le esigenze degli utenti e degli stakeholder. I requisiti alla base della progettazione della soluzione in analisi riguardano l'intera fase di acquisizione dei dati relativi alle e indagini ambientali per il monitoraggio del batterio legionella.
 
 === Requisiti non strutturati
 In particolare, i requisiti non strutturati del sistema informativo sono i seguenti:
@@ -89,7 +89,7 @@ Tutti i campioni prelevati devono essere sottoposti a diverse analisi per determ
 Un sito è caratterizzato da un indirizzo e da una categoria.
 
 == Schema relazionale
-Per rappresentare i dati relativi alle indagini ambientali e alle analisi effettuate sui campioni prelevati, è stato progettato il seguente schema relazionale.
+Di seguito è riportato lo schema concettuale-logico del database in esame
 
 #figure(
   supplement: "Figura",
@@ -97,15 +97,15 @@ Per rappresentare i dati relativi alle indagini ambientali e alle analisi effett
   caption: [Diagramma ER],
 )
 
-#linebreak()
-== Notazione IDEF1X
+#pagebreak()
+=== Notazione IDEF1X
 Lo schema è modellato tramite il linguaggio IDEF1X#footnote("Integration DEFinition for information modeling "). Tale linguaggio fa parte della famiglia dei linguaggi di modellazione IDEF#footnote("https://www.idef.com/").
 #linebreak()
 Alcune importanti caratteristiche della notazione IDEF1X sono le seguenti:
 
 ==== Entità
 Le entità sono rappresentate da tabelle e contengono attributi che ne descrivono le proprietà. Ogni entità è identificata da una chiave primaria, che è un attributo o una combinazione di attributi che identifica univocamente ogni riga della tabella.
-Un'entità può essere indipendente, se è identificata senza determinare relazioni con altre entità, o dipendente se è priva di significatosenza un'altra istanza di entità associata.
+Un'entità può essere indipendente, se è identificata senza determinare relazioni con altre entità, o dipendente se è priva di significato senza un'altra istanza di entità associata.
 
 ==== Relazioni di connessione
 Le relazioni di connessione, o associazioni, sono rappresentate da linee che collegano due entità e indicano l'esistenza di un legame tra di esse. In particolare si distinguonno due tipi di relazioni di connessione:
