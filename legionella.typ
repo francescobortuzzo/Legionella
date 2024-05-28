@@ -88,9 +88,20 @@ Tutti i campioni prelevati devono essere sottoposti a diverse analisi per determ
 ==== Frasi riguardanti i siti
 Un sito è caratterizzato da un indirizzo e da una categoria.
 
+== Schema relazionale
+
+// Rifare lo schema relazionale con un software di modellazione ER e inserire l'immagine
+Per rappresentare i dati relativi alle indagini ambientali e alle analisi effettuate sui campioni prelevati, è stato progettato il seguente schema relazionale.
+
+#figure(
+  supplement: "Figura",
+  image("Relazionale_Screen.png", width: 100%),
+  caption: [Diagramma ER],
+)
+
 #pagebreak()
 == Glossario
-Per facilitare la comprensione dei requisiti, è stato redatto un glossario contenente le definizioni dei termini tecnici utilizzati nel documento.
+Per facilitare la comprensione dello schema relazionale, è stato redatto un glossario contenente le definizioni dei termini tecnici utilizzati nel documento.
 
 #set par(justify: false)
 
@@ -102,7 +113,6 @@ Per facilitare la comprensione dei requisiti, è stato redatto un glossario cont
       
     [*Termine*], [*Descrizione*],
     [Campione], [Piccola quantità di acqua prelevata durante un'indagine ambientale],
-    [Campione Positivo], [Campione in cui è stata riscontrata una quantità misurabile di batteri della legionella],
     [Categoria], [Categoria di appartenenza di un sito (es. ospedaliero termale, alberghiero)],
     [Indagine Ambientale], [Indagine condotta per verificare la presenza di Legionella in un sito],
     [PCR Qualitativa], [Esito dell'analisi che permette di identificare la presenza del DNA di Legionella],
@@ -112,6 +122,7 @@ Per facilitare la comprensione dei requisiti, è stato redatto un glossario cont
     [Sieogruppo], [Gruppo di sierotipi di Legionella. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2–15 e sierotipo sp],
     [Sito], [Struttura presso cui viene condotta un'indagine ambientale], 
     [indirizzo], [indirizzo del sito presso cui viene condotta un'indagine ambientale. Segue modello ANNCSU#footnote("Archivio Nazionale dei Numeri Civici e delle Strade Urbane")],
+    [Punto di prelievo],[ Punto all'interno del sito in cui è stato prelevato un campione di acqua],
   ),
   caption: "Glossario delle entità",
 ) <dictionary>
@@ -141,6 +152,7 @@ Per facilitare la comprensione dei requisiti, è stato redatto un glossario cont
 
 #set par(justify: true)
 
+== Analisi critica del da
 
 
 
