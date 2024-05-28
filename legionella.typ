@@ -119,9 +119,9 @@ Per facilitare la comprensione dello schema relazionale, è stato redatto un glo
     [PCR Quantitativa], [ Esito dell'analisi che permette di quantificare la quantità di Legionella presente nei campioni],
     [Analisi Colturale], [ Esito dell'analisi che permette di isolare e identificare le unità formanti colonia UFC_L],
     [Richiedente], [Ente che richiede l'indagine ambientale],
-    [Sieogruppo], [Gruppo di sierotipi di Legionella. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2–15 e sierotipo sp],
+    [Sieogruppo], [Gruppo di sierotipi di Legionella. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp],
     [Sito], [Struttura presso cui viene condotta un'indagine ambientale], 
-    [indirizzo], [indirizzo del sito presso cui viene condotta un'indagine ambientale. Segue modello ANNCSU#footnote("Archivio Nazionale dei Numeri Civici e delle Strade Urbane")],
+    [Indirizzo], [indirizzo del sito presso cui viene condotta un'indagine ambientale. Segue modello ANNCSU#footnote("Archivio Nazionale dei Numeri Civici e delle Strade Urbane")],
     [Punto di prelievo],[ Punto all'interno del sito in cui è stato prelevato un campione di acqua],
   ),
   caption: "Glossario delle entità",
@@ -140,24 +140,38 @@ Per facilitare la comprensione dello schema relazionale, è stato redatto un glo
     [*Termine*], [*Descrizione*],
     [Esito], [Esito qualitativo dell'analisi di un campione di acqua prelevato durante un'indagine ambientale],
     [FollowUp Clinico], [Dominio booleano che indica il tipo dell'indagine, ovvero se l'indagine è di follow-up clinico oppure se è avviata nell'ambito del normale piano di monitoraggio.],
-    [IDIndirizzo], [Segue modello ANNCSU],
-    [Indagine Ambientale], [Indagine condotta per verificare la presenza di Legionella in un sito],
-    [MetodoPrelievo], [Metodo utilizzato per prelevare i campioni di acqua durante un'indagine ambientale (istantaneo o quantitativo)],
+    [MetodoPrelievo], [Dominio di due valori che spcifica il metodo utilizzato per prelevare i campioni di acqua durante un'indagine ambientale (istantaneo o quantitativo)],
     [UFC_L], [valore numerico espresso in UFC per litro],
     [UG_L], [valore numerico espresso in µg/l],
-    [Temperatura], [Dominio di due valori (caldo o freddo) che esprime la temperatura dell'acqua in cui è stato prelevato un campione ],
+    [Temperatura], [Dominio di due valori (caldo o freddo) che esprime la temperatura dell'acqua in cui è stato prelevato un campione],
+    [Sierotipo], [Dominio di tre valori che definisce il gruppo di sierotipi di Legionella (sierotipo 1, sierotipo 2-15, sierotipo sp)],
   ),
   caption: "Glossario dei domini",
 ) <dictionary>
 
 #set par(justify: true)
 
-== Analisi critica del da
+== Analisi critica del database
+L'analisi critica del database relazionale è finalizzata a valutare i punti di forza e di debolezza del sistema informativo progettato dal dottor Dario Garlatti. In particolare, si analizzeranno i seguenti aspetti:
+
+=== Struttura del database
+La struttura del database è stata progettata in modo da rappresentare le entità coinvolte nel processo di monitoraggio della legionella e le relazioni tra di esse. Tuttavia, la struttura del database presenta alcune criticità, tra cui:
+
++ Ridondanza dei dati: A causa delle relazioni molti a molti nei database relazionali, alcune informazioni sono duplicate in più tabelle, aumentando la complessità del sistema e il rischio di errori. Per garantire la consistenza dei dati, è necessario implementare vincoli di integrità referenziale e procedure di aggiornamento specifiche.
++ Schema poco flessibile: Lo schema del database è poco flessibile e non permette di gestire facilmente nuove entità o relazioni tra le entità.
++ Complessità della gestione dei vincoli di integrità referenziale: Non solo la ridondanza dei dati, ma anche i legami indiretti tra alcune tabelle rendono difficile la gestione dei vincoli di integrità referenziale. Ad esempio, per garantire la consistenza dei dati registrati nelle tabelle PCR Qualitativa e PCR Quantitativa, è necessario implementare un vincolo di integrità che assicuri che a un campione positivo sia associato un valore UG_L positivo.
+/* + Difficile gestione di domini spaziali: La presenza di campioni prelevati in diversi punti all'interno di un sito e la necessità di associare un indirizzo a ciascun sito rendono difficile la gestione di domini spaziali nel database relazionale. */
 
 
+=== Interrogazioni
+Le relazioni tra le entità coinvolte nel processo di monitoraggio della legionella sono complesse e possono rendere difficile l'interrogazione del database e l'estrazione di informazioni significative. Ad esempio, per estrarre il livello di contaminazione dei campioni positivi è necessario effettuare una serie di join tra le tabelle coinvolte, aumentando esponenzialmente la complessità delle interrogazioni.
 
-== Basi di dati relazionali
-== Basi di dati a grafo
+
+== Conclusioni
+L'analisi ha evidenziato alcune criticità nella struttura del sistema informativo relazionale. In particolare, la ridondanza dei dati, la rigidezza dello schema, la complessità della gestione dei vincoli di integrità referenziale e la complessità delle interrogazioni possono rappresentare dei limiti per l'efficace gestione e analisi dei dati relativi alla diffusione della legionella.
+#linebreak()
+Al fine di superare queste criticità e migliorare l'efficienza del sistema informativo, si propone di implementare un database a grafo per la memorizzazione e l'analisi dei dati sulla diffusione della legionella. In particolare, si utilizzerà Neo4j, un database a grafo open source, per modellare, creare e popolare il database e per effettuare interrogazioni complesse in modo efficiente.
+
 
 
 = Neo4j
