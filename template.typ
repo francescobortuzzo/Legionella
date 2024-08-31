@@ -58,23 +58,10 @@
     ),
   )
 
-  // Theorems.
-  show figure.where(kind: "theorem"): it => block(above: 11.5pt, below: 11.5pt, {
-    strong({
-      it.supplement
-      if it.numbering != none {
-        [ ]
-        counter(heading).display()
-        it.counter.display(it.numbering)
-      }
-      [.]
-    })
-    emph(it.body)
-  })
   
 
   // Main body.
-  set par(justify: true)
+  set par(justify: true, first-line-indent: 1em)
   set text(hyphenate: false)
 
   body

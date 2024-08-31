@@ -19,20 +19,20 @@
 == Introduzione al batterio Legionella
 
 Il batterio legionella è un bacillo gram-negativo aerobio, non mobile, che prospera in ambienti acquatici e umidi, sia naturali, come acque sorgive, termali, di fiumi o laghi, sia artificiali, come tubature, serbatoi, fontane e piscine. Legionella è in grado di sopravvivere in una vasta gamma di condizioni ambientali, tra cui temperature comprese tra venti e quarantacinque gradi Celsius, pH neutro o leggermente alcalino, e presenza di nutrienti organici.
-
+#linebreak()
 Il genere comprende sessantadue specie diverse, suddivise in settantuno sierotipi, di cui circa venti sono patogeni per l'uomo. La specie più comune è Legionella pneumophila, responsabile della maggior parte dei casi riportati di legionellosi#footnote("Legionellosi, o malattia del legionario, è una malattia infettiva che si presenta con sintomi simili all'influenza, come febbre, tosse, dolori muscolari e mal di testa. In alcuni casi, può evolvere in una forma polmonare, con sintomi analoghi a quelli della polmonite, e comportare complicazioni gravi, come polmonite atipica o decesso."). La malattia può essere contratta inalando aerosol contenenti il batterio, come quelli prodotti da docce, fontane, impianti di condizionamento o umidificatori.
 
-È quindi di fondamentale importanza monitorare la diffusione di questo batterio negli ambienti umidi e acquatici. Particolare attenzione deve essere rivolta alle strutture ospedaliere, termali e alberghiere, che rappresentano per loro natura ambienti a rischio di diffusione del batterio.
+È quindi di fondamentale importanza monitorare la diffusione di questo batterio negli ambienti umidi e acquatici; particolare attenzione deve essere rivolta alle strutture ospedaliere, termali e alberghiere, che rappresentano per loro natura ambienti a rischio di diffusione del batterio.
 
 #parbreak()
 
 == Legionella in Friuli Venezia Giulia
 A livello europeo, la raccolta di dati relativi alla presenza del batterio è effettuata dall'ECDC#footnote("Centro europeo per la prevenzione e il controllo delle malattie, istituito nel 2005."). Nel nostro Paese, invece, questa attività è svolta da diversi enti e istituzioni. Un contributo significativo proviene dall'Istituto Superiore di Sanità e dai vari organismi che costituiscono il SNPA#footnote("Sistema Nazionale per la Protezione dell'Ambiente"), di cui fa parte l'ARPA FVG#footnote("Agenzia Regionale per la Protezione dell'Ambiente Friuli Venezia Giulia").
-
+#linebreak()
 I dati raccolti sono utilizzati per valutare il rischio di diffusione del batterio e adottare le misure di prevenzione e controllo indicate dal Ministero della Salute nelle _Linee guida per la prevenzione
-ed il controllo della legionellosi_@LineeGuida.
+ed il controllo della legionellosi_#footnote[#cite(<LineeGuida>, form: "full")].
 
-In questo ambito, l'ARPA FVG ha effettuato numerose indagini sul territorio e ha pubblicato i risultati in vari report. Ad esempio, nel 2019, una collaborazione con l'Università degli Studi di Udine ha portato alla pubblicazione di un articolo@EnvironmentalSurveillance, relativo alla presenza di legionella nei sistemi di raccolta e distribuzione dell'acqua nella regione. Lo studio ha coperto un periodo di sedici anni, dal 2002 al 2017, durante il quale sono stati raccolti e analizzati 20.319 campioni attraverso 3.983 indagini ambientali.
+In questo ambito, l'ARPA FVG ha effettuato numerose indagini sul territorio e ha pubblicato i risultati in vari report. Ad esempio, nel 2019, una collaborazione con l'Università degli Studi di Udine ha portato alla pubblicazione di un articolo#footnote[#cite(<EnvironmentalSurveillance>, form: "full")], relativo alla presenza di legionella nei sistemi di raccolta e distribuzione dell'acqua nella regione. Lo studio ha coperto un periodo di sedici anni, dal 2002 al 2017, durante il quale sono stati raccolti e analizzati 20.319 campioni attraverso 3.983 indagini ambientali.
 #linebreak()
 I risultati riferiti alle indagini non clinciche e dunque eseguite routinariamente nell'ambito del piano regionale di sorveglianza ambientale, hanno evidenziato che la presenza di legionella è diffusa sopratutto nei cluster di impianti termali, nei quali il batterio è stato individuato nel 57,8% dei siti indagati, e ospedalieri, in cui nel 50,8% delle strutture è stata riscontrata la legionella almeno una volta, con picchi dei campioni positivi soprattutto nei mesi che segnano l'inizio del periodo autunnale.
 #linebreak()
@@ -67,11 +67,9 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
     [Campione], [Piccola quantità di acqua da sottoporre a esame],
     [Categoria], [Classificazione di un sito, o più specificamente di un edificio, in base alla sua destinazione d'uso, come ad esempio ospedaliero, termale o alberghiero],
     [Componente idraulica], [Componente di un sistema idraulico da cui viene prelevato un campione di acqua, come un rubinetto o un filtro di un impianto di condizionamento],
-    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale, che valuta l'opportunità di campionamenti ambientali sulla base della valutazione del rischio (_l.g.p.c.l. , p.30_)],
+    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale, che valuta l'opportunità di campionamenti ambientali sulla base della valutazione del rischio #footnote[#cite(<LineeGuida>,form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30")],],
     [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica],
-    [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di legionella in un campione],
-    [PCR Quantitativa], [Esame di laboratorio che rileva e quantifica il DNA o l'RNA di legionella presenti in un campione],
-    [Richiedente], [Ente o istituzione che ha richiesto un'indagine ambientale],
+    [PCR],[Polymerase Chain Reaction, è una «tecnica di laboratorio per produrre rapidamente (amplificare) milioni o miliardi di copie di uno specifico segmento di DNA, che può poi essere studiato in modo più dettagliato. La PCR prevede l'uso di brevi frammenti di DNA sintetico chiamati primer per selezionare un segmento del genoma da amplificare, e quindi più cicli di sintesi del DNA per amplificare quel segmento»#footnote[#cite(<PCR>, form: "full")].],
     ),
   caption: "Glossario",
 ) <dictionary>
@@ -83,7 +81,10 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
     inset: 8pt,
 
     [*Termine*], [*Definizione*],
-    [Sieotipo], [Livello di classificazione di batteri di legionella inferiore a quello specie. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp (sin. sierogruppo)],
+    [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di legionella in un campione],
+    [PCR Quantitativa], [Esame di laboratorio che rileva e quantifica il DNA o l'RNA di legionella presenti in un campione],
+    [Richiedente], [Ente o istituzione che ha richiesto un'indagine ambientale],
+    [Sierotipo], [Livello di classificazione di batteri di legionella inferiore a quello specie. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp (sin. sierogruppo)],
     [Sito], [Edificio presso il quale è condotta un'indagine ambientale],
     [UFC_L], [Unità formanti colonie per litro, unità di misura utilizzata per indicare la concentrazione di Legionella in un campione d'acqua destinato all'analisi colturale.],
     [UG_L], [Microgrammi per litro, unità di misura utilizzata per determinare la concentrazione di Legionella in un campione d'acqua mediante PCR quantitativa.],
@@ -104,19 +105,19 @@ In questa sezione si procede a un'analisi critica di un database relazionale uti
 Prima di procedere con lo studio del database, è necessario definire i requisiti del sistema informativo. Questi requisiti sono di natura qualitativa e descrivono le caratteristiche che il sistema deve possedere per soddisfare le esigenze degli utenti e degli stakeholder. I requisiti alla base della progettazione della soluzione in analisi riguardano l'intera fase di acquisizione dei dati relativi alle indagini ambientali portate a termine dai ricercatori dell'ARPA FVG, per il monitoraggio della legionella in regione.
 
 === Requisiti non strutturati
-In particolare, i requisiti non strutturati del sistema informativo in esame sono i seguenti:
-
-Il sistema deve permettere la registrazione di indagini ambientali relative alla presenza di legionella nei sistemi di aduzione e conservazione dell'acqua.
+Il sistema deve consentire la registrazione delle indagini ambientali riguardanti la presenza di Legionella nei sistemi di adduzione e conservazione dell'acqua.
 #linebreak()
-Un'indagine ambientale è caratterizzata dal tipo, dalla data e dal sito presso cui viene condotta ed è associata al richiedente, qualora si tratti di un'indagine di follow-up.
+Un'indagine ambientale è definita dal tipo, dalla data e dal sito presso cui viene eseguita, ed è associata al richiedente nel caso di indagine di follow-up.
 #linebreak()
-Un sito è caratterizzato da un indirizzo e da una categoria.
+Un sito è identificato dall'indirizzo e dalla categoria a cui appartiene.
 #linebreak()
-L'indagine consiste nel prelievo di campioni per analizzarli alla ricerca del batterio Legionella. Ognuno dei campioni prelevati è associato a una specifica indagine, è caratterizzato dal punto di prelievo all'interno del sito ed è identificato da un codice univoco.
-Tutti i campioni prelevati devono essere sottoposti a diverse analisi per determinare la presenza o l'assenza di Legionella:
-+ PCR#footnote("Polymerase Chain Reaction, tecnica che consiste nell'amplificazione dei frammenti di acidi nucleici") qualitativa: permette di identificare la presenza del DNA di Legionella nei campioni prelevati.
-+ PCR quantitativa: permette di quantificare la quantità di Legionella presente nei campioni prelevati (in µg/l.).
-+ Analise colturale: permette di isolare e identificare le unità formanti colonia UFC_L e, nel caso in cui il campione risulti positivo al batterio, di determinare il sierogruppo.
+L'indagine comprende il prelievo di campioni che saranno analizzati per rilevare la presenza del batterio legionella. Ciascun campione prelevato è collegato a una specifica indagine, caratterizzato dal punto di prelievo all'interno del sito, e identificato da un codice univoco.
+#linebreak()
+Tutti i campioni prelevati devono essere sottoposti a diverse analisi per accertare la presenza o l'assenza di legionella:
+#linebreak()
++ PCR qualitativa: una tecnica di reazione a catena della polimerasi che consente di rilevare la presenza del DNA di Legionella nei campioni prelevati.
++ PCR quantitativa: permette di misurare la concentrazione di legionella nei campioni prelevati (espressa in µg/l).
++ Analisi colturale: consente di isolare e identificare le unità formanti colonia (UFC_L) e, nel caso in cui il campione risulti positivo al batterio, di determinare il sierogruppo.
 
 
 === Requisiti strutturati
@@ -158,18 +159,46 @@ La cardinalità delle associazioni è indicata con una lettera, come segue:
 
 
 ==== Relazioni di categorizzazione
-Le relazioni di categorizzazione sono rappresentate da linee che collegano un'entità genitore a una o più entità figlie. Queste relazioni indicano che le entità figlie condividono le proprietà dell'entità genitore, ma possiedono anche attributi specifici che le distinguono. Le entità di categoria sono mutuamente esclusive, pertanto sono contraddistinte da un attributo discriminatore che deve avere un valore unico per ciascuna entità di categoria.
-Si distinguono categorizzazioni complete, in cui ogni entità genitore deve essere associata a una entità figlia, indicate da un pallino vuoto e due linee e categorizzazioni incomplete, in cui un'entità genitore può non essere associata a nessuna entità figlia, indicate da un pallino pieno e una linea.
-
-
-
+Le relazioni di categorizzazione sono rappresentate da linee che collegano un'entità genitore a una o più entità figlie. Queste relazioni indicano che le entità figlie ereditano le proprietà dell'entità genitore, ma dispongono anche di attributi distintivi. Le entità categoria#footnote("entità che costituisce un sottotipo di un'altra") sono mutuamente esclusive e, pertanto, sono contraddistinte da un attributo discriminatore che deve assumere un valore unico per ciascuna entità categoria.
+#linebreak()
+Si distinguono due tipologie di categorizzazione:
++ Categorizzazioni complete: Ogni entità genitore deve essere associata a una entità figlia. Queste sono rappresentate da un pallino vuoto e due linee.
++ Categorizzazioni incomplete: Un'entità genitore può non essere associata a nessuna entità figlia. Queste sono indicate da un pallino pieno e una linea.
 #pagebreak()
 
+
+
+=== Schema concettuale-logico
 #figure(
   supplement: "Figura",
   image("Relazionale_Screen.png", width: 100%),
   caption: [Diagramma ER],
 )
+
+== Analisi dello schema
+Lo schema illustrato è stato concepito per rispondere ai requisiti di memorizzazione dei dati relativi alla diffusione della legionella. Tuttavia, durante una prima fase di analisi del database, sono stati individuati alcuni difetti che necessitano di un'accurata valutazione e di una possibile revisione dello schema. È altresì fondamentale considerare le nuove esigenze emerse durante i colloqui con i ricercatori dell'ARPA FVG.
+
+==== Considerazioni
+Alcune entità, come indirizzo e categoria, sono state modellate come entità indipendenti, ma potrebbero essere meglio gestite come attributi dell'entità sito. Questo approccio semplificherebbe lo schema e ne migliorerebbe la chiarezza strutturale. In particolare, l'attributo descrizione dell'entità categoria potrebbe risultare superfluo, poiché il nome della categoria dovrebbe essere sufficiente a identificarla in maniera univoca. Inoltre, l'introduzione di un attributo "nome" per l'entità sito potrebbe agevolare la consultazione dei dati, soprattutto nel caso di riferimenti a ospedali, che sono generalmente identificati dalla combinazione di nome e città, piuttosto che solo dall'indirizzo.
+#linebreak()
+Un ulteriore punto di riflessione riguarda l'associazione dell'entità richiedente alle indagini. Contrariamente a quanto indicato nei requisiti, si propone che l'entità richiedente possa essere collegata anche a indagini che non siano di follow-up. Inoltre, si suggerisce l'introduzione di un'entità _follow-up clinico_, che potrebbe essere associata a una o più indagini ambientali. Questa modifica risulterebbe particolarmente utile nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe quindi particolarmente vantaggiosa.
+#linebreak()
+Relativamente all'entità _campione_, sarebbe opportuno considerare l'introduzione di un attributo "volume" che consenta di specificare la quantità d'acqua prelevata per l'analisi. Pur non essendo strettamente indispensabile, tale attributo potrebbe risultare utile per definire parametri di riferimento riguardanti il prelievo dei campioni, come ad esempio il volume minimo d'acqua necessario per condurre tutte le analisi previste.
+#linebreak()
+Si suggerisce, infine, di invertire la disposizione delle entità indagine ambientale e campione all'interno dello schema. La definizione del punto di prelievo di un campione in relazione a un sito consente di stabilire un collegamento diretto tra il punto di prelievo e il sito stesso, mentre l'indagine ambientale, come specificato nel glossario, rappresenta un insieme di campioni raccolti in un sito in una data specifica. Questa riorganizzazione semplificherebbe la struttura dello schema, mettendo in evidenza la relazione geografica tra il punto di prelievo di un campione e il sito.
+
+A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica ER, che permette di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.
+
+
+#figure(
+  supplement: "Figura",
+  image("er_base.png", width: 100%),
+  caption: [Diagramma ER],
+)
+
+
+==== Nuovi requisiti
+
 
 
 //necessario implementare un vincolo di integrità che assicuri che a un campione positivo sia associato un valore UG_L positivo.
