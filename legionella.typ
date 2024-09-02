@@ -49,7 +49,7 @@ In particolare, verrà effettuata un'analisi critica di una soluzione esistente 
 
 #pagebreak()
 
-= Glossario
+= Glossario <glossario>
 Al fine di facilitare la comprensione del documento, è redatto il seguente glossario contenente le definizioni dei termini tecnici utilizzati.
 
 #set par(justify: false)
@@ -67,9 +67,9 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
     [Campione], [Piccola quantità di acqua da sottoporre a esame],
     [Categoria], [Classificazione di un sito, o più specificamente di un edificio, in base alla sua destinazione d'uso, come ad esempio ospedaliero, termale o alberghiero],
     [Componente idraulica], [Componente di un sistema idraulico da cui viene prelevato un campione di acqua, come un rubinetto o un filtro di un impianto di condizionamento],
+    [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame. (sin. tabella)],
     [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale, che valuta l'opportunità di campionamenti ambientali sulla base della valutazione del rischio #footnote[#cite(<LineeGuida>,form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30")],],
     [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica],
-    [PCR],[Polymerase Chain Reaction, è una «tecnica di laboratorio per produrre rapidamente (amplificare) milioni o miliardi di copie di uno specifico segmento di DNA, che può poi essere studiato in modo più dettagliato. La PCR prevede l'uso di brevi frammenti di DNA sintetico chiamati primer per selezionare un segmento del genoma da amplificare, e quindi più cicli di sintesi del DNA per amplificare quel segmento»#footnote[#cite(<PCR>, form: "full")].],
     ),
   caption: "Glossario",
 ) <dictionary>
@@ -81,8 +81,10 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
     inset: 8pt,
 
     [*Termine*], [*Definizione*],
+    [PCR],[Polymerase Chain Reaction, è una «tecnica di laboratorio per produrre rapidamente (amplificare) milioni o miliardi di copie di uno specifico segmento di DNA, che può poi essere studiato in modo più dettagliato. La PCR prevede l'uso di brevi frammenti di DNA sintetico chiamati primer per selezionare un segmento del genoma da amplificare, e quindi più cicli di sintesi del DNA per amplificare quel segmento»#footnote[#cite(<PCR>, form: "full")].],
     [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di legionella in un campione],
     [PCR Quantitativa], [Esame di laboratorio che rileva e quantifica il DNA o l'RNA di legionella presenti in un campione],
+    [Relazione],[In riferimento allo schema E-R, legame che rappresenta la connessione logica, e significativa per la realtà modellata, tra due o più entità.],
     [Richiedente], [Ente o istituzione che ha richiesto un'indagine ambientale],
     [Sierotipo], [Livello di classificazione di batteri di legionella inferiore a quello specie. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp (sin. sierogruppo)],
     [Sito], [Edificio presso il quale è condotta un'indagine ambientale],
@@ -95,7 +97,7 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
 
 #pagebreak()
 
-
+#set par(justify: true)
 
 = Analisi critica del database relazionale
 Come accennato nel capitolo introduttivo, una delle principali sfide riscontrate nell'attuale sistema di gestione dei dati riguarda la realizzazione di soluzioni efficienti per la memorizzazione delle informazioni raccolte durante le indagini ambientali.
@@ -164,7 +166,6 @@ Le relazioni di categorizzazione sono rappresentate da linee che collegano un'en
 Si distinguono due tipologie di categorizzazione:
 + Categorizzazioni complete: Ogni entità genitore deve essere associata a una entità figlia. Queste sono rappresentate da un pallino vuoto e due linee.
 + Categorizzazioni incomplete: Un'entità genitore può non essere associata a nessuna entità figlia. Queste sono indicate da un pallino pieno e una linea.
-#pagebreak()
 
 
 
@@ -175,29 +176,34 @@ Si distinguono due tipologie di categorizzazione:
   caption: [Diagramma ER],
 )
 
+#pagebreak()
 == Analisi dello schema
-Lo schema illustrato è stato concepito per rispondere ai requisiti di memorizzazione dei dati relativi alla diffusione della legionella. Tuttavia, durante una prima fase di analisi del database, sono stati individuati alcuni difetti che necessitano di un'accurata valutazione e di una possibile revisione dello schema. È altresì fondamentale considerare le nuove esigenze emerse durante i colloqui con i ricercatori dell'ARPA FVG.
+Lo schema illustrato è stato concepito per rispondere ai requisiti di memorizzazione dei dati relativi alla diffusione della legionella. Tuttavia, durante una prima fase di analisi del database, sono stati individuati alcuni difetti che richiedono un'accurata valutazione e una potenziale revisione dello schema.
 
 ==== Considerazioni
-Alcune entità, come indirizzo e categoria, sono state modellate come entità indipendenti, ma potrebbero essere meglio gestite come attributi dell'entità sito. Questo approccio semplificherebbe lo schema e ne migliorerebbe la chiarezza strutturale. In particolare, l'attributo descrizione dell'entità categoria potrebbe risultare superfluo, poiché il nome della categoria dovrebbe essere sufficiente a identificarla in maniera univoca. Inoltre, l'introduzione di un attributo "nome" per l'entità sito potrebbe agevolare la consultazione dei dati, soprattutto nel caso di riferimenti a ospedali, che sono generalmente identificati dalla combinazione di nome e città, piuttosto che solo dall'indirizzo.
+Alcune entità, come _indirizzo_ e _categoria_, sono state inizialmente progettate come entità autonome, ma potrebbe essere più efficace trattarle come attributi dell'entità _sito_. Questo approccio non solo semplificherebbe lo schema, ma migliorerebbe anche la sua chiarezza strutturale. In particolare, l'attributo descrizione dell'entità _categoria_ è superfluo, poiché il nome della categoria dovrebbe bastare a identificarla in modo univoco. Inoltre, l'aggiunta di un attributo "nome" all'entità _sito_ potrebbe facilitare la consultazione dei dati, specialmente per quanto riguarda gli ospedali, che sono generalmente riconosciuti dalla combinazione di nome e città, piuttosto che unicamente dall'indirizzo.
+In aggiunta, si propone di arricchire l'entità sito con nuovi attributi che ne descrivano le caratteristiche principali nel contesto specifico. Questi attributi includerebbero dettagli sull'impiantistica del sito, come la tipologia di caldaia, il materiale delle tubature, l'uso del cloro, e altre informazioni di carattere generale, come l'anno dell'ultima ristrutturazione.
 #linebreak()
-Un ulteriore punto di riflessione riguarda l'associazione dell'entità richiedente alle indagini. Contrariamente a quanto indicato nei requisiti, si propone che l'entità richiedente possa essere collegata anche a indagini che non siano di follow-up. Inoltre, si suggerisce l'introduzione di un'entità _follow-up clinico_, che potrebbe essere associata a una o più indagini ambientali. Questa modifica risulterebbe particolarmente utile nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe quindi particolarmente vantaggiosa.
+Un ulteriore elemento di riflessione riguarda l'associazione dell'entità _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si propone che l'entità _richiedente_ possa essere messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
 #linebreak()
-Relativamente all'entità _campione_, sarebbe opportuno considerare l'introduzione di un attributo "volume" che consenta di specificare la quantità d'acqua prelevata per l'analisi. Pur non essendo strettamente indispensabile, tale attributo potrebbe risultare utile per definire parametri di riferimento riguardanti il prelievo dei campioni, come ad esempio il volume minimo d'acqua necessario per condurre tutte le analisi previste.
+Per quanto concerne l'entità _campione_, è opportuno valutare l'introduzione di un attributo "volume" per specificare la quantità d'acqua prelevata per l'analisi. Sebbene non strettamente necessario, tale attributo trova pertinenza nel definire parametri di riferimento relativi al prelievo dei campioni, come il volume minimo d'acqua richiesto per eseguire tutte le analisi previste.
 #linebreak()
-Si suggerisce, infine, di invertire la disposizione delle entità indagine ambientale e campione all'interno dello schema. La definizione del punto di prelievo di un campione in relazione a un sito consente di stabilire un collegamento diretto tra il punto di prelievo e il sito stesso, mentre l'indagine ambientale, come specificato nel glossario, rappresenta un insieme di campioni raccolti in un sito in una data specifica. Questa riorganizzazione semplificherebbe la struttura dello schema, mettendo in evidenza la relazione geografica tra il punto di prelievo di un campione e il sito.
+Infine,  si propone di riorganizzare la disposizione delle entità indagine ambientale e campione all'interno dello schema. In particolare, per come definita nella @glossario[sezione], un'indagine ambientale non è altro che una collezione di campioni prelevati in un sito specifico in una data determinata. Pertanto, risulta più coerente associare solo l'entità _campione_ alle informazioni spaziali contenute nelle tabelle _punto di prelievo_ e _sito_. Si noti che tale modifica comporta l'introduzione di un vincolo di integrità che stabilisce che tutti i campioni associati a un'indagine devono essere prelevati nello stesso sito.
+#linebreak()
+In questo contesto, appare vantaggioso apportare una lieve modifica alla struttura delle entità _sito_ e _punto di prelievo_ nel modo seguente: si consiglia di aggiungere l'attributo coordinate all'entità sito, associandolo a una coppia di coordinate, ad esempio riferite al centro geografico o all'ingresso principale dell'edificio, che costituirebbero una chiave per l'entità. Inoltre, l'entità punto di prelievo potrebbe essere trasformata in un'entità debole rispetto al sito, implicitando il vincolo imposto dall'associazione di un punto di prelievo a un sito, secondo il quale un punto di prelievo deve essere situato all'interno del perimetro del sito di cui fa parte. Al _punto di prelievo_ potrebbero essere associati attributi che ne descrivano la posizione all'interno del sito, come il piano, la stanza o il tipo di componente idraulico, da cui è stato prelevato il campione.
 
-A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica ER, che permette di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.
+Complessivamente, gli adeguamenti proposti esercitano un impatto positivo sulla gestione dei vincoli di integrità del database, poiché risultano logicamente più immediati e più facili da implementare rispetto alle soluzioni precedenti, e contribuiscono a fornire una visione ordinata e completa dei dati relativi alla diffusione della legionella.
+
+A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica ER, che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.
 
 
 #figure(
   supplement: "Figura",
-  image("er_base.png", width: 100%),
+  image("er_base_v2.png", width: 100%),
   caption: [Diagramma ER],
 )
 
-
-==== Nuovi requisiti
+ È altresì fondamentale considerare le nuove esigenze emerse durante i colloqui con i ricercatori dell'ARPA FVG.
 
 
 
