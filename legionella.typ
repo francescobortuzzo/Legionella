@@ -68,7 +68,7 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
     [Categoria], [Classificazione di un sito, o più specificamente di un edificio, in base alla sua destinazione d'uso, come ad esempio ospedaliero, termale o alberghiero],
     [Componente idraulica], [Componente di un sistema idraulico da cui viene prelevato un campione di acqua, come un rubinetto o un filtro di un impianto di condizionamento],
     [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame. (sin. tabella)],
-    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale, che valuta l'opportunità di campionamenti ambientali sulla base della valutazione del rischio #footnote[#cite(<LineeGuida>,form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30")],],
+    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]],
     [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica],
     ),
   caption: "Glossario",
@@ -180,7 +180,7 @@ Si distinguono due tipologie di categorizzazione:
 == Analisi dello schema
 Lo schema illustrato è stato concepito per rispondere ai requisiti di memorizzazione dei dati relativi alla diffusione della legionella. Tuttavia, durante una prima fase di analisi del database, sono stati individuati alcuni difetti che richiedono un'accurata valutazione e una potenziale revisione dello schema.
 
-==== Considerazioni
+=== Considerazioni e proposte di modifica
 Alcune entità, come _indirizzo_ e _categoria_, sono state inizialmente progettate come entità autonome, ma potrebbe essere più efficace trattarle come attributi dell'entità _sito_. Questo approccio non solo semplificherebbe lo schema, ma migliorerebbe anche la sua chiarezza strutturale. In particolare, l'attributo descrizione dell'entità _categoria_ è superfluo, poiché il nome della categoria dovrebbe bastare a identificarla in modo univoco. Inoltre, l'aggiunta di un attributo "nome" all'entità _sito_ potrebbe facilitare la consultazione dei dati, specialmente per quanto riguarda gli ospedali, che sono generalmente riconosciuti dalla combinazione di nome e città, piuttosto che unicamente dall'indirizzo.
 In aggiunta, si propone di arricchire l'entità sito con nuovi attributi che ne descrivano le caratteristiche principali nel contesto specifico. Questi attributi includerebbero dettagli sull'impiantistica del sito, come la tipologia di caldaia, il materiale delle tubature, l'uso del cloro, e altre informazioni di carattere generale, come l'anno dell'ultima ristrutturazione.
 #linebreak()
@@ -194,6 +194,9 @@ In questo contesto, appare vantaggioso apportare una lieve modifica alla struttu
 
 Complessivamente, gli adeguamenti proposti esercitano un impatto positivo sulla gestione dei vincoli di integrità del database, poiché risultano logicamente più immediati e più facili da implementare rispetto alle soluzioni precedenti, e contribuiscono a fornire una visione ordinata e completa dei dati relativi alla diffusione della legionella.
 
+
+=== Nuova versione ///CAMBIA TITOLO
+
 A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica ER, che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.
 
 
@@ -203,32 +206,14 @@ A seguito di queste considerazioni, si propone una revisione dello schema. La nu
   caption: [Diagramma ER],
 )
 
- È altresì fondamentale considerare le nuove esigenze emerse durante i colloqui con i ricercatori dell'ARPA FVG.
 
+#pagebreak()
+È altresì fondamentale considerare le nuove esigenze emerse durante i colloqui con i ricercatori dell'ARPA FVG.
 
 
 //necessario implementare un vincolo di integrità che assicuri che a un campione positivo sia associato un valore UG_L positivo.
 
-
-
-
-= Neo4j
-@GraphDatabases 
-== Specifica di implementazione dei nodi
-== Specifica di implementazione delle relazioni
-(cypher)
-
-
-= implementazione su base di dati a grafo
-== descrizione della struttura dei nodi
-== descrizione delle relazioni tra nodi
-(introduzione di uno schema generale con nodi e relazioni tra essi)
-== implementazione
-== operazioni
-== popolamento
-
-= grafici
-
+#pagebreak()
 #bibliography("bibliografia.bib", title: "Bibliografia", style: "apa")
 
 = appunti
