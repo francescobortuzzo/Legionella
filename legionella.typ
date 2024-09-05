@@ -1,14 +1,6 @@
 #import "template.typ": *
 
-#show: project.with(
-  title: "Laboratorio Basi di Dati",
-  authors: (
-    (name: "Bortuzzo Francesco", email: "francesco.bortuzzo@spes.uniud.it", identification_number: "157430"),
-  ),
-  abstract: [],
-  
-  date: "Anno accademico 2023/2024",
-)
+#show: template
 
 #set heading(numbering: "1.1.")
 #outline(title: [Indice], indent: true, depth: 2)
@@ -18,7 +10,7 @@
 = Introduzione e obiettivo del progetto
 == Introduzione al batterio Legionella
 
-Il batterio legionella è un bacillo gram-negativo aerobio, non mobile, che prospera in ambienti acquatici e umidi, sia naturali, come acque sorgive, termali, di fiumi o laghi, sia artificiali, come tubature, serbatoi, fontane e piscine. Legionella è in grado di sopravvivere in una vasta gamma di condizioni ambientali, tra cui temperature comprese tra venti e quarantacinque gradi Celsius, pH neutro o leggermente alcalino, e presenza di nutrienti organici.
+Il batterio legionella è un bacillo gram-negativo aerobio, non mobile, che prospera in ambienti acquatici e umidi, sia naturali, come acque sorgive, termali, di fiumi o laghi, sia artificiali, come tubature, serbatoi, fontane e piscine. La legionella è in grado di sopravvivere in una vasta gamma di condizioni ambientali, tra cui temperature comprese tra venti e quarantacinque gradi Celsius, pH neutro o leggermente alcalino, e presenza di nutrienti organici.
 #linebreak()
 Il genere comprende sessantadue specie diverse, suddivise in settantuno sierotipi, di cui circa venti sono patogeni per l'uomo. La specie più comune è Legionella pneumophila, responsabile della maggior parte dei casi riportati di legionellosi#footnote("Legionellosi, o malattia del legionario, è una malattia infettiva che si presenta con sintomi simili all'influenza, come febbre, tosse, dolori muscolari e mal di testa. In alcuni casi, può evolvere in una forma polmonare, con sintomi analoghi a quelli della polmonite, e comportare complicazioni gravi, come polmonite atipica o decesso."). La malattia può essere contratta inalando aerosol contenenti il batterio, come quelli prodotti da docce, fontane, impianti di condizionamento o umidificatori.
 
@@ -68,8 +60,6 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
     [Categoria], [Classificazione di un sito, o più specificamente di un edificio, in base alla sua destinazione d'uso, come ad esempio ospedaliero, termale o alberghiero],
     [Componente idraulica], [Componente di un sistema idraulico da cui viene prelevato un campione di acqua, come un rubinetto o un filtro di un impianto di condizionamento],
     [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame. (sin. tabella)],
-    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]],
-    [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica],
     ),
   caption: "Glossario",
 ) <dictionary>
@@ -81,19 +71,32 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
     inset: 8pt,
 
     [*Termine*], [*Definizione*],
+    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]],
+    [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica],
     [PCR],[Polymerase Chain Reaction, è una «tecnica di laboratorio per produrre rapidamente (amplificare) milioni o miliardi di copie di uno specifico segmento di DNA, che può poi essere studiato in modo più dettagliato. La PCR prevede l'uso di brevi frammenti di DNA sintetico chiamati primer per selezionare un segmento del genoma da amplificare, e quindi più cicli di sintesi del DNA per amplificare quel segmento»#footnote[#cite(<PCR>, form: "full")].],
     [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di legionella in un campione],
-    [PCR Quantitativa], [Esame di laboratorio che rileva e quantifica il DNA o l'RNA di legionella presenti in un campione],
+    [PCR Quantitativa], [Esame di laboratorio rapido che rileva e quantifica il DNA o l'RNA di legionella presenti in un campione. (sin. Real-Time PCR)],
     [Relazione],[In riferimento allo schema E-R, legame che rappresenta la connessione logica, e significativa per la realtà modellata, tra due o più entità.],
     [Richiedente], [Ente o istituzione che ha richiesto un'indagine ambientale],
+  ),
+  caption: "Glossario",
+) <dictionary>
+
+#figure(
+  supplement: none,
+  table(
+    columns: (135pt, auto),
+    inset: 8pt,
+      
+    [*Termine*], [*Definizione*],
     [Sierotipo], [Livello di classificazione di batteri di legionella inferiore a quello specie. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp (sin. sierogruppo)],
     [Sito], [Edificio presso il quale è condotta un'indagine ambientale],
     [UFC_L], [Unità formanti colonie per litro, unità di misura utilizzata per indicare la concentrazione di Legionella in un campione d'acqua destinato all'analisi colturale.],
     [UG_L], [Microgrammi per litro, unità di misura utilizzata per determinare la concentrazione di Legionella in un campione d'acqua mediante PCR quantitativa.],
-
   ),
   caption: "Glossario",
 ) <dictionary>
+
 
 #pagebreak()
 
@@ -120,6 +123,8 @@ Tutti i campioni prelevati devono essere sottoposti a diverse analisi per accert
 + PCR qualitativa: una tecnica di reazione a catena della polimerasi che consente di rilevare la presenza del DNA di Legionella nei campioni prelevati.
 + PCR quantitativa: permette di misurare la concentrazione di legionella nei campioni prelevati (espressa in µg/l).
 + Analisi colturale: consente di isolare e identificare le unità formanti colonia (UFC_L) e, nel caso in cui il campione risulti positivo al batterio, di determinare il sierogruppo.
+Si segnala che la PCR non costituisce un metodo diagnostico definitivo per la legionellosi, ma piuttosto un test di screening che necessita di conferma attraverso la coltura. Infatti, «poiché, così come specificato nella norma ISO “_Water quality- Detection and quantification of Legionella spp and/or Legionella pneumophila by concentration and genic amplification by quantitative polymerase chain reaction (qPCR)_” (ISO/TS 12869, 2012), la qPCR non da informazione riguardo lo stato delle cellule, la quantificazione dovrà sempre essere determinata mediante esame colturale»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 21"))].
+I metodi analitici impiegati per la rilevazione del batterio, descritti nell'allegato 4 delle Linee Guida per la prevenzione e il controllo della legionellosi, variano a seconda della matrice da analizzare (acqua, biofilm, aria); tuttavia, i risultati ottenuti sono espressi in maniera uniforme, indipendentemente dalla tipologia di analisi condotta.
 
 
 === Requisiti strutturati
@@ -167,16 +172,15 @@ Si distinguono due tipologie di categorizzazione:
 + Categorizzazioni complete: Ogni entità genitore deve essere associata a una entità figlia. Queste sono rappresentate da un pallino vuoto e due linee.
 + Categorizzazioni incomplete: Un'entità genitore può non essere associata a nessuna entità figlia. Queste sono indicate da un pallino pieno e una linea.
 
-
-
+#pagebreak()
 === Schema concettuale-logico
 #figure(
   supplement: "Figura",
-  image("Relazionale_Screen.png", width: 100%),
+  image("/img/Relazionale_Screen.png", width: 100%),
   caption: [Diagramma ER],
 )
 
-#pagebreak()
+
 == Analisi dello schema
 Lo schema illustrato è stato concepito per rispondere ai requisiti di memorizzazione dei dati relativi alla diffusione della legionella. Tuttavia, durante una prima fase di analisi del database, sono stati individuati alcuni difetti che richiedono un'accurata valutazione e una potenziale revisione dello schema.
 
@@ -186,7 +190,10 @@ In aggiunta, si propone di arricchire l'entità sito con nuovi attributi che ne 
 #linebreak()
 Un ulteriore elemento di riflessione riguarda l'associazione dell'entità _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si propone che l'entità _richiedente_ possa essere messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
 #linebreak()
+Si osserva che l'entità _follow-up clinico_ potrebbe essere ulteriormente arricchita con attributi volti a descrivere il paziente e la sua esposizione al rischio, quali la data di insorgenza dei sintomi, il luogo di residenza, il luogo di lavoro e le attività svolte nei dieci giorni precedenti l'insorgenza dei sintomi. Questi dettagli, tuttavia, non sono modellati nello schema attuale né saranno inclusi nello schema finale, poiché non sono stati considerati nei requisiti né approfonditi con i ricercatori. Tuttavia, potrebbero rivelarsi utili per una valutazione più accurata del rischio di diffusione del batterio.
+#linebreak()
 Per quanto concerne l'entità _campione_, è opportuno valutare l'introduzione di un attributo "volume" per specificare la quantità d'acqua prelevata per l'analisi. Sebbene non strettamente necessario, tale attributo trova pertinenza nel definire parametri di riferimento relativi al prelievo dei campioni, come il volume minimo d'acqua richiesto per eseguire tutte le analisi previste.
+Inoltre, poichè è possibile prelevare campioni di diversa matrice ambientale, come acqua, biofilm o aria, si propone di introdurre un attributo "matrice" che consenta di specificare il tipo di campione analizzato.
 #linebreak()
 Infine,  si propone di riorganizzare la disposizione delle entità indagine ambientale e campione all'interno dello schema. In particolare, per come definita nella @glossario[sezione], un'indagine ambientale non è altro che una collezione di campioni prelevati in un sito specifico in una data determinata. Pertanto, risulta più coerente associare solo l'entità _campione_ alle informazioni spaziali contenute nelle tabelle _punto di prelievo_ e _sito_. Si noti che tale modifica comporta l'introduzione di un vincolo di integrità che stabilisce che tutti i campioni associati a un'indagine devono essere prelevati nello stesso sito.
 #linebreak()
@@ -195,336 +202,63 @@ In questo contesto, appare vantaggioso apportare una lieve modifica alla struttu
 Complessivamente, gli adeguamenti proposti esercitano un impatto positivo sulla gestione dei vincoli di integrità del database, poiché risultano logicamente più immediati e più facili da implementare rispetto alle soluzioni precedenti, e contribuiscono a fornire una visione ordinata e completa dei dati relativi alla diffusione della legionella.
 
 
-=== Nuova versione ///CAMBIA TITOLO
+=== Diagramma E-R///CAMBIA TITOLO
 
 A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica ER, che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.
 
 
 #figure(
   supplement: "Figura",
-  image("er_base_v2.png", width: 100%),
+  image("/img/er_base_v2.png", width: 100%),
   caption: [Diagramma ER],
 )
 
+= Integrazione dei nuovi requisiti nella base di dati
 
-#pagebreak()
-È altresì fondamentale considerare le nuove esigenze emerse durante i colloqui con i ricercatori dell'ARPA FVG.
+Come accennato in precedenza, la progettazione concettuale della base di dati deve essere adeguata alle nuove esigenze emerse a seguito dei colloqui con i ricercatori dell'ARPA FVG.
+In questa sezione si procede con l'integrazione dei nuovi requisiti nella base di dati, partendo dallo schema concettuale-logico proposto nella sezione precedente.
+
+== Analisi dei requisiti
+
+Le nuove informazioni sono finalizzate a rendere la base di dati più completa e funzionale. In particolare, è stata considerata l'opportunità di introdurre ulteriori entità e attributi, allo scopo di memorizzare dati aggiuntivi relativi ai campioni raccolti nel corso delle indagini ambientali e ai siti coinvolti.
+Di seguito sono elencati i requisiti non strutturati che hanno guidato l'integrazione dei nuovi elementi.
+
+=== Requisiti non strutturati
+
+Si ritiene opportuno mantenere le informazioni relative agli aspetti meteorologici e climatici dei siti in cui vengono condotte le indagini ambientali, poiché tali dati possono essere utili per valutare l'impatto delle condizioni ambientali sulla diffusione del batterio e per individuare eventuali correlazioni tra la presenza di Legionella e i fattori climatici. Tali informazioni sono raccolte presso le stazioni meteorologiche presenti sul territorio e comprendono dati relativi a temperatura, umidità e pressione atmosferica.
+#linebreak()
+Nella base di dati si propone di introdurre un'entità denominata _stazione meteorologica_, identificata dalla posizione geografica, che può essere rappresentata attraverso indirizzo e/o coordinate, e che includa i dati meteorologici raccolti. Tale entità sarà associata all'entità _sito_ nel modo seguente: ogni sito sarà collegato alla stazione meteorologica più vicina, la quale fornirà i dati relativi alle condizioni climatiche del luogo.
+
+Una seconda considerazione riguarda l'opportunità di ampliare il campo di azione delle analisi condotte sui campioni prelevati durante le indagini ambientali. In particolare, si propone di introdurre un nuovo tipo di analisi, denominata _analisi del pH_, volta a misurare il livello di acidità o alcalinità dell'acqua campionata. Questo parametro è di fondamentale importanza per valutare la qualità dell'acqua e la presenza di Legionella, poiché il batterio prospera in acque con pH neutro o leggermente alcalino.
+
+Sempre in relazione alle analisi condotte sui campioni, durante i colloqui è emersa la volontà di memorizzare informazioni genomiche relative al batterio. In particolare, si intende raccogliere dati sulla presenza o assenza di specifici geni e individuare i fattori genetici che influenzano la diffusione del batterio. A tale scopo, è opportuno eseguire un'analisi genomica sui campioni prelevati, al fine di identificare la sequenza del DNA di Legionella. Questa informazione sarà memorizzata in un'entità _analisi genomica_, specializzazione dell'entità _analisi_, e conterrà l'intera sequenza del DNA di Legionella, espressa in base alle quattro lettere che rappresentano le basi azotate (A, T, C, G).
+
+A ogni genoma sequenziato saranno associati i diversi geni individuati. Nello specifico, si prevede la creazione di un'entità gene, che conterrà tutti i dati noti sui geni di Legionella presenti nel databse UniProt#footnote("https://www.uniprot.org/"), con chiave corrispondente al protein ID#footnote("Identificativo univoco associato a ciascuna proteina mappata nel database di riferimento di UniProt") del gene e il nome del gene, se specificato, come attributo. Questa entità sarà collegata all'entità _gene del genoma_, tenendo traccia del fattore di similarità tra i geni individuati e quelli noti. Questo dato risulterà rilevante in futuro, poiché a seguito dello sviluppo delle tecniche di riconoscimento genetico e l'aumento dei dati disponibili si potrebbe voler procedere con una nuova identificazione dei geni, per valutare se siano stati identificati geni più simili a quelli presenti nel genoma analizzato.
+
+Infine, per ogni gene del genoma verrà registrata la posizione relativa rispetto agli altri geni all'interno del genoma sequenziato. Questa informazione è utile per valutare la vicinanza tra i geni e individuare particolari pattern di distribuzione all'interno del genoma di Legionella.
+
+
+== Diagramma E-R
+
+=== Considerazioni
+
+== Diagramma E-R finale
+
+== Schema relazionale
+
+= Progettazione fisica
+
+== Creazione delle tabelle
+
+== Implementazione dei vincoli di integrità
+
+== Esempi di applicazioni
+
+= Conclusioni
+
 
 
 //necessario implementare un vincolo di integrità che assicuri che a un campione positivo sia associato un valore UG_L positivo.
 
 #pagebreak()
-#bibliography("bibliografia.bib", title: "Bibliografia", style: "apa")
-
-= appunti
-
-isolamento del batterio mediante coltura;
- rilevazione di anticorpi su sieri nella fase acuta e convalescente della malattia;
- rilevazione dell‟antigene urinario;
- rilevazione del batterio nei tessuti o nei fluidi corporei mediante test di 
-immunofluorescenza;
- rilevazione del DNA batterico mediante PCR (metodo non ancora validato). Si 
-suggerisce vivamente l‟esecuzione di questo test come rapida analisi nei casi di 
-polmonite sopra elencati. I campioni che da questo test avranno esito positivo, 
-saranno saggiati poi mediante coltura. Questa pratica, adottata già da alcuni paesi 
-europei, e suggerita dall‟ECDC, ha consentito di isolare un maggior numero di ceppi 
-dai pazienti dando la possibilità di risalire alla fonte di infezione. 
-
-Tuttavia, poiché nessun metodo di diagnosi di legionellosi è sensibile e specifico al 100% (come 
-indicato nei paragrafi successivi), è ormai opinione condivisa a livello internazionale, che 
-maggiore è il numero di metodi diagnostici utilizzati, più corretta sarà la diagnosi di 
-legionellosi. 
-Infatti, la negatività di uno o di tutti i test diagnostici utilizzati e validati non esclude che ci si 
-possa trovare di fronte ad un caso di legionellosi
-
-l‟indagine in presenza di un caso isolato, 
-senza esposizioni ambientali a rischio, non necessita, in genere, di essere corredata da prelievi 
-ambientali sistematici al domicilio del malato.
-Considerata la molteplicità delle fonti potenziali e dell‟ampia diffusione di Legionella
-nell‟ambiente, la decisione di effettuare l‟indagine presso l‟abitazione del malato è lasciata al 
-competente servizio territoriale che deve valutare di volta in volta l‟opportunità di effettuare o 
-meno dei campionamenti ambientali, sulla base della valutazione dei rischio.
-L'approfondimento delle indagini dipende dal contesto e dal numero di casi (casi sporadici, 
-focolai, cluster).
-Per avere un quadro globale della situazione è fondamentale disporre, per ciascun paziente 
-affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei 10 
-giorni precedenti l'insorgenza dei sintomi.
-L'anamnesi deve approfondire almeno i punti seguenti:
- Professione, esposizione ad acqua nebulizzata sul luogo di lavoro.
- Luogo di soggiorno frequentato: abitazione, ospedale, casa di cura, casa di riposo, 
-strutture turistico-recettive.
- Frequentazione di impianti termali, impianti natatori, centri sportivi, centri benessere, 
-utilizzo di idromassaggi.
- Partecipazione a crociere, fiere, esposizioni.
- Terapia respiratoria, trattamenti odontoiatrici.
- Frequentazione di ambienti climatizzati e/o ad uso collettiv
-
-
- Valutazione del rischio: indagine che individua le specificità della struttura e degli impianti 
-in essa esercitati, per le quali si possono realizzare condizioni che collegano la presenza 
-effettiva o potenziale di Legionella negli impianti alla possibilità di contrarre l‟infezione. Le 
-informazioni relative alla Valutazione del rischio ed al relativo Piano di Controllo devono 
-essere comunicate dall‟incaricato della Valutazione al gestore della struttura o a un suo 
-preposto che, a loro volta, dovranno informare tutte le persone che sono coinvolte nel 
-controllo e nella prevenzione della legionellosi nella struttura
-
-Valutazione del rischio
-Per un'efficace prevenzione è d‟obbligo che il gestore di ogni struttura turistico-recettiva 
-effettui con periodicità (biennale, preferibilmente annuale) la valutazione del rischio 
-legionellosi, ovvero del rischio che nella struttura possano verificarsi uno o più casi di malattia. 
-La valutazione deve essere effettuata da una figura competente, responsabile dell‟esecuzione di 
-tale attività (ad es. igienista, microbiologo, ingegnere con esperienza specifica, ecc.).
-La valutazione del rischio è fondamentale per acquisire conoscenze sulla vulnerabilità degli 
-impianti in termini di:
- potenziali di proliferazione batterica al loro interno e di esposizione ad aerosol d‟acqua 
-che essi possono determinare;
- stima del possibile impatto potenzialmente causato dagli impianti sulla salute dei loro 
-utenti e, più in generale dei frequentatori (lavoratori compresi);
- definizione ed implementazione delle contromisure adeguate a mitigare il rischio, con un 
-impegno di sforzi e risorse commisurati al potenziale impatto.
-Una corretta valutazione del rischio correlato ad una struttura turistico-recettiva deve partire 
-da un‟ispezione degli impianti a rischio, supportata, qualora disponibili, dagli schemi 
-d‟impianto aggiornati.
-Tale analisi ispettiva deve essere finalizzata ad individuare i punti critici di ciascun impianto 
-a rischio, in considerazione delle condizioni di esercizio e manutenzione che lo caratterizzano. 
-In base all‟ispezione ed agli schemi d‟impianto disponibili, deve essere valutato quali siano i 
-punti della rete (idrica ed aeraulica) e le specifiche d‟esercizio e di controllo che possano 
-determinare un rischio per gli ospiti e per i dipendenti della struttura.
-L‟ispezione della struttura deve essere accurata, per poter evidenziare eventuali fonti di 
-rischio e valutare, nella loro complessità, gli impianti e non solamente i loro singoli componenti.
-Il Rischio legionellosi dipende da un certo numero di fattori. A seguire, si elencano quelli più 
-importanti, di cui tenere sempre in debito conto:
- Temperatura dell‟acqua compresa tra 20 e 50°C.
- Presenza di tubazioni con flusso d'acqua minimo o assente (tratti poco o per nulla 
-utilizzati della rete, utilizzo saltuario delle fonti di erogazione).
- Utilizzo stagionale o discontinuo della struttura o di una sua parte.
-Linee guida per la prevenzione ed il controllo della legionellosi
-Pag. 34 di 144
- Caratteristiche e manutenzione degli impianti e dei terminali di erogazione (pulizia, 
-disinfezione).
- Caratteristiche dell‟acqua di approvvigionamento a ciascun impianto (fonte di 
-erogazione, disponibilità di nutrimento per Legionella, presenza di eventuali 
-disinfettanti).
- Vetustà, complessità e dimensioni dell‟impianto.
- Ampliamento o modifica d‟impianto esistente (lavori di ristrutturazione).
- Utilizzo di gomma e fibre naturali per guarnizioni e dispositivi di tenuta. 
- Presenza e concentrazione di Legionella, evidenziata a seguito di eventuali pregressi 
-accertamenti ambientali (campionamenti microbiologici).
-Nell‟Allegato 12, è riportata una Lista di controllo per agevolare la raccolta delle 
-informazioni base di riferimento per l‟effettuazione di una preliminare stima dei fattori di 
-rischio presenti in una determinata struttura. 
-È importante evidenziare che la Lista di controllo rappresenta solo il primo passo di 
-Valutazione del Rischio legionellosi, in quanto è necessario elaborare ed approfondire i dati 
-raccolti, in maniera tale da poter definire, su una scala la gravità del rischio e le relative priorità 
-d‟intervento.
-Per tale ragione, maggiore è la complessità impiantistica maggiore è l‟esperienza di cui il 
-valutatore del rischio deve disporre per definire con precisione il livello di rischio e le relative 
-azioni di gestione necessarie a controllarlo.
-Periodicità della valutazione del rischio
-I gestori di strutture recettive devono effettuare e revisionare regolarmente la valutazione del
-rischio, almeno ogni 2 anni (preferibilmente ogni anno) ed ogni volta che ci sia motivo di 
-considerare che la situazione possa essersi modificata (ad esempio: lavori di ristrutturazioni o 
-rifacimento di parti d‟impianto, esame batteriologico positivo con valori di legionella che 
-richiedono intervento. Vedi Tabelle 6 e 7). La revisione deve essere documentata formalmente.
-La valutazione del rischio, deve, comunque, essere sottoposta a revisione, con carattere 
-d‟urgenza, ad ogni segnalazione di un possibile caso di legionellosi.
-In base ai risultati complessivi della valutazione del rischio, andrà preparato, anche con 
-l'ausilio di personale tecnico qualificato, un Piano scritto per il controllo e la manutenzione di 
-ciascun impianto a rischio, che specifichi tutti gli interventi da mettere in atto per controllarlo,
-
-
-
-Campionamento
-Il campionamento deve essere effettuato prima che venga attuato un qualunque intervento di 
-disinfezione o pratica preventiva (pulizia e/o disinfezione con qualunque metodo) oppure a 
-distanza di un tempo congruo dalla sua esecuzione (rif. dopo circa 48 ore dall‟avvenuta messa a 
-regime dell‟impianto post intervento).
-Il protocollo operativo per effettuare il campionamento è descritto nell‟Allegato 3.
-E‟ opportuno che il numero di campioni sia proporzionato alle dimensioni dell‟impianto.
-Per ciascun impianto di acqua calda sanitaria devono essere effettuati almeno i seguenti 
-prelievi:
- mandata (oppure dal rubinetto più vicino al serbatoio/i
- ricircolo
- fondo serbatoio/i
- almeno 3 punti rappresentativi (ovvero i più lontani nella distribuzione idrica e i più 
-freddi)
-Per ciascun impianto di acqua fredda devono essere effettuati almeno i seguenti prelievi:
- fondo serbatoio/i
- almeno 2 in punti rappresentativi (ovvero il più lontano nella distribuzione idrica ed il 
-più caldo)
-
-
-Campionamento 
-I reparti che ospitano pazienti profondamente immunocompromessi (trapianto allogenico di 
-cellule staminali ematopoietiche, trapianto di organo solido) devono avere impianti privi di 
-Legionella. 
-Inoltre in questi reparti deve essere eseguito un campionamento ambientale almeno
-trimestrale per controllare l‟assenza di colonizzazione con Legionella.
-Il protocollo operativo per effettuare il campionamento è descritto nell‟Allegato 3.
-E‟ opportuno che il numero di campioni sia proporzionato alle dimensioni dell‟impianto. Per 
-ciascun impianto di acqua calda sanitaria devono essere effettuati almeno i seguenti prelievi:
- mandata (oppure dal rubinetto più vicino al serbatoio/i
- ricircolo
- fondo serbatoio/i
- almeno 3 punti rappresentativi (ovvero i più lontani nella distribuzione idrica e i più 
-freddi)
- Per strutture con numero di posti letto superiore a 150, considerare almeno un punto di 
-prelievo aggiuntivo ogni 100 posti letto in più.
-Per ciascun impianto di acqua fredda devono essere effettuati almeno i seguenti prelievi:
- fondo serbatoio/i
- almeno 2 in punti rappresentativi (ovvero il più lontano nella distribuzione idrica ed il 
-più caldo).
-Linee guida per la prevenzione ed il controllo della legionellosi
-Pag. 46 di 144
- Per strutture con numero di posti letto superiore a 150, considerare almeno un punto di 
-prelievo aggiuntivo ogni 100 posti letto in più.
-Quando viene diagnosticato un caso di legionellosi, in un qualsiasi reparto o struttura 
-sanitaria, è necessario eseguire l‟indagine epidemiologica ed il campionamento ambientale.
-Sulla base di questi aspetti, si forniscono le seguenti indicazioni:
- Tutti gli ospedali che ospitano reparti ove vengono ricoverati pazienti che devono essere 
-sottoposti a trapianto allogenico di cellule ematopoietiche staminali o di organo solido, 
-devono pianificare interventi specifici per garantire in questi reparti l‟assenza di 
-colonizzazione degli impianti di trattamento dell‟aria e l‟assenza di Legionella(non 
-rilevabile in relazione al metodo analitico utilizzato e comunque sempre \<100 UFC/L)
-nell‟acqua erogata. Quanto indicato per i Centri trapianto si raccomanda sia esteso anche 
-ai reparti che assistono le altre tipologie di pazienti a rischio molto elevato. 
- L‟assenza di Legionella deve essere garantita anche nell‟acqua utilizzata per il parto in 
-vasca.
-Per gli altri reparti si raccomanda una ricerca attiva di Legionella almeno ogni sei mesi, e 
-annualmente l‟esecuzione/riesame della valutazione del rischio. In tutti i reparti deve comunque 
-essere garantita la ricerca dell‟antigene urinario in tutti i casi di polmonite comparsa dopo il 
-ricovero.
-
-
-I gestori di tutti gli impianti elencati sono tenuti a conservare la documentazione relativa a:
- eventuali modifiche apportate a ciascun impianto a rischio
- interventi di manutenzione ordinari e straordinari, relativi al controllo del rischio, 
-applicati su ciascun impianto a rischio
- operazioni di pulizia e disinfezione applicati su ciascun impianto a rischio.
-Tale documentazione deve essere messa a disposizione degli Organi di Controllo, quando 
-richiesto
-
-
-
-Prima di effettuare il campionamento, è necessario raccogliere (od aggiornare) le seguenti 
-informazioni relative all‟impianto idrico od aeraulico oggetto del monitoraggio:
- Schema della rete idrica (qualora esistente)
- Localizzazione della tubazione di alimentazione idrica alla rete
- Localizzazione degli eventuali serbatoi d‟acqua calda e fredda e di tutti i sistemi che 
-possano generare aerosol d‟acqua
- Presenza di linee di distribuzione idrica contraddistinte da stagnazione/scarso 
-ricambio idrico (ad es. camere non utilizzate per tempi superiori ai 7 giorni)
- Vetustà dell‟impianto
- Distribuzione di ciascun impianto idrico a rischio
- Presenza di sistemi di disinfezione in continuo installati sull‟impianto idro-sanitario, 
-(tipo di impianto, caratteristiche del disinfettante, modalità di monitoraggio delle 
-concentrazioni del disinfettante, ecc.)
- Distribuzione di ciascun impianto aeraulico a rischio
- Registro di manutenzione con tutti gli interventi ordinari e straordinari effettuati 
-sugli impianti
-Qualora il Registro di Controllo fosse ancora da redigere, raccogliere informazioni su eventuali 
-lavori svolti o su interventi di disinfezione effettuati.
-
-E‟ necessario che i campioni siano univocamente identificati e univocamente correlati a 
-quanto riportato nello schema di registrazione e quindi mostrare sempre un‟attenta osservanza di 
-procedure di registrazione e marcatura dei campioni.
-Legionella sarà ricercata nell'ambiente idrico artificiale (impianti d‟acqua destinata al 
-consumo umano, impianti aeraulici, impianti di raffreddamento a torri evaporative/condensatori 
-evaporativi, fontane decorative, idromassaggi, apparecchiature mediche per la respirazione 
-assistita, impianti d‟acqua termale e qualunque altro impianto risulti evidenziato dalla 
-valutazione del rischio legionellosi o da osservazioni effettuate sul campo) limitando i prelievi 
-ai punti che maggiormente possono essere critici, sia in base allo schema di ciascun impianto a 
-rischio sia in funzione dei dati epidemiologici.
-I campioni sono rappresentati principalmente da:
- acqua del circuito dell'acqua calda sanitaria e di quello dell'acqua fredda sanitaria 
-soprattutto qualora, per quest‟ultima tipologia d‟impianto, la temperatura sia superiore a 
-20°C;
- depositi (cosiddetti "fanghi") o sedimenti da serbatoi e altri punti di raccolta dell'acqua;
- incrostazioni da tubature e serbatoi;
- biofilm e/o altro materiale attaccato alle superfici interne delle tubazioni, allo sbocco di 
-rubinetti, nei filtri rompigetto, all‟interno del diffusore delle docce, da raccogliere 
-utilizzando dei tamponi;
- acqua d‟umidificazione degli impianti aeraulici;
- acqua dell‟impianto di raffreddamento a torri evaporative/condensatori evaporativi;
- filtri da impianti di climatizzazione;
- aria umidificata (ad es. quella che fuoriesce dalle torri evaporative/condensatori 
-evaporativi;
- acqua da vasche idromassaggio, fontane decorative;
-Linee guida per la prevenzione ed il controllo della legionellosi
-Pag. 88 di 144
- acqua da sistemi per la respirazione assistita, aerosol;
- acqua e altre matrici tipiche di stabilimenti termali.
-
-Nella rete idrosanitaria, nonostante sia maggiore la probabilità di riscontrare il batterio 
-nell‟impianto di distribuzione dell‟acqua calda, è necessario effettuare anche il campionamento
-dell‟impianto di distribuzione dell‟acqua fredda sanitaria da effettuarsi in relazione agli esiti 
-della valutazione del rischio e negli altri casi indicati nel presente documento (es. verificarsi di 
-un caso).
-Il percorso dell‟acqua dovrebbe essere monitorato dal suo punto di partenza (punto di 
-alimento idrico della rete, ossia dall‟allacciamento all‟acquedotto od al punto d‟emungimento 
-d‟acqua di pozzo) fino ai terminali di utilizzo (erogatori sentinella).
-A seguire, si riporta l‟elenco dei principali punti di controllo, da utilizzarsi come riferimento 
-per la definizione della più opportuna mappatura analitica della rete idrica oggetto d‟indagine:
- Allacciamento all‟acquedotto od al punto d‟emungimento d‟acqua di pozzo
- Accumuli acqua fredda destinata al consumo umano, serbatoi/bollitori acqua calda 
-sanitaria (alla base e ad 1/3 dell‟altezza, quando possibile)
- Tutti i siti in cui possono essere presenti fenomeni di ristagno, sedimentazione od 
-incrostazioni significative
- Utenze poco utilizzate
- Ricircolo dell‟acqua calda sanitaria (anello di distribuzione)
- Erogatori a servizio di bagni e/o docce distali (erogatori sentinella)
- Addolcitori.
-Il campionamento dei punti di controllo deve riguardare l‟acqua sanitaria sia calda che 
-fredda. Quando questa è ≤ 20 °C il numero dei campioni può essere ridotto. La definizione di 
-quali e quanti punti di controllo sottoporre a campionamento deve essere motivata dalla 
-valutazione del rischio legionellosi, così come la frequenza d‟esecuzione di tali controlli 
-analitici
-
-
-ALLEGATO 6:RICERCA DI LEGIONELLA IN CAMPIONI 
-AMBIENTALI MEDIANTE REAL-TIME PCR
-Il presente allegato riporta indicazioni per la determinazione della presenza di DNA di 
-Legionella in campioni di acqua. Per approfondimenti e ulteriori dettagli si suggerisce la 
-consultazione della norma di riferimento da cui è tratto, “Water quality-Detection and 
-quantification of Legionellaspp and/or Legionella pneumophila by concentration and 
-genicamplification by quantitativepolymerasechainreaction (qPCR)” (ISO /TS 12869, 2012). 
-Quanto riportato ha lo scopo di suggerire una buona pratica di laboratorio per l‟attuazione 
-della Real Time PCR, poiché al momento non esiste una procedura standard e la metodica 
-rimane ancora oggi non validata per scopi diagnostici. Il presente allegato è rivolto a coloro che 
-intendano determinare e quantificare Legionella spp e/o Legionella pneumophila, mediante 
-amplificazione genica attraverso Real Time PCR. Essa può essere utilizzata per una rapida 
-analisi di routine, ma soprattutto in campioni ambientali correlati a focolai epidemici, per i quali 
-è ancor più necessaria la tempestività delle indagini, al fine di attuare le opportune misure di 
-controllo per il contenimento dei casi di malattia.
-
-I campioni devono essere raccolti in contenitori sterili, con tutte le precauzioni necessarie. 
-Sul contenitore e/o su un registro devono essere indicati: luogo e data del prelievo, volume e 
-temperatura e se è stato effettuato un trattamento con biocidi. Nel caso in cui si utilizzi la Real 
-Time PCR per analisi di routine, se si prevede che il/i campioni siano negativi, è possibile 
-campionare un solo litro. Nel caso in cui si debbano investigare cluster epidemici è sempre 
-consigliato il prelievo di 2 litri d‟acqua che saranno utilizzati possibilmente mescolati in 
-sospensione omogenea. Qualora non fosse possibile fare un‟unica sospensione, analizzare una 
-prima metà di ciascun litro con la Real Time PCR ed eventualmente (se positivo in Real Time 
-PCR) la seconda metà mediante coltura. Nel caso in cui un diverso volume d„acqua è prelevato, 
-bisogna indicarlo e tenerne conto nell‟analisi quantitativa.
-
-
-La rilevazione è ottenuta mediante ampliconi specifici del genere Legionella e/o specifici 
-della specie L. pneumophila. Qualora si voglia determinare la quantità di DNA di Legionella
-presente nel campione, sono necessari almeno quattro campioni di DNA genomico di L. 
-pneumophila ceppo ATCC 33152 a concentrazione nota espresso in unità genomiche (UG), un 
-controllo interno di inibizione, per verificare qualche inibizione presente nel DNA estratto dal 
-campione, un controllo negativo. Tutti i campioni, DNA standard, controlli negativi e campioni 
-test) devono essere analizzati almeno in doppio.
-Le concentrazioni sono espresse in unità genomiche per litro (UG/L) di campione. Se un 
-volume differente è stato utilizzato nella fase di concentrazione, si dovrà tenere conto del 
-volume filtrato.
-
-N.B. I campioni analizzati mediante Real Time PCR che hanno dato esito negativo possono 
-non essere analizzati mediante coltura. In questo caso il risultato verrà espresso come « DNA 
-di Legionella non rilevato mediante Real Time PCR ». Al contrario, se i campioni sono positivi 
-per Real Time PCR devono essere analizzati mediante coltura
-
-
-
-
+#bibliography("bibliografia.bib", title: "7. Bibliografia", style: "ieee",)
