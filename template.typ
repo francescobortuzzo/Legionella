@@ -136,7 +136,7 @@
         left: 8pt,
         top: 4pt,
         bottom: 2pt,
-        image("logo.svg"),
+        image("/img/logo.svg"),
       ),
       text(0.67em, font:"Arial", weight: 700, fill: white)[ DIPARTIMENTO DI SCIENZE MATEMATICHE, INFORMATICHE E FISICHE ]
     )
@@ -201,6 +201,7 @@
   pagebreak(to: "odd")
   set par(justify: true, first-line-indent: 1em)
   set align(center + horizon)
+
 
   // Configure the page
   set page(
