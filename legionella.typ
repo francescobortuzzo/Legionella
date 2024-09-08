@@ -3,8 +3,6 @@
 #show: template
 #show par: set block(spacing: 0.65em)
 
-#set heading(numbering: "1.1.")
-#outline(title: [Indice], indent: true, depth: 2)
 
 = Introduzione e obiettivo del progetto
 == Introduzione al batterio Legionella
@@ -112,26 +110,18 @@ Come accennato nel capitolo introduttivo, una delle principali sfide riscontrate
 In questa sezione si procede a un'analisi critica di un database relazionale utilizzato per archiviare i dati relativi alla diffusione della legionella. Il database oggetto di analisi è stato sviluppato dal dottor Dario Garlatti nell'ambito della sua tesi di laurea triennale in informatica, dal titolo "Base di dati e applicazione web per il monitoraggio del batterio della legionella".
 
 ==  Analisi dei requisiti
-Prima di procedere con lo studio del database, è necessario definire i requisiti del sistema informativo. Questi requisiti sono di natura qualitativa e descrivono le caratteristiche che il sistema deve possedere per soddisfare le esigenze degli utenti e degli stakeholder. I requisiti alla base della progettazione della soluzione in analisi riguardano l'intera fase di acquisizione dei dati relativi alle indagini ambientali portate a termine dai ricercatori dell'ARPA FVG, per il monitoraggio della legionella in regione.
+Prima di procedere con lo studio del database, è necessario definire i requisiti del sistema informativo. Questi requisiti sono di natura qualitativa e descrivono le caratteristiche che il sistema deve possedere per soddisfare le esigenze degli utenti e degli stakeholder. I requisiti alla base della progettazione della soluzione in analisi riguardano l'intera fase di acquisizione dei dati relativi alle indagini ambientali portate a termine dai ricercatori di ARPA FVG, per il monitoraggio della legionella in regione. 
 
-=== Requisiti non strutturati
-Il sistema deve consentire la registrazione delle indagini ambientali riguardanti la presenza di Legionella nei sistemi di adduzione e conservazione dell'acqua.
-
-Un'indagine ambientale è definita dal tipo, dalla data e dal sito presso cui viene eseguita, ed è associata al richiedente nel caso di indagine di follow-up.
-
-Un sito è identificato dall'indirizzo e dalla categoria a cui appartiene.
-
-L'indagine comprende il prelievo di campioni che saranno analizzati per rilevare la presenza del batterio legionella. Ciascun campione prelevato è collegato a una specifica indagine, caratterizzato dal punto di prelievo all'interno del sito, e identificato da un codice univoco.
-
-Tutti i campioni prelevati devono essere sottoposti a diverse analisi per accertare la presenza o l'assenza di legionella:
-
-+ PCR qualitativa: una tecnica di reazione a catena della polimerasi che consente di rilevare la presenza del DNA di Legionella nei campioni prelevati.
-+ PCR quantitativa: permette di misurare la concentrazione di legionella nei campioni prelevati (espressa in µg/l).
-+ Analisi colturale: consente di isolare e identificare le unità formanti colonia (UFC_L) e, nel caso in cui il campione risulti positivo al batterio, di determinare il sierogruppo.
 #linebreak()
+Di seguito sono riportati i requisiti, non strutturati, che hanno guidato la progettazione della base di dati.
 
+il sistema deve consentire la registrazione delle indagini ambientali relative alla presenza di Legionella nei sistemi di adduzione e conservazione dell'acqua. Ogni indagine è definita dal tipo, dalla data e dal sito presso il quale viene eseguita, ed è, eventualmente, associata al richiedente qualora si tratti di un'indagine di follow-up. Un sito è identificato dall'indirizzo e dalla categoria di appartenenza. Le indagini comprendono il prelievo di campioni, ciascuno dei quali è associato ad una e una sola indagine. Tali campioni sono caratterizzati dal punto di prelievo, all'interno del sito preso cui è svolta l'indagine cui afferiscono, e sono univocamente identificati da un codice. Tutti i campioni prelevati sono sottoposti a diverse analisi per accertare la presenza di legionella, tra cui: la PCR qualitativa, che consente di rilevare la presenza del DNA del batterio; la PCR quantitativa, che misura la concentrazione di legionella nei campioni, espressa in µg/l; e l'analisi colturale, che consente di isolare e identificare le unità formanti colonia (UFC_L) e, in caso di positività, di determinare il sierogruppo.
+
+
+=== Note
 Si segnala che la PCR non costituisce un metodo diagnostico definitivo per la legionellosi, ma piuttosto un test di screening che necessita di conferma attraverso la coltura. Infatti, «poiché, così come specificato nella norma ISO “_Water quality- Detection and quantification of Legionella spp and/or Legionella pneumophila by concentration and genic amplification by quantitative polymerase chain reaction (qPCR)_” (ISO/TS 12869, 2012), la qPCR non da informazione riguardo lo stato delle cellule, la quantificazione dovrà sempre essere determinata mediante esame colturale»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 21"))].
-I metodi analitici impiegati per la rilevazione del batterio, descritti nell'allegato 4 delle Linee Guida per la prevenzione e il controllo della legionellosi, variano a seconda della matrice da analizzare (acqua, biofilm, aria); tuttavia, i risultati ottenuti sono espressi in maniera uniforme, indipendentemente dalla tipologia di analisi condotta.
+
+Inoltre, si osserva che i metodi analitici utilizzati per la rilevazione del batterio, come indicato nell'allegato 4 delle Linee Guida per la prevenzione e il controllo della legionellosi, variano in base alla matrice da analizzare (acqua, biofilm, aria); tuttavia, i risultati ottenuti sono espressi in modo uniforme, a prescindere dal tipo di analisi effettuata. Pertanto, considerata l'esigenza di conservare le informazioni relative ai risultati delle analisi sui campioni, si ritiene lecito mantenere le tre tipologie di analisi sopra menzionate, senza ulteriori distinzioni.
 
 == Schema relazionale
 Di seguito viene presentato lo schema concettuale-logico del database sviluppato dal dottor Garlatti. Tale schema è stato modellato utilizzando il linguaggio IDEF1X#footnote("Integration DEFinition for information modeling"). Questo linguaggio appartiene alla famiglia dei linguaggi di modellazione IDEF#footnote("https://www.idef.com/"). Per una corretta comprensione dello schema, è essenziale definire i concetti di entità e relazione, che rappresentano i fondamenti della modellazione dei dati.
@@ -157,10 +147,10 @@ Le relazioni di categorizzazione, invece, sono rappresentate da linee che colleg
 Lo schema illustrato è stato concepito per rispondere ai requisiti di memorizzazione dei dati relativi alla diffusione della legionella. Tuttavia, durante una prima fase di analisi del database, sono stati individuati alcuni difetti che richiedono un'accurata valutazione e una potenziale revisione dello schema.
 
 === Considerazioni e proposte di modifica
-Alcune entità, come _indirizzo_ e _categoria_, sono state inizialmente progettate come entità autonome, ma potrebbe essere più efficace trattarle come attributi dell'entità _sito_. Questo approccio non solo semplificherebbe lo schema, ma migliorerebbe anche la sua chiarezza strutturale. In particolare, l'attributo descrizione dell'entità _categoria_ è superfluo, poiché il nome della categoria dovrebbe bastare a identificarla in modo univoco. Inoltre, l'aggiunta di un attributo "nome" all'entità _sito_ potrebbe facilitare la consultazione dei dati, specialmente per quanto riguarda gli ospedali, che sono generalmente riconosciuti dalla combinazione di nome e città, piuttosto che unicamente dall'indirizzo.
-In aggiunta, si propone di arricchire l'entità sito con nuovi attributi che ne descrivano le caratteristiche principali nel contesto specifico. Questi attributi includerebbero dettagli sull'impiantistica del sito, come la tipologia di caldaia, il materiale delle tubature, l'uso del cloro, e altre informazioni di carattere generale, come l'anno dell'ultima ristrutturazione.
+Alcune entità, come _indirizzo_ e _categoria_, sono state inizialmente progettate come entità autonome, ma potrebbe essere più efficace trattarle come attributi dell'entità _sito_. Questo approccio non solo semplificherebbe lo schema, ma migliorerebbe anche la sua chiarezza strutturale. In particolare, l'attributo "descrizione" dell'entità _categoria_ è superfluo, poiché il nome della categoria dovrebbe bastare a identificarla in modo univoco. Inoltre, l'aggiunta di un attributo "nome" all'entità _sito_ potrebbe facilitare la consultazione dei dati, specialmente per quanto riguarda gli ospedali, che sono generalmente riconosciuti dalla combinazione di nome e città, piuttosto che unicamente dall'indirizzo.
+In aggiunta, si propone di arricchire l'entità sito con nuovi attributi che ne descrivano le caratteristiche principali nel contesto specifico. Questi attributi includono dettagli sull'impiantistica del sito, come la tipologia di caldaia, il materiale delle tubature, l'uso del cloro, e altre informazioni di carattere generale, come l'anno dell'ultima ristrutturazione.
 
-Un ulteriore elemento di riflessione riguarda l'associazione dell'entità _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si propone che l'entità _richiedente_ possa essere messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
+Un ulteriore elemento di riflessione riguarda l'associazione dell'entità _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si propone che l'entità _richiedente_ sia messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30"))]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
 
 Si osserva che l'entità _follow-up clinico_ potrebbe essere ulteriormente arricchita con attributi volti a descrivere il paziente e la sua esposizione al rischio, quali la data di insorgenza dei sintomi, il luogo di residenza, il luogo di lavoro e le attività svolte nei dieci giorni precedenti l'insorgenza dei sintomi. Questi dettagli, tuttavia, non sono modellati nello schema attuale né saranno inclusi nello schema finale, poiché non sono stati considerati nei requisiti né approfonditi con i ricercatori. Tuttavia, potrebbero rivelarsi utili per una valutazione più accurata del rischio di diffusione del batterio.
 
@@ -169,27 +159,39 @@ Inoltre, poichè è possibile prelevare campioni di diversa matrice ambientale, 
 
 Infine,  si propone di riorganizzare la disposizione delle entità indagine ambientale e campione all'interno dello schema. In particolare, per come definita nella @glossario[sezione], un'indagine ambientale non è altro che una collezione di campioni prelevati in un sito specifico in una data determinata. Pertanto, risulta più coerente associare solo l'entità _campione_ alle informazioni spaziali contenute nelle tabelle _punto di prelievo_ e _sito_. Si noti che tale modifica comporta l'introduzione di un vincolo di integrità che stabilisce che tutti i campioni associati a un'indagine devono essere prelevati nello stesso sito.
 
-In questo contesto, appare vantaggioso apportare una lieve modifica alla struttura delle entità _sito_ e _punto di prelievo_ nel modo seguente: si consiglia di aggiungere l'attributo coordinate all'entità sito, associandolo a una coppia di coordinate, ad esempio riferite al centro geografico o all'ingresso principale dell'edificio, che costituirebbero una chiave per l'entità. Inoltre, l'entità punto di prelievo potrebbe essere trasformata in un'entità debole rispetto al sito, implicitando il vincolo imposto dall'associazione di un punto di prelievo a un sito, secondo il quale un punto di prelievo deve essere situato all'interno del perimetro del sito di cui fa parte. Al _punto di prelievo_ potrebbero essere associati attributi che ne descrivano la posizione all'interno del sito, come il piano, la stanza o il tipo di componente idraulico, da cui è stato prelevato il campione.
+In questo contesto, appare vantaggioso apportare una modifica alla struttura delle entità _sito_ e _punto di prelievo_ nel modo seguente: si consiglia di aggiungere l'attributo coordinate all'entità sito, associandolo a una coppia di coordinate, ad esempio riferite al centro geografico o all'ingresso principale dell'edificio, che costituirebbero una chiave per l'entità. Inoltre, l'entità punto di prelievo potrebbe essere trasformata in un'entità debole rispetto al sito, implicitando il vincolo imposto dall'associazione di un punto di prelievo a un sito, secondo il quale un punto di prelievo deve essere situato all'interno del perimetro del sito di cui fa parte. Al _punto di prelievo_ potrebbero essere associati attributi che ne descrivano la posizione all'interno del sito, come il piano, la stanza o il tipo di componente idraulico, da cui è stato prelevato il campione.
 
 #linebreak()
 
 Complessivamente, gli adeguamenti proposti esercitano un impatto positivo sulla gestione dei vincoli di integrità del database, poiché risultano logicamente più immediati e più facili da implementare rispetto alle soluzioni precedenti, e contribuiscono a fornire una visione ordinata e completa dei dati relativi alla diffusione della legionella.
 
-
+#pagebreak()
 === Diagramma E-R///CAMBIA TITOLO
 
-A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica ER, che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.
+A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica E-R, che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
 
+#rotate(90deg)[
+  #figure(
+    supplement: "Figura",
+    image("/img/er_base.png", width: 140%),
+    caption: [Diagramma ER],
+  )
+]
 
-#figure(
-  supplement: "Figura",
-  image("/img/er_base_v2.png", width: 100%),
-  caption: [Diagramma ER],
-)
+#pagebreak()
 
 = Integrazione dei nuovi requisiti nella base di dati
 
-Come accennato in precedenza, la progettazione concettuale della base di dati deve essere adeguata alle nuove esigenze emerse a seguito dei colloqui con i ricercatori dell'ARPA FVG.
+Come accennato in precedenza, la progettazione concettuale della base di dati deve essere adeguata alle nuove esigenze emerse a seguito dei colloqui con i ricercatori di ARPA FVG.
 In questa sezione si procede con l'integrazione dei nuovi requisiti nella base di dati, partendo dallo schema concettuale-logico proposto alla conclusione del capitolo precedente.
 
 == Nuovi requisiti e proposte di modfifica dello schema
@@ -211,8 +213,32 @@ Questo approccio ha lo scopo di consentire, in futuro, a seguito del progresso d
 
 Infine, si intende registrare per ciascun _gene del genoma_ la sua posizione relativa rispetto agli altri geni all'interno del profilo genetico sequenziato. Questa informazione è essenziale per valutare la prossimità tra i geni e per identificare eventuali pattern di distribuzione specifici all'interno del genoma di Legionella.
 In termini pratici, si propone di introdurre una relazione auto-referenziale che coinvolga l'entità _gene del genoma_, al fine di stabilire un legame tra i geni identificati e la loro posizione, relativa#footnote("definita in relazione alla prossimità ad altri geni all'interno del genoma sequenziato") all'interno del genoma sequenziato. La cardinalità di tale relazione sarà definita come 0,2 a 0,2, indicando che ogni gene può essere associato a zero, uno, o al massimo due geni vicini. Questa configurazione tiene conto della limitata conoscenza attuale sui geni di Legionella, che potrebbe comportare l'assenza di associazioni per alcune aree del genoma.
+#pagebreak()
 
 == Diagramma E-R
+
+A seguito delle modifiche proposte, è realizzato il seguente diagramma E-R.
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+#linebreak()
+
+#rotate(90deg)[
+  #figure(
+    supplement: "Figura",
+    image("/img/er_aggiornato.png", width: 140%),
+    caption: [Diagramma ER],
+  )
+]
+
+#pagebreak()
+=== Note
+
 
 === Considerazioni
 
