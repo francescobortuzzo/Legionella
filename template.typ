@@ -277,15 +277,15 @@
   set align(center + horizon)
 
   // Acknowledgments
-  if acknowledgments != none {
+  if appendix != none {
     heading(
       level: 2,
       numbering: none,
       outlined: false,
       if lang == "en" {
-        "Acknowledgments"
+        "Appendice"
       } else {
-        "Ringraziamenti"
+        "Appendice"
       }
     )
     acknowledgments
