@@ -264,6 +264,9 @@ Si osserva che l'introduzione di nuove entità e relazioni, sebbene arricchisca 
 
 Le considerazioni relative ai vincoli di integrità sono posticipate al capitolo successivo laddove, terminata la fase di progettazione, sarà possibile ottenere una visione del tutto trasparente e definitiva delle entità coinvolte nel sistema, e dei relativi attributi, e delle relazioni tra di esse.
 
+#pagebreak()
+= Progettazione logica della base di dati
+
 == Rivisitazione del modello concettuale: Sempliﬁcazione delle generalizzazioni e degli attributi composti
 
 Ultimata la fase di progettazione concettuale della base di dati, è opportuno effettuare un'ultima revisione del modello al fine di elaborarne la struttura finale, priva di elementi discrezionali. In questa unità sono riportate le modifiche, congiuntamente alle motivazioni che le guidano, apportate allo schema E-R proposto al @ER_aggiornato[paragrafo], con l'obbiettivo di risolvere generalizzazioni, attributi composti e attributi multivalori presenti in figura.
@@ -481,7 +484,7 @@ FOREIGN KEY (id_gene) REFERENCES gene(id_gene);
 //necessario implementare un vincolo di integrità che assicuri che a un campione positivo sia associato un valore UG_L positivo.
 
 #pagebreak()
-#bibliography("bibliografia.bib", title: "7 Bibliografia")
+#bibliography("bibliografia.bib", title: "8 Bibliografia")
 
 #pagebreak()
 
