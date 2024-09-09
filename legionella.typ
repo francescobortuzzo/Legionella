@@ -98,7 +98,7 @@ Al fine di facilitare la comprensione del documento, è redatto il seguente glos
     [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di Legionella in un campione],
     [PCR Quantitativa], [Esame di laboratorio rapido che rileva e quantifica il DNA o l'RNA di Legionella presenti in un campione. (i.e. Real-Time PCR)],
     [Relazione],[In riferimento allo schema E-R, legame che rappresenta la connessione logica, e significativa per la realtà modellata, tra due o più entità.],
-    [Relazione Ricorsiva],[Relazione che associa una entità a se stessa(sin. relazione autoreferenziale)],
+    [Relazione Ricorsiva],[Relazione che associa una entità a se stessa(i.e. relazione autoreferenziale)],
     [Richiedente], [Ente o istituzione che richiede un'indagine ambientale],
     [Sierotipo], [Livello di classificazione di batteri di Legionella inferiore a quello specie. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp (i.e. sierogruppo)],
     [Sito], [Edificio presso il quale è condotta un'indagine ambientale],
