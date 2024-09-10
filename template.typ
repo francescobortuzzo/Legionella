@@ -85,18 +85,18 @@
   set list(indent: 10pt, body-indent: 9pt, marker: ([•], [--]))
 
   // Configure headings
-  set heading(numbering: "1.a.I")
+  set heading(numbering: "1.a.I.")
   show heading.where(level: 1): it => {
     if it.body not in ([References], [Riferimenti]) {
-      block(width: 100%, height: 20%)[
+      block(width: auto, height: 20%)[
         #set align(center + horizon)
         #set text(1.3em, weight: "bold")
         #smallcaps(it)
       ]
     } else {
-      block(width: 100%, height: 8%)[
+      block(width: auto, height: 8%)[
         #set align(center + horizon)
-        #set text(1.1em, weight: "bold")
+        #set text(1.1em, weight: "bold", hyphenate: true)
         #smallcaps(it)
       ]
     
@@ -199,7 +199,7 @@
   ])
 
   pagebreak(to: "odd")
-  set par(justify: true, first-line-indent: 1em)
+  set par(justify: true, first-line-indent: 1.25em)
   set align(center + horizon)
 
 
@@ -257,39 +257,4 @@
 
   pagebreak(to: "odd")
 
-  // Bibliography
-  if bibliography != none {
-    heading(
-      level: 1,
-      numbering: none,
-      if lang == "en" {
-        "References"
-      } else {
-        "Riferimenti"
-      }
-    )
-    show std-bibliography: set text(size: 0.9em)
-    set std-bibliography(title: none)
-    bibliography
-  }
-
-  pagebreak()
-  set align(center + horizon)
-
-  // Acknowledgments
-  if appendix != none {
-    heading(
-      level: 2,
-      numbering: none,
-      outlined: false,
-      if lang == "en" {
-        "Appendice"
-      } else {
-        "Appendice"
-      }
-    )
-    acknowledgments
-
-    pagebreak(weak: true)
-  }
 }
