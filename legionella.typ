@@ -324,6 +324,8 @@ Per quanto riguarda le relazioni tra campioni e analisi, si è deciso di mappare
 
 Le relazioni uno a molti, invece, sono più semplici da gestire, in quanto la chiave esterna è necessariamente inserita nell'entità che rappresenta il lato "uno" della relazione. Infine, le relazioni molti a molti sono gestite mediante l'introduzione di una tabella di associazione, che contiene le chiavi esterne delle due entità coinvolte.
 
+Infine, per quanto riguarda le entità deboli, come _dati meterelogici_, _punto di prelievo_ e _gene del genoma_ la chiave primaria è composta dalla chiave primaria dell'entità forte, o delle entità forti, a cui sono associate e un attributo che ne identifica univocamente l'istanza all'interno dell'entità forte.
+
 
 == Schema relazionale
 Sulla base delle considerazioni precedenti, si procede con la definizione dello schema relazionale, che rappresenta la struttura logica del database.
