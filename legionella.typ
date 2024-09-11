@@ -40,85 +40,7 @@ Inoltre, si è osservato che la presenza del batterio ha registrato un notevole 
 In questo contesto, i sistemi di basi di dati giocano un ruolo fondamentale, in quanto permettono di memorizzare grandi quantità di dati e di effettuare ricerche complesse in modo rapido ed efficiente.
 
 Il presente documento si propone di delineare gli aspetti principali per la progettazione di un database relazionale destinato alla memorizzazione dei dati relativi alla diffusione della Legionella. 
-In particolare, verrà effettuata un'analisi critica di una soluzione esistente e saranno proposte modifiche per adattarla alle nuove esigenze emerse dai colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG.
-
-#pagebreak()
-
-= Glossario <glossario>
-#annotation[Al fine di facilitare la comprensione del documento, è redatto il seguente glossario contenente le definizioni dei termini tecnici utilizzati.]
-
-#set par(justify: false)
-
-#figure(
-  supplement: none,
-  table(
-    columns: (135pt, auto),
-    inset: 8pt,
-      
-    [*Termine*], [*Definizione*],
-    [Aerosol], [Particelle sospese nell'aria, contenenti gocce d'acqua, che possono trasportare il batterio Legionella.],
-    [Analisi], [Esame di laboratorio effettuato su campioni di acqua prelevati durante un'indagine ambientale.],
-    [Analisi Colturale], [Esame di laboratorio che permette di isolare e identificare le unità formanti colonia (UFC_L) di Legionella in un campione di acqua.],
-    [Attributo],[Concetto che descrive una proprietà o una componente di una entità o di una relazione. (_i.e._ campo).],
-    [Attributo composto],[Attributo dalla struttura complessa, costituito da diversi sotto-attributi.],
-    [Attributo multivalore],[Attributo che, per ogni istanza dell'entità cui è associato, può assumere più di un valore.],
-    [Campione], [Piccola quantità di acqua da sottoporre a esame.],
-    [Categoria], [Classificazione di un sito, o più specificamente di un edificio, in base alla sua destinazione d'uso, come ad esempio ospedaliero, termale o alberghiero.],
-    [Chiave primaria], [Attributo o insieme di attributi che identifica univocamente ogni istanza di un'entità.],
-    
-    ),
-  caption: "Glossario",
-) <dictionary>
-
-#figure(
-  supplement: none,
-  table(
-    columns: (135pt, auto),
-    inset: 8pt,
-
-    [*Termine*], [*Definizione*],
-    [Componente idraulica], [Componente di un sistema idraulico da cui viene prelevato un campione di acqua, come un rubinetto o un filtro di un impianto di condizionamento.],
-    [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame. (_i.e._ tabella).],
-    [Entità debole], [Entità che non ha una chiave primaria propria, ma dipende da un'altra entità per la sua identificazione.],
-    [Generalizzazione],[In riferimento al modello E-R, relazione che associa ad un'entità genitore una o più entità figlie, che ereditano le proprietà del genitore. (_i.e._ specializzazione).],
-    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30."))].],
-    [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica.],
-  ),
-  caption: "Glossario",
-) <dictionary>
-
-#figure(
-  supplement: none,
-  table(
-    columns: (135pt, auto),
-    inset: 8pt,
-      
-    [*Termine*], [*Definizione*],
-    [PCR],[Polymerase Chain Reaction, è una «tecnica di laboratorio per produrre rapidamente (amplificare) milioni o miliardi di copie di uno specifico segmento di DNA, che può poi essere studiato in modo più dettagliato. La PCR prevede l'uso di brevi frammenti di DNA sintetico chiamati primer per selezionare un segmento del genoma da amplificare, e quindi più cicli di sintesi del DNA per amplificare quel segmento»#footnote[#cite(<PCR>, form: "full")].],
-    [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di Legionella in un campione.],
-    [PCR Quantitativa], [Esame di laboratorio rapido che rileva e quantifica il DNA o l'RNA di Legionella presenti in un campione. (_i.e._ Real-Time PCR).],
-    [Relazione],[In riferimento allo schema E-R, legame che rappresenta la connessione logica e significativa per la realtà modellata, tra due o più entità.],
-    [Relazione Ricorsiva],[Relazione che associa una entità a se stessa (_i.e._ relazione autoreferenziale).],
-    [Richiedente], [Ente o istituzione che richiede un'indagine ambientale.],
-    [Sierotipo], [Livello di classificazione di batteri di Legionella inferiore a quello specie. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp (_i.e._ sierogruppo).]
-  ),
-  caption: "Glossario",
-) <dictionary>
-
-#figure(
-  supplement: none,
-  table(
-    columns: (135pt, auto),
-    inset: 8pt,
-      
-    [*Termine*], [*Definizione*],
-    [Sito], [Edificio presso il quale è condotta un'indagine ambientale.],
-    [UFC_L], [Unità formanti colonie per litro: ovvero unità di misura utilizzata per indicare la concentrazione di Legionella in un campione d'acqua destinato all'analisi colturale.],
-    [UG_L], [Microgrammi per litro: ovvero unità di misura utilizzata per determinare la concentrazione di Legionella in un campione d'acqua mediante PCR quantitativa.],
-    ),
-  caption: "Glossario",
-) <dictionary>
-
+Più specificamente, nei prossimi capitoli viene condotta un'analisi critica di una soluzione esistente, rispetto alla quale sono proposte alcune modifiche al fine di adattarla alle nuove esigenze emerse dai colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. Successivamente, vengono descritte le fasi di ristrutturazione, traduzione in modello relazionale e implementazione della base di dati, con particolare attenzione alla gestione dei vincoli che garantiscono l'integrità dei dati.
 
 #pagebreak()
 
@@ -127,7 +49,7 @@ In particolare, verrà effettuata un'analisi critica di una soluzione esistente 
 = Analisi critica di una soluzione pre-esistente: Valutazione e proposte di modifica
 
 #annotation[Come accennato nel capitolo introduttivo, una delle principali sfide riscontrate nell'attuale sistema di gestione dei dati riguarda la realizzazione di soluzioni efficienti per la memorizzazione delle informazioni raccolte durante le indagini ambientali.
-In questa sezione si procede a un'analisi critica di un database relazionale utilizzato per archiviare i dati relativi alla diffusione della Legionella. Il database oggetto di analisi è stato sviluppato dal dottor Dario Garlatti nell'ambito della sua tesi di laurea triennale in informatica, dal titolo "Base di dati e applicazione web per il monitoraggio del batterio della Legionella"#footnote[#cite(<Tesi_Garlatti>, form: "full")].]
+In questa sezione si procede a un'analisi critica di un database relazionale utilizzato per archiviare i dati relativi alla diffusione della Legionella. Il database oggetto di analisi è stato sviluppato dal dottor Dario Garlatti nell'ambito della sua tesi di laurea triennale in informatica, dal titolo "Base di dati e applicazione web per il monitoraggio del batterio della Legionella"#footnote[#cite(<TesiGarlatti>, form: "full")].]
 
 ==  Requisiti
 #annotation[Prima di procedere con lo studio del database, è necessario definire i requisiti del sistema informativo. Questi sono di natura qualitativa e descrivono le caratteristiche che il sistema deve possedere per soddisfare le esigenze degli utenti e degli stakeholder. I criteri alla base della progettazione della soluzione in analisi riguardano l'intera fase di acquisizione dei dati relativi alle indagini ambientali portate a termine dai ricercatori di ARPA FVG per il monitoraggio della Legionella in regione.]
@@ -138,9 +60,9 @@ Il sistema deve consentire la registrazione delle indagini ambientali relative a
 
 
 === Note
-#annotation[Si segnala che la PCR non costituisce un metodo diagnostico definitivo per la legionellosi, ma piuttosto un test di screening che necessita di conferma attraverso la coltura. Infatti, «poiché, così come specificato nella norma ISO “_Water quality- Detection and quantification of Legionella spp and/or Legionella pneumophila by concentration and genic amplification by quantitative polymerase chain reaction (qPCR)_” (ISO/TS 12869, 2012), la qPCR non da informazione riguardo lo stato delle cellule, la quantificazione dovrà sempre essere determinata mediante esame colturale»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 21."))].]
+#annotation[Si segnala che la PCR non costituisce un metodo diagnostico definitivo per la legionellosi, ma piuttosto un test di screening che necessita di conferma attraverso la coltura. Infatti, «poiché, così come specificato nella norma ISO “_Water quality- Detection and quantification of Legionella spp and/or Legionella pneumophila by concentration and genic amplification by quantitative polymerase chain reaction (qPCR)_” (ISO/TS 12869, 2012), la qPCR non da informazione riguardo lo stato delle cellule, la quantificazione dovrà sempre essere determinata mediante esame colturale»#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 21].]
 
-Inoltre, si osserva che i metodi analitici utilizzati per la rilevazione del batterio, come indicato nell'allegato 4 delle Linee Guida per la prevenzione e il controllo della legionellosi#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi")], variano in base alla matrice da analizzare (acqua, biofilm, aria); tuttavia, i risultati ottenuti sono espressi in modo uniforme, a prescindere dal tipo di analisi effettuata. Pertanto, considerata l'esigenza di conservare le informazioni relative ai risultati delle analisi sui campioni, si ritiene lecito mantenere le tre tipologie di analisi sopra menzionate, senza ulteriori distinzioni.
+Inoltre, si osserva che i metodi analitici utilizzati per la rilevazione del batterio, come indicato nell'allegato 4 delle Linee Guida per la prevenzione e il controllo della legionellosi#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 91], variano in base alla matrice da analizzare (acqua, biofilm, aria); tuttavia, i risultati ottenuti sono espressi in modo uniforme, a prescindere dal tipo di analisi effettuata. Pertanto, considerata l'esigenza di conservare le informazioni relative ai risultati delle analisi sui campioni, si ritiene lecito mantenere le tre tipologie di analisi sopra menzionate, senza ulteriori distinzioni.
 
 == Schema concettuale-logico
 #annotation[Di seguito viene presentato lo schema concettuale-logico del database sviluppato dal dottor Garlatti. Tale schema è stato modellato utilizzando il linguaggio IDEF1X#footnote("Integration DEFinition for information modeling."). Questo linguaggio appartiene alla famiglia dei linguaggi di modellazione IDEF#footnote("https://www.idef.com/"). Per una corretta comprensione dello schema, è essenziale definire i concetti di entità e relazione, che rappresentano i fondamenti della modellazione dei dati.]
@@ -168,7 +90,7 @@ Le relazioni di categorizzazione, invece, sono rappresentate da linee che colleg
 Alcune entità, come _indirizzo_ e _categoria_, sono state inizialmente progettate come entità autonome, ma potrebbe essere più efficace trattarle come attributi dell'entità _sito_. Questo approccio non solo semplificherebbe lo schema, ma migliorerebbe anche la sua chiarezza strutturale. In particolare, l'attributo descrizione dell'entità _categoria_ è superfluo, poiché il nome della categoria dovrebbe essere sufficiente per identificarla in modo univoco. Inoltre, l'aggiunta di un attributo nome all'entità _sito_ potrebbe facilitare la consultazione dei dati, specialmente per quanto riguarda gli ospedali, che sono generalmente riconosciuti dalla combinazione di nome e città, piuttosto che unicamente dall'indirizzo.
 In aggiunta, si propone di arricchire l'entità sito con nuovi attributi che ne descrivano le caratteristiche principali nel contesto specifico. Questi attributi includono dettagli sull'impiantistica del sito, come la tipologia di caldaia, il materiale delle tubature, l'uso del cloro, e altre informazioni di carattere generale, come l'anno dell'ultima ristrutturazione.
 
-Un ulteriore elemento di riflessione riguarda l'associazione del _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si considera opportuno che l'entità _richiedente_ sia messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30."))]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
+Un ulteriore elemento di riflessione riguarda l'associazione del _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si ritiene opportuno che l'entità _richiedente_ sia messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 30].. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
 
 L'entità _follow-up clinico_ potrebbe essere ulteriormente arricchita con attributi volti a descrivere il paziente e la sua esposizione al rischio, quali la data di insorgenza dei sintomi, il luogo di residenza, il luogo di lavoro e le attività svolte nei dieci giorni precedenti l'insorgenza dei sintomi. Questi dettagli, tuttavia, non sono modellati nello schema attuale né saranno inclusi nello schema finale, poiché non sono stati considerati nei requisiti né approfonditi con i ricercatori. Ciononostante, potrebbero rivelarsi utili per una valutazione più accurata del rischio di diffusione del batterio.
 
@@ -184,7 +106,7 @@ Complessivamente, gli adeguamenti proposti esercitano un impatto positivo sulla 
 #pagebreak()
 === Diagramma E-R che raccoglie le modifiche proposte
 
-#annotation[A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica E-R#footnote[#cite(<ER>, form: "full")] che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.]
+#annotation[A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica E-R#footnote[#cite(<DatabaseSystems>, form: "full")] che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.]
 #linebreak()
 #linebreak()
 #linebreak()
@@ -267,13 +189,15 @@ Le considerazioni relative ai vincoli di integrità sono posticipate al capitolo
 #pagebreak()
 = Progettazione logica della base di dati
 
-== Rivisitazione del modello concettuale: Sempliﬁcazione delle generalizzazioni e degli attributi composti
+== Ristrutturazione del modello concettuale: Sempliﬁcazione delle generalizzazioni e degli attributi composti
 
 #annotation[Ultimata la fase di progettazione concettuale della base di dati, è opportuno effettuare un'ultima revisione del modello al fine di elaborarne la struttura finale, priva di elementi discrezionali. In questa unità sono riportate le modifiche, congiuntamente alle motivazioni che le guidano, apportate allo schema E-R proposto al #ref(<ER_aggiornato>, supplement: "paragrafo"), con l'obbiettivo di risolvere generalizzazioni, attributi composti e attributi multivalori presenti in figura.]
 
 In prima istanza sono trattati gli aspetti riguardanti le entità coinvolte nelle relazioni di generalizzazione.
 
-Per quanto concerne l'entità _analisi_, si propone di rimuovere, in tutto il suo complesso, la relazione di generalizzazione associando piuttosto le differenti tipologie di analisi ai campioni su cui sono eseguite. Ognuna delle analisi è identificata in modo esclusivo da un codice e caratterizzata sia della data di esecuzione, proprietà ereditata dall'entità soppressa _analisi_, sia dagli attributi caratterizzanti di ciascuna specializzazione. Inoltre, sebbene sia scientificamente inesatto, si propone di riassumere le tabelle rappresentative delle analisi _PCR qualitativa_ e _PCR quantitativa_ in un'unica soluzione denominata _analisi PCR_, che conserva informazioni di entrambe le nature sui campioni analizzati. Questa semplificazione è ritenuta lecita in quanto i risultati prodotti dalle due analisi sono intrinsecamente correlati e possono essere memorizzati in modo più efficiente all'interno di un'unica entità. Infatti la PCR qualitativa, che rileva la presenza del DNA di Legionella, è, nell'ipotesi in cui restituisce un risultato positivo, seguita dala PCR quantitativa, la quale misura la concentrazione del batterio nel campione. La soluzione proposta consente di alleggerire la struttura del database e di semplificare le operazioni di inserimento e consultazione dei dati, senza introdurre perdite di informazioni né comportare un'aumento della complessità del sistema inteso come l'introduzione di vincoli di integrità.
+Per quanto concerne l'entità _analisi_, si propone di rimuovere, in tutto il suo complesso, la relazione di generalizzazione associando piuttosto le differenti tipologie di analisi ai campioni su cui sono eseguite. Ognuna delle analisi è identificata in modo esclusivo da un codice e caratterizzata sia della data di esecuzione, proprietà ereditata dall'entità soppressa _analisi_, sia dagli attributi caratterizzanti di ciascuna specializzazione. Inoltre, pur non essendo del tutto rigoroso dal punto di vista scientifico, si propone di riassumere le tabelle rappresentative delle analisi _PCR qualitativa_ e _PCR quantitativa_ in un'unica soluzione denominata _analisi PCR_, che conserva informazioni di entrambe le nature sui campioni analizzati. Questa semplificazione è ritenuta lecita in quanto i risultati prodotti dalle due analisi sono intrinsecamente correlati e possono essere memorizzati in modo più efficiente all'interno di un'unica entità. Infatti la PCR qualitativa, che rileva la presenza del DNA di Legionella, è, nell'ipotesi in cui restituisce un risultato positivo, seguita dala PCR quantitativa, la quale misura la concentrazione del batterio nel campione. La soluzione proposta consente di alleggerire la struttura del database e di semplificare le operazioni di inserimento e consultazione dei dati, senza introdurre perdite di informazioni né comportare un'aumento della complessità del sistema inteso come l'introduzione di vincoli di integrità.
+Si noti che non tutte le analisi sono eseguite su tutti i campioni, ma, talvolta, solo su una parte di essi.
+Ad esempio, come suggerito dalle linee guida per la prevenzione ed il controllo della legionellosi, «poichè la q-PCR è effettivamente vantaggiosa per molteplici aspetti ma non ancora validata a livello internazionale, essa può, ad oggi, essere solo consigliata per una rapida analisi di numerosi campioni prelevati da siti probabilmente associati ad un caso o ancor più a un cluster di legionellosi, potendo in tempi brevi escludere i siti negativi ed identificare quelli positivi» #footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 21]. In altre parole, le stesse linee guida suggeriscono di eseguire l'analisi colturale solo in caso di risultato positivo alla q-PCR, senza tuttavia stabilire una convenzione. Tale mancanza consente diverse interpretazioni e, pertanto, si è deciso di definire la cardinalità della relazione tra _campione_ e le diverse _analisi_ come "(0,1) a (1,1)", stabilendo che un campione può essere associato a zero o una sola analisi specifica, mentre ogni analisi è sempre associata a un campione. Questa scelta garantisce anche la retrocompatibilità del sistema. Infatti non essendo possibile associare a campioni già esistenti le analisi aggiunte successivamente, ovvero _analisi del pH_ e _analisi genomica_, è opportuno che i campioni non siano obbligatoriamente associati a tutte le tipologie di analisi.
 
 Per quanto concerne la specializzazione relativa all'_analisi colturale_, ovvero l'_analisi colturale positiva_, se ne suggerisce la sostituzione con un attributo denominato sierogruppo, che è proprio dell'entità _analisi colturale_.
 Tale modifica permette di conservare le informazioni relative al sierogruppo di Legionella identificato nel campione, senza introdurre una nuova entità e risparmiando dunque spazio.
@@ -317,41 +241,151 @@ Ad esempio, l'implementazione della query @query di ricerca di tutti i campioni 
 
 La traduzione delle entità in tabelle è diretta e non comporta particolari difficoltà. Ogni entità, infatti, è rappresentata mediante una matrice in cui ogni attributo corrisponde a una colonna.
 
-Per quanto riguarda le relazioni è essenziale considerare tre tipologie fondamentale: le relazioni uno a uno, le relazioni uno a molti e le relazioni molti a molti. non è immediatamente chiaro quale entità debba essere scelta per mappare la relazione, ovvero in quale entità inserire la chiave esterna. Nel nostro contesto si presentano due situazioni principali: la relazione autoreferenziale tra i geni del genoma e la relazione tra i campioni e le analisi.
+Per quanto riguarda le relazioni è essenziale considerare tre tipologie fondamentali: le relazioni uno a uno, le relazioni uno a molti e le relazioni molti a molti. Le relazioni uno a uno sono le più complesse in quanto non è immediatamente chiaro quale entità debba essere scelta per mappare la relazione, ovvero in quale entità inserire la chiave esterna. Nel nostro contesto si presentano due situazioni principali: la relazione autoreferenziale tra i geni del genoma e la relazione tra i campioni e le analisi.
 Nel primo caso, la relazione è mappata sull'entità _gene del genoma_ poichè, sebbene gli strumenti di analisi presentino alcune limitazioni, nella maggioranza dei genomi analizzati esiste un'effettiva sequenzialità tra i geni. Pertanto lo spazio sprecato a causa della mancanza di informazioni è limitato e dunque non giustifica l'introduzione di una nuova tabella che, pur limitando lo spazio utilizzato, porterebbe problemi di integrità e complessità.
 
-Per quanto riguarda le relazioni tra campioni e analisi, si è deciso di mappare la relazione sull'entità _analisi_. Si osserva che la soluzione alternativa, ovvero quella di mappare la relazione sull'entità _campione_, non avrebbe comportato particolari problemi. In particolare lnecessarie per un'analisi geografica della diffusione del batterio, che a seguito dei colloqui con i ricercatori si è rivelata essere una delle principali esigenze, avrebbero avuto lo stesso costo sia in termini di complessità nella redazione del codice per la query sia per il tempo di risposta del sistema.
+Per quanto riguarda le relazioni tra campioni e analisi, si è deciso di mappare la relazione sull'entità _analisi_. Si osserva che la soluzione alternativa, ovvero quella di mappare la relazione sull'entità _campione_, potrebbe comportare perdite di spazio a causa della presenza di campioni non analizzati rispetto ad un esame specifico.
 
 Le relazioni uno a molti, invece, sono più semplici da gestire, in quanto la chiave esterna è necessariamente inserita nell'entità che rappresenta il lato "uno" della relazione. Infine, le relazioni molti a molti sono gestite mediante l'introduzione di una tabella di associazione, che contiene le chiavi esterne delle due entità coinvolte.
 
-Infine, per quanto riguarda le entità deboli, come _dati meterelogici_, _punto di prelievo_ e _gene del genoma_ la chiave primaria è composta dalla chiave primaria dell'entità forte, o delle entità forti, a cui sono associate e un attributo che ne identifica univocamente l'istanza all'interno dell'entità forte.
+Per concludere, le entità deboli, come _dati meteorologici_, _punto di prelievo_ e _gene del genoma_ la chiave primaria è composta dalla chiave primaria dell'entità forte, o delle entità forti, a cui sono associate e un attributo che ne identifica univocamente l'istanza all'interno dell'entità forte.
 
 
 == Schema relazionale
 Sulla base delle considerazioni precedenti, si procede con la definizione dello schema relazionale, che rappresenta la struttura logica del database.
 
-== Note
-=== domini
-=== Vincoli sui domini
-=== Vincoli di integrità
+#figure(
+  image("/img/relazionale.png", width: 100%),
+  caption: [Schema relazionale],
+)
 
+#pagebreak()
+
+
+= Progettazione fisica della base di dati: definizione dei domini, dei vincoli di integrità e impplementazione del codice SQL
+
+=== Domini
+#annotation[Prima di procedere con le considerazioni sui vincoli del sistema è necessario definire, per ogni tabella i domini, ovvero l'insieme dei valori ammissibili, per ciascuna colonna. La maggior parte dei domini relativi alle colonne di ciascuna tabella è è facilmente determinabile. Tuttavia, alcuni domini richiedono una definizione più dettagliata per garantire una corretta rappresentazione dei dati e facilitare l'esecuzione delle operazioni di interrogazione.]
+
+Primariamente si considerino i domnini relativi alla quantificazione della Legionella nei campioni, espressi in ufc/l e µg/l. Per entrambi è opportuno ridururre il dominio ai valori positivi, poichè non ha senso esprimere la presenza di Legionella con valori negativi.
+
+In secondo luogo si analizzi il dominio relativo al parametro di misurazione del pH. Per il fatto che il range di valori ammissibili per il pH è compreso tra 0 e 14, si propone di definire il dominio del pH come un numero decimale rientrante in questo intervallo.
+
+Un ulteriore aspetto da considerare riguarda le colonne categoria e matrice relative rispettivamente alle tabelle _sito_ e _campione_. Per quanto riguarda la colonna categoria, si propone di limitare il dominio a pochi vocaboli appartenenti ad un ristretto insieme semantico, come ad esempio "ospedaliero", "termale", "pubblico", "privato". Si precisa che il valore "pubblico" include tutti quegli edifici destinati alla fruizione da parte di un'ampia e variegata utenza. Analogamente, per la colonna 'matrice', si propone di fissare un dominio che comprenda solo valori appartenenti a un insieme finito di matrici, come ad esempio "acqua", "terreno" e "biofilm".
+
+Inoltre, è opportuno ponderare la dimensione del domino relativo alla colonna genoma dell'entità _analisi genomica_. Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici della Legionella, come ad esempio _Genomic Analysis Reveals Novel Diversity among the 1976 Philadelphia Legionnaires’ Disease Outbreak Isolates and Additional ST36 Strains_#footnote[#cite(<GenomicAnalysis>, form:"full")] e _Comparative Genomics of Legionella pneumophila Isolates from the West Bank and Germany Support Molecular Epidemiology of Legionnaires’ Disease_#footnote[#cite(<ComparativeGenomics>, form: "full")], si è riscontrato che la lunghezza media del genoma del batterio è di circa 3.500.000 basi azotate. Pertanto, si propone di definire il dominio del genoma come una stringa di lunghezza massima pari a 3.700.000 basi.
+
+Infine, per quanto riguarda gli attributi relativi alle coordinate geografiche, ovvero latitudine e longitudine, il dominio deve essere limitato a valori compresi tra -90 e 90 per la latitudine e tra -180 e 180 per la longitudine.
+
+#linebreak()
+
+Di seguito è riportata la definizione dei domini per ciascuna tabella.
+
+*Dati meterologici*
+- data e ora: data
+- temperatura: float
+- umidità: float
+- pressione atmosferica: float
+
+*Stazione meterologica*
+- latitudine: float
+- longitudine: float
+- via: varchar(25)
+- numero_civico: int
+- CAP: int
+- città: varchar(25)
+
+*Sito*
+- latitudine: float
+- longitudine: float
+- CAP: int
+- via/piazza: varchar(25)
+- civico: int
+- città: varchar(25)
+- nome: varchar(25)
+- categoria: varchar(25)
+- materiale tubature: varchar(25)
+- cloro: boolean
+- anno di ultima ristrutturazione: int
+- caldaia: varchar(25)
+
+
+*Punto di prelievo*
+- piano: int
+- stanza: varchar(15)
+- descrizione: varchar(100)
+- componente idraulica: varchar(25)
+
+*Campione*
+- codice: char(5)
+- temperatura: float
+- matrice: varchar(25)
+- volume: float
+
+*Indagini ambientali*
+- codice: char(5)
+- data: date
+
+*FollowUp Clinico*
+- codice: char
+
+*Richiedente*
+- codice: char(5)
+- nome: varchar(25)
+
+*Analisi PCR*
+- codice: char(5)
+- data: date
+- esito: boolean
+- µg/l: int
+
+*Analisi colturale*
+- codice: char(5)
+- data: date
+- esito: boolean
+- ufc/l: int
+- sierotipo: varchar(50)
+
+*Analisi del pH*
+- codice: char(5)
+- data: date
+- ph: float
+
+*Analisi genomica*
+- codice: char(5)
+- data: date
+
+// Sulla base di quanto detto in numerosi articoli scientifici riferiti allo stuido degli aspetti genetici di Legionella, è emerso che mediamente la lunghezza del genoma di Legionella è di circa 3.500.000 basi azotate. Pertanto si è deciso di definire il dominio del genoma come una stringa di lunghezza massima 3.700.000.
+- genoma: varchar(3.700.000)
+
+*Gene del genoma*
+- posizione: int
+- query-cover: float
+- percent-identity: float
+- e-value: float
+
+*Gene*
+- protein-ID: char(5)
+- nome: varchar(75)
+
+== Vincoli
 #annotation[A questo stadio si dispone di una visione completa e definitiva della struttura del database, che rende possibile analizzare le criticità non risolte dallo schema attuale. In questa unità vengono presentati i vincoli di integrità necessari per garantire la consistenza dei dati all'interno del database, insieme alle motivazioni che ne determinano l'introduzione.]
 
-Si consideri, in primo luogo, l'entità _analisi colturale_. la corretta formazione dei dati registrati a seguito di ciascuna analisi, si propone l'introduzione del seguente vincolo di integrità relativo ai casi di positività del campione, relativo alll'associazione tra l'attributo _sierogruppo_ e l'attributo _esito_: ad ogni campione positivo deve essere associato un sierogruppo di Legionella, ovvero quello individuato dall'analisi, mentre ad ogni campione negativo non deve essere associato alcun sierogruppo.
+=== Vincoli sui domini
+La maggaioranza dei domini relativi alle colonne di ciascuna tabella è immediatamente definita. Tuttavia alcuni domini richiedono una definizione più precisa al fine di garantire la corretta rappresentazione dei dati e permettere l'esecuzione delle operazioni di interrogazione.
 
 
+=== Vincoli sulle relazioni
 
-- sequenzialità 1
-- sequenzialità 2
+Si consideri, in primo luogo, l'entità _analisi colturale_. la corretta formazione dei dati registrati a seguito di ciascuna analisi, prevede l'introduzione dei seguenti vincoli di integrità relativi ai casi di positività del campione: ad ogni campione positivo deve essere associato un sierogruppo di Legionella, ovvero quello individuato dall'analisi, mentre ad ogni campione negativo non deve essere associato alcun sierogruppo; ad ogni campione positivo deve essere associato un valore di unità formanti colonia (ufc/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore zero.
 
-- colturale sierogruppo
-- colturale ufc_l
+Per quanto riguarda l'entità _analisi PCR_, è individuato il seguente vincolo: ad ogni campione positivo deve essere associato un valore, µg/l, maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore zero.
 
-- pcr UG_L
+Per l'entità _analisi del pH_, è opportuno introdurre una restrizione che garantisca che il valore del pH sia compreso tra 0 e 14, parametri che definiscono il range di valori ammissibili per il pH.
 
-- sito prelievo campioni indagine
+Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, come già accenntato, poichè un'indagine ambientale è una collezione di campioni raccolti in una stessa data, in un sito specifico, è necessario garantire che tutti i campioni associati a un'indagine siano prelevati nello stesso sito.
 
-= Progettazione fisica
+Infine, per quanto riguarda l'entità _gene del genoma_ è necessario fare alcune considerazioni sulla relazione di sequenzialità tra i geni. In particolare, si propone di introdurre un vincolo che garantisca che un gene non possa essere associato a se stesso, né possa essere associato a un altro gene se esistono geni noti che hanno posizione assoluta maggiore rispetto al gene con il quale si vuole stabilire la relazione di sequenzialità, ma minore rispetto al gene inserito. Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e per evitare situazioni di inconsistenza dovute alla presenza di informazioni errate o non verificabili.
 
 == Creazione delle tabelle
 
@@ -527,19 +561,83 @@ FOREIGN KEY (id_gene) REFERENCES gene(id_gene);
 
 #pagebreak()
 
-// Appendice
-/*
-#let appendix(body) = {
-  set heading(numbering: "A", supplement: [Appendix])
-  counter(heading).update(0)
-  body
-}
 
-#show: appendix
 
-#outline(target: heading.where(supplement: [Appendix]), title: [Appendix])
-*/
+= Glossario  <glossario>
+#annotation[Al fine di facilitare la comprensione del documento, è redatto il seguente glossario contenente le definizioni dei termini tecnici utilizzati.]
 
+#set par(justify: false)
+
+#figure(
+  supplement: none,
+  table(
+    columns: (135pt, auto),
+    inset: 8pt,
+      
+    [*Termine*], [*Definizione*],
+    [Aerosol], [Particelle sospese nell'aria, contenenti gocce d'acqua, che possono trasportare il batterio Legionella.],
+    [Analisi], [Esame di laboratorio effettuato su campioni di acqua prelevati durante un'indagine ambientale.],
+    [Analisi Colturale], [Esame di laboratorio che permette di isolare e identificare le unità formanti colonia (UFC_L) di Legionella in un campione di acqua.],
+    [Attributo],[Concetto che descrive una proprietà o una componente di una entità o di una relazione. (_i.e._ campo).],
+    [Attributo composto],[Attributo dalla struttura complessa, costituito da diversi sotto-attributi.],
+    [Attributo multivalore],[Attributo che, per ogni istanza dell'entità cui è associato, può assumere più di un valore.],
+    [Campione], [Piccola quantità di acqua da sottoporre a esame.],
+    [Categoria], [Classificazione di un sito, o più specificamente di un edificio, in base alla sua destinazione d'uso, come ad esempio ospedaliero, termale o alberghiero.],
+    [Chiave primaria], [Attributo o insieme di attributi che identifica univocamente ogni istanza di un'entità.],
+    
+    ),
+  caption: "Glossario",
+) <dictionary>
+
+#figure(
+  supplement: none,
+  table(
+    columns: (135pt, auto),
+    inset: 8pt,
+
+    [*Termine*], [*Definizione*],
+    [Componente idraulica], [Componente di un sistema idraulico da cui viene prelevato un campione di acqua, come un rubinetto o un filtro di un impianto di condizionamento.],
+    [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame. (_i.e._ tabella).],
+    [Entità debole], [Entità che non ha una chiave primaria propria, ma dipende da un'altra entità per la sua identificazione.],
+    [Generalizzazione],[In riferimento al modello E-R, relazione che associa ad un'entità genitore una o più entità figlie, che ereditano le proprietà del genitore. (_i.e._ specializzazione).],
+    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30."))].],
+    [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica.],
+  ),
+  caption: "Glossario",
+) <dictionary>
+
+#figure(
+  supplement: none,
+  table(
+    columns: (135pt, auto),
+    inset: 8pt,
+      
+    [*Termine*], [*Definizione*],
+    [PCR],[Polymerase Chain Reaction, è una «tecnica di laboratorio per produrre rapidamente (amplificare) milioni o miliardi di copie di uno specifico segmento di DNA, che può poi essere studiato in modo più dettagliato. La PCR prevede l'uso di brevi frammenti di DNA sintetico chiamati primer per selezionare un segmento del genoma da amplificare, e quindi più cicli di sintesi del DNA per amplificare quel segmento»#footnote[#cite(<PCR>, form: "full")].],
+    [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di Legionella in un campione.],
+    [PCR Quantitativa], [Esame di laboratorio rapido che rileva e quantifica il DNA o l'RNA di Legionella presenti in un campione. (_i.e._ Real-Time PCR).],
+    [Relazione],[In riferimento allo schema E-R, legame che rappresenta la connessione logica e significativa per la realtà modellata, tra due o più entità.],
+    [Relazione Ricorsiva],[Relazione che associa una entità a se stessa (_i.e._ relazione autoreferenziale).],
+    [Richiedente], [Ente o istituzione che richiede un'indagine ambientale.],
+    [Sierotipo], [Livello di classificazione di batteri di Legionella inferiore a quello specie. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp (_i.e._ sierogruppo).]
+  ),
+  caption: "Glossario",
+) <dictionary>
+
+#figure(
+  supplement: none,
+  table(
+    columns: (135pt, auto),
+    inset: 8pt,
+      
+    [*Termine*], [*Definizione*],
+    [Sito], [Edificio presso il quale è condotta un'indagine ambientale.],
+    [UFC_L], [Unità formanti colonie per litro: ovvero unità di misura utilizzata per indicare la concentrazione di Legionella in un campione d'acqua destinato all'analisi colturale.],
+    [UG_L], [Microgrammi per litro: ovvero unità di misura utilizzata per determinare la concentrazione di Legionella in un campione d'acqua mediante PCR quantitativa.],
+    ),
+  caption: "Glossario",
+) <dictionary>
 
 #pagebreak()
-#bibliography("bibliografia.bib", title: "8 Bibliografia", style: "ieee")
+
+#bibliography("bibliografia.bib", title: "8. Bibliografia", style: "ieee")
