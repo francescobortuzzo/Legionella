@@ -40,7 +40,7 @@ Inoltre, si è osservato che la presenza del batterio ha registrato un notevole 
 In questo contesto, i sistemi di basi di dati giocano un ruolo fondamentale, in quanto permettono di memorizzare grandi quantità di dati e di effettuare ricerche complesse in modo rapido ed efficiente.
 
 Il presente documento si propone di delineare gli aspetti principali per la progettazione di un database relazionale destinato alla memorizzazione dei dati relativi alla diffusione della Legionella. 
-Più specificamente, nei prossimi capitoli viene condotta un'analisi critica di una soluzione esistente, rispetto alla quale sono proposte alcune modifiche al fine di adattarla alle nuove esigenze emerse dai colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. Successivamente, vengono descritte le fasi di ristrutturazione, traduzione in modello relazionale e implementazione della base di dati, con particolare attenzione alla gestione dei vincoli che garantiscono l'integrità dei dati.
+Più specificamente, nei prossimi capitoli viene condotta un'analisi critica di una soluzione esistente, rispetto alla quale sono proposte alcune modifiche al fine di adattarla alle nuove esigenze emerse dai colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. Successivamente, vengono descritte le fasi di ristrutturazione, traduzione in modello relazionale e implementazione della base di dati, con particolare attenzione rivolta alla definizione dei domini e dei vincoli che garantiscono l'integrità dei dati.
 
 #pagebreak()
 
@@ -90,7 +90,8 @@ Le relazioni di categorizzazione, invece, sono rappresentate da linee che colleg
 Alcune entità, come _indirizzo_ e _categoria_, sono state inizialmente progettate come entità autonome, ma potrebbe essere più efficace trattarle come attributi dell'entità _sito_. Questo approccio non solo semplificherebbe lo schema, ma migliorerebbe anche la sua chiarezza strutturale. In particolare, l'attributo descrizione dell'entità _categoria_ è superfluo, poiché il nome della categoria dovrebbe essere sufficiente per identificarla in modo univoco. Inoltre, l'aggiunta di un attributo nome all'entità _sito_ potrebbe facilitare la consultazione dei dati, specialmente per quanto riguarda gli ospedali, che sono generalmente riconosciuti dalla combinazione di nome e città, piuttosto che unicamente dall'indirizzo.
 In aggiunta, si propone di arricchire l'entità sito con nuovi attributi che ne descrivano le caratteristiche principali nel contesto specifico. Questi attributi includono dettagli sull'impiantistica del sito, come la tipologia di caldaia, il materiale delle tubature, l'uso del cloro, e altre informazioni di carattere generale, come l'anno dell'ultima ristrutturazione.
 
-Un ulteriore elemento di riflessione riguarda l'associazione del _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si ritiene opportuno che l'entità _richiedente_ sia messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 30].. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
+
+Un ulteriore elemento di riflessione riguarda l'associazione del _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si ritiene opportuno che l'entità _richiedente_ sia messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 30]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
 
 L'entità _follow-up clinico_ potrebbe essere ulteriormente arricchita con attributi volti a descrivere il paziente e la sua esposizione al rischio, quali la data di insorgenza dei sintomi, il luogo di residenza, il luogo di lavoro e le attività svolte nei dieci giorni precedenti l'insorgenza dei sintomi. Questi dettagli, tuttavia, non sono modellati nello schema attuale né saranno inclusi nello schema finale, poiché non sono stati considerati nei requisiti né approfonditi con i ricercatori. Ciononostante, potrebbero rivelarsi utili per una valutazione più accurata del rischio di diffusione del batterio.
 
@@ -137,10 +138,18 @@ In questa sezione si procede con l'integrazione dei nuovi requisiti nella base d
 #annotation[Le nuove informazioni sono finalizzate a rendere la base di dati più completa e funzionale. In particolare, è stata considerata l'opportunità di introdurre ulteriori entità e attributi, allo scopo di memorizzare dati aggiuntivi relativi ai campioni raccolti nel corso delle indagini ambientali e ai siti coinvolti.
 Di seguito sono elencati i requisiti, non strutturati, che hanno guidato l'integrazione dei nuovi elementi e le corrispondenti proposte di modifica dello schema.]
 
+#linebreak()
+*Dati meteorologici*
 
 Si ritiene opportuno mantenere le informazioni relative agli aspetti meteorologici e climatici dei siti in cui vengono condotte le indagini ambientali, poiché tali dati possono essere utili per valutare l'impatto delle condizioni ambientali sulla diffusione del batterio e per individuare eventuali correlazioni tra la presenza di Legionella e particolari fattori climatici. Tali informazioni sono raccolte presso le stazioni meteorologiche presenti sul territorio e comprendono dati relativi a temperatura, umidità e pressione atmosferica. Nella base di dati si propone di introdurre un'entità denominata _stazione meteorologica_, identificata dalla posizione geografica, che può essere rappresentata attraverso l'indirizzo oppure le coordinate, e che conserva i dati meteorologici raccolti. Questa entità è associata alla tabella _sito_ nel seguente modo: ogni sito è in relazione con la stazione meteorologica più vicina, la quale forsnisce i dati relativi alle condizioni climatiche del luogo.
 
+#linebreak()
+*Analisi del pH*
+
 Una seconda considerazione riguarda l'opportunità di ampliare il campo di azione delle analisi condotte sui campioni prelevati durante le indagini ambientali. In particolare, si suggerisce di introdurre un nuovo tipo di analisi, denominata _analisi del pH_, volta a misurare il livello di acidità o alcalinità dell'acqua campionata. Questo parametro è di fondamentale importanza per valutare la qualità dell'acqua e la presenza di Legionella, poiché il batterio prospera in acque con pH neutro o leggermente alcalino.
+
+#linebreak()
+*Informazioni genomiche*
 
 Sempre in relazione alle analisi condotte sui campioni, durante i colloqui è emerso il proposito di memorizzare le informazioni genomiche relative al batterio. In particolare, si intende raccogliere dati sulla presenza, o assenza, di specifici geni e individuare i fattori genetici che influenzano la diffusione del batterio. A tale scopo, è necessario eseguire un'analisi genomica sui campioni prelevati per identificare la sequenza del DNA di Legionella. Questa informazione è memorizzata in un'entità _analisi genomica_, che rappresenta una specializzazione dell'entità _analisi_, e contiene l'intera sequenza del DNA di Legionella, espressa mediante le quattro lettere che indicano le basi azotate (A, T, C, G).
 
@@ -182,7 +191,7 @@ Si osserva che gli unici vincoli di integrità che si rendono necessari sono i s
 === Note
 #annotation[Si noti come che l'introduzione di nuove entità e relazioni, sebbene arricchisca il quadro di informazioni memorizzate nel database, comporta un forte aumento della complessità del sistema. Più specificamente, l'aggiunta delle entità coinvolte nella memorizzazione delle informazioni genomiche richiede maggiore attenzione, in quanto, per garantire la coerenza dei dati con le informazioni disponibili nei database di BLAST o degli altri strumenti che possono essere utilizzati per l'individuazione e la classificazione dei geni, è necessario aggiornare costantemente le istanze dell'entità _gene_ con i dati più recenti.]
 
-In ultimo si segnala che le principali operazioni eseguite sulla base di dati riguardano l'inserimento, la modifica e la cancellazione dei dati. Al contrario, le operazioni di interrogazione sono limitate a un numero ristretto di query, finalizzate a ottenere informazioni di tipo spaziale sui campioni, sulle analisi effettuate e sui risultati ottenuti, nonché sulle informazioni genetiche. Pertanto, si preferisce adottare una struttura facilmente manutenibile e ottimizzata per le operazioni fondamentali, che risulta già adeguata per l'esecuzione delle operazioni sopra menzionate, piuttosto che una struttura più complessa, progettata per ottimizzare le interrogazioni, ma che comporterebbe un costo maggiore per la gestione dei dati.
+In ultimo si segnala che le principali operazioni eseguite sulla base di dati riguardano l'inserimento, la modifica e la cancellazione dei dati. Al contrario, le operazioni di interrogazione sono limitate a un numero ristretto di query, finalizzate a ottenere informazioni di tipo spaziale sui campioni, sulle analisi effettuate e sui risultati ottenuti oppure informazioni genetiche. Pertanto, si preferisce adottare una struttura facilmente manutenibile e ottimizzata per le operazioni fondamentali, che risulta già adeguata per l'esecuzione delle operazioni sopra menzionate, piuttosto che una struttura più complessa, progettata per ottimizzare le interrogazioni, ma che comporterebbe un costo maggiore per la gestione dei dati.
 
 Le considerazioni relative ai vincoli di integrità sono posticipate al capitolo successivo, nel quale, terminata la fase di progettazione, sarà possibile ottenere una visione del tutto trasparente e definitiva delle entità coinvolte nel sistema dei relativi attributi e delle relazioni tra di esse.
 
@@ -264,128 +273,138 @@ Sulla base delle considerazioni precedenti, si procede con la definizione dello 
 
 = Progettazione fisica della base di dati: definizione dei domini, dei vincoli di integrità e impplementazione del codice SQL
 
-=== Domini
-#annotation[Prima di procedere con le considerazioni sui vincoli del sistema è necessario definire, per ogni tabella i domini, ovvero l'insieme dei valori ammissibili, per ciascuna colonna. La maggior parte dei domini relativi alle colonne di ciascuna tabella è è facilmente determinabile. Tuttavia, alcuni domini richiedono una definizione più dettagliata per garantire una corretta rappresentazione dei dati e facilitare l'esecuzione delle operazioni di interrogazione.]
+=== Definizione dei domini
+#annotation[Prima di procedere con le considerazioni sui vincoli del sistema è necessario definire, per ogni tabella, i domini, ovvero l'insieme dei valori ammissibili, per ciascuna colonna. La maggior parte dei domini relativi alle colonne di ciascuna tabella è facilmente determinabile. Tuttavia, alcuni domini richiedono una definizione più dettagliata per garantire una corretta rappresentazione dei dati e facilitare l'esecuzione delle operazioni di interrogazione.]
 
-Primariamente si considerino i domnini relativi alla quantificazione della Legionella nei campioni, espressi in ufc/l e µg/l. Per entrambi è opportuno ridururre il dominio ai valori positivi, poichè non ha senso esprimere la presenza di Legionella con valori negativi.
+Primariamente si considerino i domini relativi alla quantificazione della Legionella nei campioni, espressi in ufc/l e µg/l. Per entrambi è opportuno ridururre il dominio ai valori interi positivi, poichè non ha senso esprimere la presenza di Legionella con valori negativi.
+Un caso analogo si presenta per i valori che misurano il volume di un campione, l'umidità e la pressione atmosferica, per i quali si propone di definire il dominio come un numero decimale positivo, in quanto non ha senso avere valori negativi per queste grandezze fisiche.
 
 In secondo luogo si analizzi il dominio relativo al parametro di misurazione del pH. Per il fatto che il range di valori ammissibili per il pH è compreso tra 0 e 14, si propone di definire il dominio del pH come un numero decimale rientrante in questo intervallo.
 
-Un ulteriore aspetto da considerare riguarda le colonne categoria e matrice relative rispettivamente alle tabelle _sito_ e _campione_. Per quanto riguarda la colonna categoria, si propone di limitare il dominio a pochi vocaboli appartenenti ad un ristretto insieme semantico, come ad esempio "ospedaliero", "termale", "pubblico", "privato". Si precisa che il valore "pubblico" include tutti quegli edifici destinati alla fruizione da parte di un'ampia e variegata utenza. Analogamente, per la colonna 'matrice', si propone di fissare un dominio che comprenda solo valori appartenenti a un insieme finito di matrici, come ad esempio "acqua", "terreno" e "biofilm".
+Un ulteriore aspetto da considerare riguarda le colonne categoria e matrice relative rispettivamente alle tabelle _sito_ e _campione_. Per quanto riguarda la colonna categoria, si propone di limitare il dominio a pochi vocaboli appartenenti ad un ristretto insieme semantico, come ad esempio "ospedaliero", "termale", "alberghiero", "pubblico" e "privato". Si precisa che il valore "pubblico" include tutti quegli edifici, non afferenti alle categorie specificate, destinati alla fruizione da parte di un'ampia e variegata utenza. Analogamente, per la colonna matrice, si propone di fissare un dominio che comprenda solo valori appartenenti a un insieme finito di matrici, come ad esempio "acqua", "aria" e "biofilm" e "sedimento".
 
-Inoltre, è opportuno ponderare la dimensione del domino relativo alla colonna genoma dell'entità _analisi genomica_. Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici della Legionella, come ad esempio _Genomic Analysis Reveals Novel Diversity among the 1976 Philadelphia Legionnaires’ Disease Outbreak Isolates and Additional ST36 Strains_#footnote[#cite(<GenomicAnalysis>, form:"full")] e _Comparative Genomics of Legionella pneumophila Isolates from the West Bank and Germany Support Molecular Epidemiology of Legionnaires’ Disease_#footnote[#cite(<ComparativeGenomics>, form: "full")], si è riscontrato che la lunghezza media del genoma del batterio è di circa 3.500.000 basi azotate. Pertanto, si propone di definire il dominio del genoma come una stringa di lunghezza massima pari a 3.700.000 basi.
+Inoltre, è opportuno ponderare la dimensione del domino relativo alla colonna genoma dell'entità _analisi genomica_. Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici della Legionella, come ad esempio _Draft genome sequences from 127 Legionella spp. strains isolated in water systems linked to legionellosis outbreaks_#footnote[#cite(<DraftGenome>, form:"full")], si è riscontrato che la lunghezza media del genoma del batterio è di circa 3.500.000 basi azotate. Pertanto, si propone di definire il dominio del genoma come una stringa di lunghezza massima pari a 3.800.000 basi.
 
 Infine, per quanto riguarda gli attributi relativi alle coordinate geografiche, ovvero latitudine e longitudine, il dominio deve essere limitato a valori compresi tra -90 e 90 per la latitudine e tra -180 e 180 per la longitudine.
 
 #linebreak()
+#linebreak()
 
 Di seguito è riportata la definizione dei domini per ciascuna tabella.
 
-*Dati meterologici*
-- data e ora: data
-- temperatura: float
-- umidità: float
-- pressione atmosferica: float
+#linebreak()
 
-*Stazione meterologica*
-- latitudine: float
-- longitudine: float
-- via: varchar(25)
-- numero_civico: int
-- CAP: int
-- città: varchar(25)
+#box(height: 350pt,
+ columns(2, gutter: -1.95em)[
+   #set par(justify: true)
+    *Dati meterologici*
+    - data e ora: data
+    - temperatura: float
+    - umidità: float (>0)
+    - pressione atmosferica: float (>0)
 
-*Sito*
-- latitudine: float
-- longitudine: float
-- CAP: int
-- via/piazza: varchar(25)
-- civico: int
-- città: varchar(25)
-- nome: varchar(25)
-- categoria: varchar(25)
-- materiale tubature: varchar(25)
-- cloro: boolean
-- anno di ultima ristrutturazione: int
-- caldaia: varchar(25)
+    *Stazione meterologica*
+    - latitudine: float (-90, 90)
+    - longitudine: float (-180, 180)
+    - via: varchar(25)
+    - numero_civico: int
+    - CAP: int (5 cifre)
+    - città: varchar(25)
 
+    *Campione*
+    - codice: char(5)
+    - temperatura: float
+    - matrice: matrice
+    - volume: float (>0)
 
-*Punto di prelievo*
-- piano: int
-- stanza: varchar(15)
-- descrizione: varchar(100)
-- componente idraulica: varchar(25)
+    *Indagini ambientali*
+    - codice: char(5)
+    - data: date
 
-*Campione*
-- codice: char(5)
-- temperatura: float
-- matrice: varchar(25)
-- volume: float
+    *FollowUp Clinico*
+    - codice: char(5)
 
-*Indagini ambientali*
-- codice: char(5)
-- data: date
+    *Sito*
+    - latitudine: float (-90, 90)
+    - longitudine: float (-180, 180)
+    - CAP: int (5 cifre)
+    - via/piazza: varchar(25)
+    - civico: int
+    - città: varchar(25)
+    - nome: varchar(25)
+    - categoria: categoria
+    - materiale tubature: varchar(25)
+    - cloro: boolean
+    - anno di ultima ristrutturazione: date
+    - caldaia: varchar(25)
 
-*FollowUp Clinico*
-- codice: char
+    *Punto di prelievo*
+    - piano: int
+    - stanza: varchar(15)
+    - descrizione: varchar(100)
+    - componente idraulica: varchar(25)
 
-*Richiedente*
-- codice: char(5)
-- nome: varchar(25)
+    *Richiedente*
+    - codice: char(5)
+    - nome: varchar(25)
+  ]
+)
 
-*Analisi PCR*
-- codice: char(5)
-- data: date
-- esito: boolean
-- µg/l: int
+#pagebreak()
 
-*Analisi colturale*
-- codice: char(5)
-- data: date
-- esito: boolean
-- ufc/l: int
-- sierotipo: varchar(50)
+#box(height: 235pt,
+ columns(2, gutter: -1.95em)[
+   #set par(justify: false)
 
-*Analisi del pH*
-- codice: char(5)
-- data: date
-- ph: float
+    *Analisi PCR*
+    - codice: char(5)
+    - data: date
+    - esito: boolean
+    - µg/l: int (≥0)
 
-*Analisi genomica*
-- codice: char(5)
-- data: date
+    *Analisi colturale*
+    - codice: char(5)
+    - data: date
+    - esito: boolean
+    - ufc/l: int (≥0)
+    - sierotipo: varchar(50)
 
-// Sulla base di quanto detto in numerosi articoli scientifici riferiti allo stuido degli aspetti genetici di Legionella, è emerso che mediamente la lunghezza del genoma di Legionella è di circa 3.500.000 basi azotate. Pertanto si è deciso di definire il dominio del genoma come una stringa di lunghezza massima 3.700.000.
-- genoma: varchar(3.700.000)
+    *Analisi del pH*
+    - codice: char(5)
+    - data: date
+    - ph: float (0, 14)
 
-*Gene del genoma*
-- posizione: int
-- query-cover: float
-- percent-identity: float
-- e-value: float
+    *Analisi genomica*
+    - codice: char(5)
+    - data: date
+    // Sulla base di quanto detto in numerosi articoli scientifici riferiti allo stuido degli aspetti genetici di Legionella, è emerso che mediamente la lunghezza del genoma di Legionella è di circa 3.500.000 basi azotate. Pertanto si è deciso di definire il dominio del genoma come una stringa di lunghezza massima 3.700.000.
+    - genoma: varchar(3.800.000)
 
-*Gene*
-- protein-ID: char(5)
-- nome: varchar(75)
+    *Gene del genoma*
+    - posizione: int
+    - query-cover: float
+    - percent-identity: float
+    - e-value: float
 
-== Vincoli
-#annotation[A questo stadio si dispone di una visione completa e definitiva della struttura del database, che rende possibile analizzare le criticità non risolte dallo schema attuale. In questa unità vengono presentati i vincoli di integrità necessari per garantire la consistenza dei dati all'interno del database, insieme alle motivazioni che ne determinano l'introduzione.]
+    *Gene*
+    - protein-ID: char(5)
+    - nome: varchar(75)
+ ]
+)
 
-=== Vincoli sui domini
-La maggaioranza dei domini relativi alle colonne di ciascuna tabella è immediatamente definita. Tuttavia alcuni domini richiedono una definizione più precisa al fine di garantire la corretta rappresentazione dei dati e permettere l'esecuzione delle operazioni di interrogazione.
+== Definizione dei vincoli di integrità
+#annotation[A questo punto si dispone di una visione completa e definitiva della struttura del database, che rende possibile analizzare le criticità non risolte dallo schema attuale. In questa sezione sono presentati i vincoli di integrità necessari per garantire la consistenza dei dati all'interno del database, insieme alle motivazioni che ne determinano l'introduzione.]
 
+Si consideri, in primo luogo, l'entità _analisi colturale_. La corretta formazione dei dati registrati a seguito di ciascuna analisi prevede l'introduzione dei seguenti vincoli di integrità relativi ai casi di positività del campione: ad ogni campione positivo deve essere associato un sierogruppo di Legionella, ovvero quello individuato dall'analisi, mentre ad ogni campione negativo non deve essere associato alcun sierogruppo; ad ogni campione positivo deve essere associato un valore di unità formanti colonia su litro (ufc/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore zero.
 
-=== Vincoli sulle relazioni
-
-Si consideri, in primo luogo, l'entità _analisi colturale_. la corretta formazione dei dati registrati a seguito di ciascuna analisi, prevede l'introduzione dei seguenti vincoli di integrità relativi ai casi di positività del campione: ad ogni campione positivo deve essere associato un sierogruppo di Legionella, ovvero quello individuato dall'analisi, mentre ad ogni campione negativo non deve essere associato alcun sierogruppo; ad ogni campione positivo deve essere associato un valore di unità formanti colonia (ufc/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore zero.
-
-Per quanto riguarda l'entità _analisi PCR_, è individuato il seguente vincolo: ad ogni campione positivo deve essere associato un valore, µg/l, maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore zero.
+Per quanto riguarda l'entità _analisi PCR_, è individuato il seguente vincolo: ad ogni campione positivo deve essere associato un valore di microgrammi su litro (µg/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore zero.
 
 Per l'entità _analisi del pH_, è opportuno introdurre una restrizione che garantisca che il valore del pH sia compreso tra 0 e 14, parametri che definiscono il range di valori ammissibili per il pH.
 
 Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, come già accenntato, poichè un'indagine ambientale è una collezione di campioni raccolti in una stessa data, in un sito specifico, è necessario garantire che tutti i campioni associati a un'indagine siano prelevati nello stesso sito.
 
-Infine, per quanto riguarda l'entità _gene del genoma_ è necessario fare alcune considerazioni sulla relazione di sequenzialità tra i geni. In particolare, si propone di introdurre un vincolo che garantisca che un gene non possa essere associato a se stesso, né possa essere associato a un altro gene se esistono geni noti che hanno posizione assoluta maggiore rispetto al gene con il quale si vuole stabilire la relazione di sequenzialità, ma minore rispetto al gene inserito. Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e per evitare situazioni di inconsistenza dovute alla presenza di informazioni errate o non verificabili.
+Infine, per quanto riguarda l'entità _gene del genoma_ è necessario fare alcune considerazioni sulla relazione di sequenzialità tra i geni. In particolare, si propone di introdurre diversi vincoli che assicurino che a un gene di un genoma non possa essere associato un gene di un genoma diverso né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto al gene con cui si intende stabilire la relazione di sequenzialità, ma minore rispetto al gene considerato.
+Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e per evitare situazioni di inconsistenza.
 
 == Creazione delle tabelle
 
@@ -394,166 +413,264 @@ Infine, per quanto riguarda l'entità _gene del genoma_ è necessario fare alcun
 ==== query sui campioni positivi in una certa data, in una certa via di una certa città
 <query>
 
+#pagebreak()
 = Appendice
 
-== Codice SQL per la creazione delle tabelle
 
 ```SQL
-CREATE TABLE stazione_meteorologica (
-    id_stazione INT PRIMARY KEY,
-    indirizzo VARCHAR(255),
-    latitudine DECIMAL(10, 8),
-    longitudine DECIMAL(11, 8)
+
+CREATE SCHEMA Legionella;
+
+SET search_path TO Legionella;
+
+-- Definizione dei tipi enum relativi a categoria e matrice
+CREATE TYPE CATEGORIA AS
+    ENUM ('ospedaliero', 'termale', 'alberghiero', 'pubblico', 'privato');
+
+CREATE TYPE MATRICE AS 
+    ENUM ('acqua',  'aria', 'biofilm', 'sedimento');
+
+-- Definizione del dominio per le coordinate geografiche
+-- Dominio per latitudine
+CREATE DOMAIN LATITUDINE AS REAL
+    CONSTRAINT latitudine_range CHECK (VALUE >= -90 AND VALUE <= 90);
+
+-- Dominio per longitudine
+CREATE DOMAIN LONGITUDINE AS REAL
+    CONSTRAINT longitudine_range CHECK (VALUE >= -180 AND VALUE <= 180);
+
+-- Dominio per il valore intero non negativo
+CREATE DOMAIN INT_POS AS INTEGER
+    CONSTRAINT valore_non_negativo CHECK (VALUE >= 0);
+
+-- Dominio per il valore reale non negativo
+CREATE DOMAIN FLOAT_POS AS FLOAT
+    CONSTRAINT valore_non_negativo CHECK (VALUE >= 0);
+
+-- Dominio per il pH: float tra 0 e 14
+CREATE DOMAIN PH AS FLOAT
+    CONSTRAINT ph_range CHECK (VALUE >= 0 AND VALUE <= 14);
+
+-- Dominio per il CAP: intero a 5 cifre
+CREATE DOMAIN CAP AS INTEGER
+    CONSTRAINT cap_range CHECK (VALUE >= 10000 AND VALUE <= 99999);
+
+-- DEFINIZIONE DELLE TABELLE
+
+-- Stazione meteorologica
+CREATE TABLE Stazione_meterologica (
+    latitudine LATITUDINE NOT NULL,
+    longitudine LONGITUDINE NOT NULL,
+    via VARCHAR(25) NOT NULL,
+    numero_civico INTEGER NOT NULL,
+    CAP CAP NOT NULL,
+    città VARCHAR(25) NOT NULL,
+
+    PRIMARY KEY (latitudine, longitudine)
 );
 
-CREATE TABLE dati_meteorologici (
-    id_stazione INT,
-    data DATE,
-    temperatura DECIMAL(5, 2),
-    umidita DECIMAL(5, 2),
-    pressione DECIMAL(5, 2),
-    PRIMARY KEY (id_stazione, data),
-    FOREIGN KEY (id_stazione) REFERENCES stazione_meteorologica(id_stazione)
+-- Dati meteorologici
+CREATE TABLE Dati_meterologici (
+    data_ora DATE,
+    latitudine_stazione LATITUDINE NOT NULL,
+    longitudine_stazione LONGITUDINE NOT NULL,
+    temperatura FLOAT NOT NULL,
+    umidità FLOAT_POS NOT NULL,
+    pressione_atmosferica FLOAT NOT NULL,
+
+    PRIMARY KEY (data_ora, latitudine_stazione, longitudine_stazione),
+
+    FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meterologica(latitudine, longitudine)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE gene (
-    protein_id VARCHAR(255) PRIMARY KEY,
-    nome VARCHAR(255)
+-- Sito
+CREATE TABLE Sito (
+    latitudine LATITUDINE NOT NULL,
+    longitudine LONGITUDINE NOT NULL,
+    latitudine_stazione LATITUDINE NOT NULL,
+    longitudine_stazione LONGITUDINE NOT NULL,
+    CAP CAP NOT NULL,
+    via_piazza VARCHAR(25) NOT NULL,
+    civico INTEGER NOT NULL,
+    città VARCHAR(25) NOT NULL,
+    nome VARCHAR(25),
+    categoria CATEGORIA NOT NULL,
+    materiale_tubature VARCHAR(25),
+    cloro BOOLEAN NOT NULL,
+    anno_ultima_ristrutturazione DATE,
+    caldaia VARCHAR(25),
+
+    PRIMARY KEY (latitudine, longitudine),
+
+    FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meterologica(latitudine, longitudine)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE gene_del_genoma (
-    id_gene INT PRIMARY KEY,
-    id_genoma INT,
-    posizione INT,
-    similarita DECIMAL(5, 2),
-    identita DECIMAL(5, 2),
-    score INT,
-    e_value DECIMAL(5, 2),
-    FOREIGN KEY (id_gene) REFERENCES gene(id_gene),
-    FOREIGN KEY (id_genoma) REFERENCES analisi_genomica(id_genoma)
+-- Punto di prelievo
+CREATE TABLE Punto_di_prelievo (
+    piano INTEGER NOT NULL,
+    stanza VARCHAR(15) NOT NULL,
+    latitudine_sito LATITUDINE NOT NULL,
+    longitudine_sito LONGITUDINE NOT NULL,
+    descrizione VARCHAR(100),
+    componente_idraulica VARCHAR(25) NOT NULL,
+
+    PRIMARY KEY (latitudine_sito, longitudine_sito, piano, stanza),
+
+    FOREIGN KEY (latitudine_sito, longitudine_sito) REFERENCES Sito(latitudine, longitudine)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE analisi (
-    id_analisi INT PRIMARY KEY,
-    data DATE,
-    tipo VARCHAR(255),
-    id_campione INT,
-    FOREIGN KEY (id_campione) REFERENCES campione(id_campione)
+-- FollowUp clinico
+CREATE TABLE FollowUp_clinico (
+    codice CHAR(5) NOT NULL,
+
+    PRIMARY KEY (codice)
 );
 
-CREATE TABLE analisi_genomica (
-    id_genoma INT PRIMARY KEY,
-    sequenza VARCHAR(255)
+-- Richiedente
+CREATE TABLE Richiedente (
+    codice CHAR(5) NOT NULL,
+    nome VARCHAR(25),
+
+    PRIMARY KEY (codice)
 );
 
-CREATE TABLE campione (
-    id_campione INT PRIMARY KEY,
-    volume DECIMAL(5, 2),
-    matrice VARCHAR(255),
-    id_punto_prelievo INT,
-    FOREIGN KEY (id_punto_prelievo) REFERENCES punto_prelievo(id_punto_prelievo)
+-- Indagine ambientale
+CREATE TABLE Indagine_ambientale (
+    codice CHAR(5) NOT NULL,
+    codice_FollowUp CHAR(5),
+    codice_Richiedente CHAR(5),
+    data DATE NOT NULL,
+
+    PRIMARY KEY (codice),
+
+    FOREIGN KEY (codice_FollowUp) REFERENCES FollowUp_clinico(codice)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    FOREIGN KEY (codice_Richiedente) REFERENCES Richiedente(codice)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE punto_prelievo (
-    id_punto_prelievo INT PRIMARY KEY,
-    piano VARCHAR(255),
-    stanza VARCHAR(255),
-    componente_idraulico VARCHAR(255),
-    id_sito INT,
-    FOREIGN KEY (id_sito) REFERENCES sito(id_sito)
+-- Campione
+CREATE TABLE Campione (
+    codice CHAR(5) NOT NULL,
+    longitudine_sito LONGITUDINE NOT NULL,
+    latitudine_sito LATITUDINE NOT NULL,
+    piano_punto_prelievo INTEGER NOT NULL,
+    stanza_punto_prelievo VARCHAR(15) NOT NULL,
+    codice_indagine CHAR(5) NOT NULL,
+    temperatura FLOAT NOT NULL,
+    matrice MATRICE NOT NULL,
+    volume FLOAT_POS NOT NULL,
+
+    PRIMARY KEY (codice),
+
+    FOREIGN KEY (longitudine_sito, latitudine_sito, piano_punto_prelievo, stanza_punto_prelievo) REFERENCES Punto_di_prelievo(longitudine_sito, latitudine_sito, piano, stanza)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    FOREIGN KEY (codice_indagine) REFERENCES Indagine_ambientale(codice)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE sito (
-    id_sito INT PRIMARY KEY,
-    nome VARCHAR(255),
-    indirizzo VARCHAR(255),
-    categoria VARCHAR(255),
-    anno_ristrutturazione INT,
-    tipologia_caldaia VARCHAR(255),
-    materiale_tubature VARCHAR(255),
-    uso_cloro BOOLEAN
+-- Analisi PCR
+CREATE TABLE Analisi_PCR (
+    codice CHAR(5) NOT NULL,
+    codice_campione CHAR(5) NOT NULL,
+    data_ora DATE NOT NULL,
+    esito BOOLEAN NOT NULL,
+    µg_l INT_POS NOT NULL,
+
+    PRIMARY KEY (codice),
+
+    FOREIGN KEY (codice_campione) REFERENCES Campione(codice)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE follow_up_clinico (
-    id_follow_up INT PRIMARY KEY,
-    data_insorgenza DATE,
-    luogo_residenza VARCHAR(255),
-    luogo_lavoro VARCHAR(255),
-    attivita_svolte VARCHAR(255),
-    id_paziente INT,
-    FOREIGN KEY (id_paziente) REFERENCES paziente(id_paziente)
+-- Analisi colturale
+CREATE TABLE Analisi_culturale (
+    codice CHAR(5) NOT NULL,
+    codice_campione CHAR(5) NOT NULL,
+    data_ora DATE NOT NULL,
+    esito BOOLEAN NOT NULL,
+    ufc_l INT_POS NOT NULL,
+    sierotipo VARCHAR(50),
+
+    PRIMARY KEY (codice),
+
+    FOREIGN KEY (codice_campione) REFERENCES Campione(codice)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE paziente (
-    id_paziente INT PRIMARY KEY,
-    nome VARCHAR(255),
-    cognome VARCHAR(255),
-    data_nascita DATE
+-- Analisi del pH
+CREATE TABLE Analisi_pH (
+    codice CHAR(5) NOT NULL,
+    codice_campione CHAR(5) NOT NULL,
+    data_ora DATE NOT NULL,
+    ph PH NOT NULL,
+
+    PRIMARY KEY (codice),
+
+    FOREIGN KEY (codice_campione) REFERENCES Campione(codice)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE richiedente (
-    id_richiedente INT PRIMARY KEY,
-    nome VARCHAR(255),
-    indirizzo VARCHAR(255)
+-- Analisi genomica
+CREATE TABLE Analisi_genomica (
+    codice CHAR(5) NOT NULL,
+    codice_campione CHAR(5) NOT NULL,
+    data_ora DATE NOT NULL,
+    genoma VARCHAR(3800000) NOT NULL,
+
+    PRIMARY KEY (codice),
+
+    FOREIGN KEY (codice_campione) REFERENCES Campione(codice)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE indagine (
-    id_indagine INT PRIMARY KEY,
-    tipo VARCHAR(255),
-    data DATE,
-    id_sito INT,
-    id_richiedente INT,
-    FOREIGN KEY (id_sito) REFERENCES sito(id_sito),
-    FOREIGN KEY (id_richiedente) REFERENCES richiedente(id_richiedente)
+-- Gene
+CREATE TABLE Gene (
+    protein_ID CHAR(5) NOT NULL,
+    nome VARCHAR(75),
+
+    PRIMARY KEY (protein_ID)
 );
 
-CREATE TABLE analisi_colture (
-    id_analisi INT PRIMARY KEY,
-    ufc_l INT,
-    sierogruppo VARCHAR(255),
-    FOREIGN KEY (id_analisi) REFERENCES analisi(id_analisi)
+-- Gene del genoma
+CREATE TABLE Gene_genoma (
+    posizione INTEGER NOT NULL,
+    codice_genoma CHAR(5) NOT NULL,
+    protein_ID CHAR(5) NOT NULL,
+    posizione_predecessore INTEGER,
+    codice_genoma_predecessore CHAR(5),
+    protein_ID_predecessore CHAR(5),
+    query_cover FLOAT NOT NULL,
+    percent_identity FLOAT NOT NULL,
+    e_value FLOAT NOT NULL,
+
+    PRIMARY KEY (posizione, codice_genoma, protein_ID),
+
+    FOREIGN KEY (codice_genoma) REFERENCES Analisi_genomica(codice)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (protein_ID) REFERENCES Gene(protein_ID)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    FOREIGN KEY (posizione_predecessore, codice_genoma_predecessore, protein_ID_predecessore) REFERENCES Gene_genoma(posizione, codice_genoma, protein_ID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
-CREATE TABLE analisi_pcr (
-    id_analisi INT PRIMARY KEY,
-    risultato BOOLEAN,
-    quantita DECIMAL(5, 2),
-    FOREIGN KEY (id_analisi) REFERENCES analisi(id_analisi)
-);
-
-CREATE TABLE analisi_ph (
-    id_analisi INT PRIMARY KEY,
-    valore DECIMAL(5, 2),
-    FOREIGN KEY (id_analisi) REFERENCES analisi(id_analisi)
-);
-
-CREATE TABLE analisi_genomica (
-    id_analisi INT PRIMARY KEY,
-    id_genoma INT,
-    FOREIGN KEY (id_analisi) REFERENCES analisi(id_analisi),
-    FOREIGN KEY (id_genoma) REFERENCES gene_del_genoma(id_genoma)
-);
-```
-
-== Codice SQL per l'implementazione dei vincoli di integrità
-
-```SQL
-ALTER TABLE analisi_colture
-ADD CONSTRAINT ufc_l_positivo
-CHECK (ufc_l > 0);
-
-ALTER TABLE analisi_pcr
-ADD CONSTRAINT risultato_positivo
-CHECK (quantita > 0);
-
-ALTER TABLE analisi_genomica
-ADD CONSTRAINT fk_gene_del_genoma
-FOREIGN KEY (id_genoma) REFERENCES gene_del_genoma(id_genoma);
-
-ALTER TABLE gene_del_genoma
-ADD CONSTRAINT fk_gene
-FOREIGN KEY (id_gene) REFERENCES gene(id_gene);
-...
 ```
 
 
@@ -561,8 +678,12 @@ FOREIGN KEY (id_gene) REFERENCES gene(id_gene);
 
 #pagebreak()
 
+#pagebreak()
+= Bibliografia
 
+#bibliography("bibliografia.bib", title:none , style: "ieee")
 
+#pagebreak()
 = Glossario  <glossario>
 #annotation[Al fine di facilitare la comprensione del documento, è redatto il seguente glossario contenente le definizioni dei termini tecnici utilizzati.]
 
@@ -600,7 +721,7 @@ FOREIGN KEY (id_gene) REFERENCES gene(id_gene);
     [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame. (_i.e._ tabella).],
     [Entità debole], [Entità che non ha una chiave primaria propria, ma dipende da un'altra entità per la sua identificazione.],
     [Generalizzazione],[In riferimento al modello E-R, relazione che associa ad un'entità genitore una o più entità figlie, che ereditano le proprietà del genitore. (_i.e._ specializzazione).],
-    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite(<LineeGuida>, form: "prose", supplement: "Linee guida per la prevenzione ed il controllo della legionellosi, p. 30."))].],
+    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 30].],
     [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica.],
   ),
   caption: "Glossario",
@@ -615,7 +736,7 @@ FOREIGN KEY (id_gene) REFERENCES gene(id_gene);
     [*Termine*], [*Definizione*],
     [PCR],[Polymerase Chain Reaction, è una «tecnica di laboratorio per produrre rapidamente (amplificare) milioni o miliardi di copie di uno specifico segmento di DNA, che può poi essere studiato in modo più dettagliato. La PCR prevede l'uso di brevi frammenti di DNA sintetico chiamati primer per selezionare un segmento del genoma da amplificare, e quindi più cicli di sintesi del DNA per amplificare quel segmento»#footnote[#cite(<PCR>, form: "full")].],
     [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di Legionella in un campione.],
-    [PCR Quantitativa], [Esame di laboratorio rapido che rileva e quantifica il DNA o l'RNA di Legionella presenti in un campione. (_i.e._ Real-Time PCR).],
+    [PCR Quantitativa], [Esame di laboratorio rapido che rileva e quantifica il DNA o l'RNA di Legionella presenti in un campione. (_i.e._ Real-Time PCR o qPCR).],
     [Relazione],[In riferimento allo schema E-R, legame che rappresenta la connessione logica e significativa per la realtà modellata, tra due o più entità.],
     [Relazione Ricorsiva],[Relazione che associa una entità a se stessa (_i.e._ relazione autoreferenziale).],
     [Richiedente], [Ente o istituzione che richiede un'indagine ambientale.],
@@ -637,7 +758,3 @@ FOREIGN KEY (id_gene) REFERENCES gene(id_gene);
     ),
   caption: "Glossario",
 ) <dictionary>
-
-#pagebreak()
-
-#bibliography("bibliografia.bib", title: "8. Bibliografia", style: "ieee")
