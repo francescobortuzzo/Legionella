@@ -4,7 +4,7 @@
 
 #let template(
   // Your thesis title
-  title: [Thesis Title],
+  title: [Modellazione e realizzazione di una base di dati per il monitoraggio del batterio legionella ],
 
   // The academic year you're graduating in
   academic-year: [2023/2024],

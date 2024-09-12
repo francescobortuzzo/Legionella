@@ -297,13 +297,13 @@ Di seguito è riportata la definizione dei domini per ciascuna tabella.
 #box(height: 350pt,
  columns(2, gutter: -1.95em)[
    #set par(justify: true)
-    *Dati meterologici*
+    *Dati meteorologici*
     - data e ora: data
     - temperatura: float
     - umidità: float (>0)
     - pressione atmosferica: float (>0)
 
-    *Stazione meterologica*
+    *Stazione meteorologica*
     - latitudine: float (-90, 90)
     - longitudine: float (-180, 180)
     - via: varchar(25)
@@ -406,7 +406,14 @@ Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, 
 Infine, per quanto riguarda l'entità _gene del genoma_ è necessario fare alcune considerazioni sulla relazione di sequenzialità tra i geni. In particolare, si propone di introdurre diversi vincoli che assicurino che a un gene di un genoma non possa essere associato un gene di un genoma diverso né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto al gene con cui si intende stabilire la relazione di sequenzialità, ma minore rispetto al gene considerato.
 Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e per evitare situazioni di inconsistenza.
 
+== Definizione di tipi e creazione dei domini
+
+
 == Creazione delle tabelle
+Il codice per la creazione delle tabelle è banalmente ottenuto dal modello relazionale, tuttavia, alcuni si riportano alcune scelte progettuali circa la definizione dei vincoli sulle chiavi esterne.
+
+Per una corretta gestione dei dati, le tabelle coinvolte in diverse relazioni
+
 
 == Implementazione dei vincoli di integrità
 
@@ -458,7 +465,7 @@ CREATE DOMAIN CAP AS INTEGER
 -- DEFINIZIONE DELLE TABELLE
 
 -- Stazione meteorologica
-CREATE TABLE Stazione_meterologica (
+CREATE TABLE Stazione_meteorologica (
     latitudine LATITUDINE NOT NULL,
     longitudine LONGITUDINE NOT NULL,
     via VARCHAR(25) NOT NULL,
@@ -470,7 +477,7 @@ CREATE TABLE Stazione_meterologica (
 );
 
 -- Dati meteorologici
-CREATE TABLE Dati_meterologici (
+CREATE TABLE Dati_meteorologici (
     data_ora DATE,
     latitudine_stazione LATITUDINE NOT NULL,
     longitudine_stazione LONGITUDINE NOT NULL,
@@ -480,7 +487,7 @@ CREATE TABLE Dati_meterologici (
 
     PRIMARY KEY (data_ora, latitudine_stazione, longitudine_stazione),
 
-    FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meterologica(latitudine, longitudine)
+    FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meteorologica(latitudine, longitudine)
         ON DELETE RESTRICT
         ON UPDATE CASCADE
 );
@@ -504,7 +511,7 @@ CREATE TABLE Sito (
 
     PRIMARY KEY (latitudine, longitudine),
 
-    FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meterologica(latitudine, longitudine)
+    FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meteorologica(latitudine, longitudine)
         ON DELETE RESTRICT
         ON UPDATE CASCADE
 );
