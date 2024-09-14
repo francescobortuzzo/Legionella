@@ -3,9 +3,12 @@ CREATE SCHEMA Legionella;
 SET search_path TO Legionella;
 
 -- Definizione dei tipi enum relativi a categoria e matrice
+
+-- Tipo enum per la categoria di un sito
 CREATE TYPE CATEGORIA AS
     ENUM ('ospedaliero', 'termale', 'alberghiero', 'pubblico', 'privato');
 
+-- Tipo enum per la matrice di un campione
 CREATE TYPE MATRICE AS 
     ENUM ('acqua',  'aria', 'biofilm', 'sedimento');
 
@@ -33,6 +36,10 @@ CREATE DOMAIN PH AS FLOAT
 -- Dominio per il CAP: intero a 5 cifre
 CREATE DOMAIN CAP AS INTEGER
     CONSTRAINT cap_range CHECK (VALUE >= 10000 AND VALUE <= 99999);
+
+-- Dominio per percent-identity e query-cover: float tra 0 e 100
+CREATE DOMAIN PERCENT AS FLOAT
+    CONSTRAINT percent_range CHECK (VALUE >= 0 AND VALUE <= 100);
 
 -- DEFINIZIONE DELLE TABELLE
 
@@ -106,14 +113,14 @@ CREATE TABLE Punto_di_prelievo (
 
 -- FollowUp clinico
 CREATE TABLE FollowUp_clinico (
-    codice CHAR(5) NOT NULL,
+    codice CHAR(6) NOT NULL,
 
     PRIMARY KEY (codice)
 );
 
 -- Richiedente
 CREATE TABLE Richiedente (
-    codice CHAR(5) NOT NULL,
+    codice CHAR(6) NOT NULL,
     nome VARCHAR(25),
 
     PRIMARY KEY (codice)
@@ -121,9 +128,9 @@ CREATE TABLE Richiedente (
 
 -- Indagine ambientale
 CREATE TABLE Indagine_ambientale (
-    codice CHAR(5) NOT NULL,
-    codice_FollowUp CHAR(5),
-    codice_Richiedente CHAR(5),
+    codice CHAR(6) NOT NULL,
+    codice_FollowUp CHAR(6),
+    codice_Richiedente CHAR(6),
     data DATE NOT NULL,
 
     PRIMARY KEY (codice),
@@ -138,12 +145,12 @@ CREATE TABLE Indagine_ambientale (
 
 -- Campione
 CREATE TABLE Campione (
-    codice CHAR(5) NOT NULL,
+    codice CHAR(6) NOT NULL,
     longitudine_sito LONGITUDINE NOT NULL,
     latitudine_sito LATITUDINE NOT NULL,
     piano_punto_prelievo INTEGER NOT NULL,
     stanza_punto_prelievo VARCHAR(15) NOT NULL,
-    codice_indagine CHAR(5) NOT NULL,
+    codice_indagine CHAR(6) NOT NULL,
     temperatura FLOAT NOT NULL,
     matrice MATRICE NOT NULL,
     volume FLOAT_POS NOT NULL,
@@ -160,8 +167,8 @@ CREATE TABLE Campione (
 
 -- Analisi PCR
 CREATE TABLE Analisi_PCR (
-    codice CHAR(5) NOT NULL,
-    codice_campione CHAR(5) NOT NULL,
+    codice CHAR(6) NOT NULL,
+    codice_campione CHAR(6) NOT NULL,
     data_ora DATE NOT NULL,
     esito BOOLEAN NOT NULL,
     µg_l INT_POS NOT NULL,
@@ -175,8 +182,8 @@ CREATE TABLE Analisi_PCR (
 
 -- Analisi colturale
 CREATE TABLE Analisi_culturale (
-    codice CHAR(5) NOT NULL,
-    codice_campione CHAR(5) NOT NULL,
+    codice CHAR(6) NOT NULL,
+    codice_campione CHAR(6) NOT NULL,
     data_ora DATE NOT NULL,
     esito BOOLEAN NOT NULL,
     ufc_l INT_POS NOT NULL,
@@ -191,8 +198,8 @@ CREATE TABLE Analisi_culturale (
 
 -- Analisi del pH
 CREATE TABLE Analisi_pH (
-    codice CHAR(5) NOT NULL,
-    codice_campione CHAR(5) NOT NULL,
+    codice CHAR(6) NOT NULL,
+    codice_campione CHAR(6) NOT NULL,
     data_ora DATE NOT NULL,
     ph PH NOT NULL,
 
@@ -205,8 +212,8 @@ CREATE TABLE Analisi_pH (
 
 -- Analisi genomica
 CREATE TABLE Analisi_genomica (
-    codice CHAR(5) NOT NULL,
-    codice_campione CHAR(5) NOT NULL,
+    codice CHAR(6) NOT NULL,
+    codice_campione CHAR(6) NOT NULL,
     data_ora DATE NOT NULL,
     genoma VARCHAR(3800000) NOT NULL,
 
@@ -219,7 +226,7 @@ CREATE TABLE Analisi_genomica (
 
 -- Gene
 CREATE TABLE Gene (
-    protein_ID CHAR(5) NOT NULL,
+    protein_ID CHAR(6) NOT NULL,
     nome VARCHAR(75),
 
     PRIMARY KEY (protein_ID)
@@ -228,11 +235,11 @@ CREATE TABLE Gene (
 -- Gene del genoma
 CREATE TABLE Gene_genoma (
     posizione INTEGER NOT NULL,
-    codice_genoma CHAR(5) NOT NULL,
-    protein_ID CHAR(5) NOT NULL,
+    codice_genoma CHAR(6) NOT NULL,
+    protein_ID CHAR(6) NOT NULL,
     posizione_predecessore INTEGER,
-    codice_genoma_predecessore CHAR(5),
-    protein_ID_predecessore CHAR(5),
+    codice_genoma_predecessore CHAR(6),
+    protein_ID_predecessore CHAR(6),
     query_cover FLOAT NOT NULL,
     percent_identity FLOAT NOT NULL,
     e_value FLOAT NOT NULL,
@@ -249,3 +256,49 @@ CREATE TABLE Gene_genoma (
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
+
+
+-- Vincoli di integrità
+
+-- Analisi PCR
+CREATE OR REPLACE FUNCTION check_esito_PCR()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF NEW.esito = TRUE AND NEW.µg_l = 0 THEN
+        RAISE EXCEPTION 'Il valore µg/l deve essere maggiore di 0 quando l''esito è positivo.';
+    ELSIF NEW.esito = FALSE AND NEW.µg_l > 0 THEN
+        RAISE EXCEPTION 'Il valore µg/l deve essere 0 quando l''esito è negativo.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_esito_PCR
+BEFORE INSERT OR UPDATE ON Analisi_PCR
+FOR EACH ROW
+EXECUTE FUNCTION check_esito_PCR();
+
+
+-- Analisi colturale
+CREATE OR REPLACE FUNCTION check_esito_Colturale()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF NEW.esito = TRUE AND NEW.ufc_l = 0 THEN
+        RAISE EXCEPTION 'Il valore ufc/l deve essere maggiore di 0 quando l''esito è positivo.';
+    ELSIF NEW.esito = FALSE AND NEW.ufc_l > 0 THEN
+        RAISE EXCEPTION 'Il valore ufc/l deve essere 0 quando l''esito è negativo.';
+    ELSIF NEW.esito = TRUE AND NEW.sierotipo IS NULL THEN
+        RAISE EXCEPTION 'Il sierotipo deve essere specificato quando l''esito è positivo.';
+    ELSIF NEW.esito = FALSE AND NEW.sierotipo IS NOT NULL THEN
+        RAISE EXCEPTION 'Il sierotipo non può essere specificato quando l''esito è negativo.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_esito_Colturale
+BEFORE INSERT OR UPDATE ON Analisi_culturale
+FOR EACH ROW
+EXECUTE FUNCTION check_esito_Colturale();

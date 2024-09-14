@@ -60,9 +60,9 @@ Il sistema deve consentire la registrazione delle indagini ambientali relative a
 
 
 === Note
-#annotation[Si segnala che la PCR non costituisce un metodo diagnostico definitivo per la legionellosi, ma piuttosto un test di screening che necessita di conferma attraverso la coltura. Infatti, «poiché, così come specificato nella norma ISO “_Water quality- Detection and quantification of Legionella spp and/or Legionella pneumophila by concentration and genic amplification by quantitative polymerase chain reaction (qPCR)_” (ISO/TS 12869, 2012), la qPCR non da informazione riguardo lo stato delle cellule, la quantificazione dovrà sempre essere determinata mediante esame colturale»#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 21].]
+#annotation[Si segnala che la PCR non costituisce un metodo diagnostico definitivo per la legionellosi, ma piuttosto un test di screening che necessita di conferma attraverso la coltura. Infatti, «poiché, così come specificato nella norma ISO “_Water quality- Detection and quantification of Legionella spp and/or Legionella pneumophila by concentration and genic amplification by quantitative polymerase chain reaction (qPCR)_” (ISO/TS 12869, 2012), la qPCR non da informazione riguardo lo stato delle cellule, la quantificazione dovrà sempre essere determinata mediante esame colturale»#footnote[#cite( <LineeGuida>, form:"normal" ),«Linee guida per la prevenzione ed il controllo della legionellosi», p. 21].]
 
-Inoltre, si osserva che i metodi analitici utilizzati per la rilevazione del batterio, come indicato nell'allegato 4 delle Linee Guida per la prevenzione e il controllo della legionellosi#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 91], variano in base alla matrice da analizzare (acqua, biofilm, aria); tuttavia, i risultati ottenuti sono espressi in modo uniforme, a prescindere dal tipo di analisi effettuata. Pertanto, considerata l'esigenza di conservare le informazioni relative ai risultati delle analisi sui campioni, si ritiene lecito mantenere le tre tipologie di analisi sopra menzionate, senza ulteriori distinzioni.
+Inoltre, si osserva che i metodi analitici utilizzati per la rilevazione del batterio, come indicato nell'allegato 4 delle "Linee Guida per la prevenzione e il controllo della legionellosi"#footnote[#cite( <LineeGuida>, form:"normal" ), «Linee guida per la prevenzione ed il controllo della legionellosi», p. 91], variano in base alla matrice da analizzare (acqua, biofilm, aria); tuttavia, i risultati ottenuti sono espressi in modo uniforme, a prescindere dal tipo di analisi effettuata. Pertanto, considerata l'esigenza di conservare le informazioni relative ai risultati delle analisi sui campioni, si ritiene lecito mantenere le tre tipologie di analisi sopra menzionate, senza ulteriori distinzioni.
 
 == Schema concettuale-logico
 #annotation[Di seguito viene presentato lo schema concettuale-logico del database sviluppato dal dottor Garlatti. Tale schema è stato modellato utilizzando il linguaggio IDEF1X#footnote("Integration DEFinition for information modeling."). Questo linguaggio appartiene alla famiglia dei linguaggi di modellazione IDEF#footnote("https://www.idef.com/"). Per una corretta comprensione dello schema, è essenziale definire i concetti di entità e relazione, che rappresentano i fondamenti della modellazione dei dati.]
@@ -91,7 +91,7 @@ Alcune entità, come _indirizzo_ e _categoria_, sono state inizialmente progetta
 In aggiunta, si propone di arricchire l'entità sito con nuovi attributi che ne descrivano le caratteristiche principali nel contesto specifico. Questi attributi includono dettagli sull'impiantistica del sito, come la tipologia di caldaia, il materiale delle tubature, l'uso del cloro, e altre informazioni di carattere generale, come l'anno dell'ultima ristrutturazione.
 
 
-Un ulteriore elemento di riflessione riguarda l'associazione del _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si ritiene opportuno che l'entità _richiedente_ sia messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 30]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
+Un ulteriore elemento di riflessione riguarda l'associazione del _richiedente_ alle _indagini ambientali_. Superando quanto indicato nei requisiti, si ritiene opportuno che l'entità _richiedente_ sia messa in relazione con indagini che non siano unicamente di follow-up. Inoltre, si suggerisce l'introduzione di una nuova entità denominata _follow-up clinico_, associata a una o più indagini ambientali. Questa modifica si dimostra particolarmente efficace nella gestione dei dati relativi ai pazienti affetti da legionellosi e nella valutazione del rischio di diffusione del batterio. Infatti, «per avere un quadro globale della situazione, è fondamentale disporre, per ciascun paziente affetto da legionellosi, di informazioni precise su una eventuale esposizione a rischio nei dieci giorni precedenti l'insorgenza dei sintomi»#footnote[#cite( <LineeGuida>, form:"normal" ), «Linee guida per la prevenzione ed il controllo della legionellosi», p. 30]. La possibilità di associare un paziente a una o più indagini ambientali risulterebbe, dunque, vantaggiosa.
 
 L'entità _follow-up clinico_ potrebbe essere ulteriormente arricchita con attributi volti a descrivere il paziente e la sua esposizione al rischio, quali la data di insorgenza dei sintomi, il luogo di residenza, il luogo di lavoro e le attività svolte nei dieci giorni precedenti l'insorgenza dei sintomi. Questi dettagli, tuttavia, non sono modellati nello schema attuale né saranno inclusi nello schema finale, poiché non sono stati considerati nei requisiti né approfonditi con i ricercatori. Ciononostante, potrebbero rivelarsi utili per una valutazione più accurata del rischio di diffusione del batterio.
 
@@ -272,33 +272,97 @@ Sulla base delle considerazioni precedenti, si procede con la definizione dello 
 
 
 = Progettazione fisica della base di dati: definizione dei domini, dei vincoli di integrità e impplementazione del codice SQL
+In questa sezione viene eseguita l'implementazione della base di dati, iniziando dalla definizione dei domini, ovvero l'insieme dei valori ammissibili per ciascuna colonna, e proseguendo con la creazione delle tabelle e delle funzioni che implementano i vincoli che assicurano l'integrità dei dati.
 
-=== Definizione dei domini
-#annotation[Prima di procedere con le considerazioni sui vincoli del sistema è necessario definire, per ogni tabella, i domini, ovvero l'insieme dei valori ammissibili, per ciascuna colonna. La maggior parte dei domini relativi alle colonne di ciascuna tabella è facilmente determinabile. Tuttavia, alcuni domini richiedono una definizione più dettagliata per garantire una corretta rappresentazione dei dati e facilitare l'esecuzione delle operazioni di interrogazione.]
+Il DBMS scelto per la realizzazione del database è PostgreSQL, un sistema di gestione di basi di dati relazionali rilasciato per la prima volta nel 1989. La scelta è motivata dalla flessibilità ed estendibilità del sistema, che consente di implementare vincoli di integrità complessi e di gestire grandi quantità di dati in modo efficiente.
+
+
+== Definizione dei domini
+#annotation[Per prima cosa è necessario definire i vincoliLa maggior parte dei domini relativi alle colonne di ciascuna tabella è facilmente determinabile. Tuttavia, alcuni domini richiedono una definizione più dettagliata per garantire una corretta rappresentazione dei dati e facilitare l'esecuzione delle operazioni di interrogazione.]
 
 Primariamente si considerino i domini relativi alla quantificazione della Legionella nei campioni, espressi in ufc/l e µg/l. Per entrambi è opportuno ridururre il dominio ai valori interi positivi, poichè non ha senso esprimere la presenza di Legionella con valori negativi.
 Un caso analogo si presenta per i valori che misurano il volume di un campione, l'umidità e la pressione atmosferica, per i quali si propone di definire il dominio come un numero decimale positivo, in quanto non ha senso avere valori negativi per queste grandezze fisiche.
 
-In secondo luogo si analizzi il dominio relativo al parametro di misurazione del pH. Per il fatto che il range di valori ammissibili per il pH è compreso tra 0 e 14, si propone di definire il dominio del pH come un numero decimale rientrante in questo intervallo.
+```SQL
+-- Dominio per il valore intero non negativo
+CREATE DOMAIN INT_POS AS INTEGER
+    CONSTRAINT valore_non_negativo CHECK (VALUE >= 0);
 
-Un ulteriore aspetto da considerare riguarda le colonne categoria e matrice relative rispettivamente alle tabelle _sito_ e _campione_. Per quanto riguarda la colonna categoria, si propone di limitare il dominio a pochi vocaboli appartenenti ad un ristretto insieme semantico, come ad esempio "ospedaliero", "termale", "alberghiero", "pubblico" e "privato". Si precisa che il valore "pubblico" include tutti quegli edifici, non afferenti alle categorie specificate, destinati alla fruizione da parte di un'ampia e variegata utenza. Analogamente, per la colonna matrice, si propone di fissare un dominio che comprenda solo valori appartenenti a un insieme finito di matrici, come ad esempio "acqua", "aria" e "biofilm" e "sedimento".
+-- Dominio per il valore reale non negativo
+CREATE DOMAIN FLOAT_POS AS FLOAT
+    CONSTRAINT valore_non_negativo CHECK (VALUE >= 0);
+```
 
-Inoltre, è opportuno ponderare la dimensione del domino relativo alla colonna genoma dell'entità _analisi genomica_. Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici del batterio, come ad esempio _Draft genome sequences from 127 Legionella spp. strains isolated in water systems linked to legionellosis outbreaks_#footnote[#cite(<DraftGenome>, form:"full")], si è riscontrato che la lunghezza media del genoma della _Legionella Pneumophila_ batterio, in par è di circa 3.500.000 basi azotate. Pertanto, si propone di definire il dominio del genoma come una stringa di lunghezza massima pari a 3.800.000 basi.
+#annotation[In secondo luogo si analizzi il dominio relativo al parametro di misurazione del pH. Per il fatto che il range di valori ammissibili per il pH è compreso tra 0 e 14, si propone di definire il dominio del pH come un numero decimale rientrante in questo intervallo.]
 
-Infine, per quanto riguarda gli attributi relativi alle coordinate geografiche, ovvero latitudine e longitudine, il dominio deve essere limitato a valori compresi tra -90 e 90 per la latitudine e tra -180 e 180 per la longitudine.
+```SQL
+-- Dominio per il valore del pH
+CREATE DOMAIN PH AS FLOAT
+    CONSTRAINT ph_range CHECK (VALUE >= 0 AND VALUE <= 14);
+```
+
+#annotation[Un ulteriore aspetto da considerare riguarda le colonne categoria e matrice relative rispettivamente alle tabelle _sito_ e _campione_. Per quanto riguarda la colonna categoria, si propone di limitare il dominio a pochi vocaboli appartenenti ad un ristretto insieme semantico, come ad esempio "ospedaliero", "termale", "alberghiero", "pubblico" e "privato". Si precisa che il valore "pubblico" include tutti quegli edifici, non afferenti alle categorie specificate, destinati alla fruizione da parte di un'ampia e variegata utenza. Analogamente, per la colonna matrice, si propone di fissare un dominio che comprenda solo valori appartenenti a un insieme finito di matrici, come ad esempio "acqua", "aria" e "biofilm" e "sedimento".]
+
+```SQL
+CREATE TYPE CATEGORIA AS
+    ENUM ('ospedaliero', 'termale', 'alberghiero', 'pubblico', 'privato');
+
+-- Tipo enum per la matrice di un campione
+CREATE TYPE MATRICE AS 
+    ENUM ('acqua',  'aria', 'biofilm', 'sedimento');
+```
+
+#annotation[La colonna CAP delle tabelle _sito_ e _stazione meteorologica_ rappresenta un aggiuntivo aspetto notevole. Poichè il CAP è un codice numerico formato da cinque cifre, si suggerisce di definire un dominio di tipo integer che accetti esclusivamente valori numerici di tale lunghezza.]
+
+```SQL
+CREATE DOMAIN CAP AS INTEGER
+    CONSTRAINT cap_range CHECK (VALUE >= 10000 AND VALUE <= 99999);
+```
+
+#annotation[Inoltre, si propone di restringere l'intervallo dei valori ammessi per le colonne _percent-identity_, _query-cover_ e _e-value_ dell'entità _gene del genoma_. In termini pratici, si suggerisce di definire un dominio di tipo float compresi tra 0 e 100 per le colonne _percent-identity_ e _query-cover_, in quanto rappresentano percentuali di similarità tra i geni noti e quelli individuati tramite l'analisi. Per quanto concerne l'_e-value_, invece, si propone di utilizzare il dominio FLOAT_POS definito in precedenza, in quanto si vuole rappresentare un valore numerico positivo.]
+
+```SQL
+-- Dominio per percent-identity e query-cover: float tra 0 e 100
+CREATE DOMAIN PERCENT AS FLOAT
+    CONSTRAINT percent_range CHECK (VALUE >= 0 AND VALUE <= 100);
+```
+
+#annotation[Infine, per quanto riguarda gli attributi relativi alle coordinate geografiche, ovvero latitudine e longitudine, il dominio deve essere limitato a valori compresi tra -90 e 90 per la latitudine e tra -180 e 180 per la longitudine.]
+
+```SQL
+-- Dominio per latitudine
+CREATE DOMAIN LATITUDINE AS REAL
+    CONSTRAINT latitudine_range CHECK (VALUE >= -90 AND VALUE <= 90);
+
+-- Dominio per longitudine
+CREATE DOMAIN LONGITUDINE AS REAL
+    CONSTRAINT longitudine_range CHECK (VALUE >= -180 AND VALUE <= 180);
+```
+
+=== Note
+Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici del batterio, come ad esempio _Draft genome sequences from 127 Legionella spp. strains isolated in water systems linked to legionellosis outbreaks_#footnote[#cite(<DraftGenome>, form:"full")], è emerso che la lunghezza media del genoma di Legionella pneumophila è di circa 3.500.000 coppie di basi, con una significativa variabilità tra i genomi sequenziati.
+
+In considerazione alle dimensioni dell'oggetto, si propone di assegnare un dominio di tipo text#footnote("https://www.postgresql.org/docs/current/datatype-character.html"). Questo tipo di dato consente la memorizzazione di stringhe di lunghezza arbitraria, risultando particolarmente adatto per la conservazione di sequenze di DNA.
 
 #linebreak()
+
+*Si potrebbe anche impostare un limite superiore e usare varchar, ma sarebbe meglio aggiungere uno step di conferma per valori superiori a 7.000.000 bp (il doppio rispetto alla media, ovvero un possibile errore di duplicazione dei dati) in un'eventuale interfaccia per interagire con il database per lasciare flessibilità a questo livello*
+
 #linebreak()
+
+Si evidenzia inoltre che, in termini di occupazione della memoria, la politica TOAST#footnote("https://www.postgresql.org/docs/current/storage-toast.html") tipica di PostgreSQL consente una gestione efficiente anche per attributi di grandi dimensioni, allocando i dati in pagine separate e comprimendoli per ridurre lo spazio complessivo occupato.
+#pagebreak()
+
+/*
 
 Di seguito è riportata la definizione dei domini per ciascuna tabella.
 
-#linebreak()
 
-#box(height: 350pt,
- columns(2, gutter: -1.95em)[
+#box(height: 570pt,
+ columns(2)[
    #set par(justify: true)
     *Dati meteorologici*
-    - data e ora: data
+    - data e ora: timestamp
     - temperatura: float
     - umidità: float (>0)
     - pressione atmosferica: float (>0)
@@ -311,19 +375,6 @@ Di seguito è riportata la definizione dei domini per ciascuna tabella.
     - CAP: int (5 cifre)
     - città: varchar(25)
 
-    *Campione*
-    - codice: char(5)
-    - temperatura: float
-    - matrice: matrice
-    - volume: float (>0)
-
-    *Indagini ambientali*
-    - codice: char(5)
-    - data: date
-
-    *FollowUp Clinico*
-    - codice: char(5)
-
     *Sito*
     - latitudine: float (-90, 90)
     - longitudine: float (-180, 180)
@@ -335,9 +386,13 @@ Di seguito è riportata la definizione dei domini per ciascuna tabella.
     - categoria: categoria
     - materiale tubature: varchar(25)
     - cloro: boolean
-    - anno di ultima ristrutturazione: date
+    - anno ultima ristrutturazione: date
     - caldaia: varchar(25)
 
+    *Indagini ambientali*
+    - codice: char(5)
+    - data: date
+   
     *Punto di prelievo*
     - piano: int
     - stanza: varchar(15)
@@ -347,14 +402,15 @@ Di seguito è riportata la definizione dei domini per ciascuna tabella.
     *Richiedente*
     - codice: char(5)
     - nome: varchar(25)
-  ]
-)
 
-#pagebreak()
+    *FollowUp Clinico*
+    - codice: char(5)
 
-#box(height: 235pt,
- columns(2, gutter: -1.95em)[
-   #set par(justify: false)
+    *Campione*
+    - codice: char(5)
+    - temperatura: float
+    - matrice: matrice
+    - volume: float (>0)
 
     *Analisi PCR*
     - codice: char(5)
@@ -378,7 +434,7 @@ Di seguito è riportata la definizione dei domini per ciascuna tabella.
     - codice: char(5)
     - data: date
     // Sulla base di quanto detto in numerosi articoli scientifici riferiti allo stuido degli aspetti genetici di Legionella, è emerso che mediamente la lunghezza del genoma di Legionella è di circa 3.500.000 basi azotate. Pertanto si è deciso di definire il dominio del genoma come una stringa di lunghezza massima 3.700.000.
-    - genoma: varchar(3.800.000)
+    - genoma: text
 
     *Gene del genoma*
     - posizione: int
@@ -391,6 +447,7 @@ Di seguito è riportata la definizione dei domini per ciascuna tabella.
     - nome: varchar(75)
  ]
 )
+*/
 
 == Definizione dei vincoli di integrità
 #annotation[A questo punto si dispone di una visione completa e definitiva della struttura del database, che rende possibile analizzare le criticità non risolte dallo schema attuale. In questa sezione sono presentati i vincoli di integrità necessari per garantire la consistenza dei dati all'interno del database, insieme alle motivazioni che ne determinano l'introduzione.]
@@ -406,8 +463,13 @@ Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, 
 Infine, per quanto riguarda l'entità _gene del genoma_ è necessario fare alcune considerazioni sulla relazione di sequenzialità tra i geni. In particolare, si propone di introdurre diversi vincoli che assicurino che a un gene di un genoma non possa essere associato un gene di un genoma diverso né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto al gene con cui si intende stabilire la relazione di sequenzialità, ma minore rispetto al gene considerato.
 Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e per evitare situazioni di inconsistenza.
 
-== Definizione di tipi e creazione dei domini
+== Implementazione
+#annotation[Il DBMS scelto per la realizzazione del database è PostgreSQL, un sistema di gestione di basi di dati relazionali rilasciato per la prima volta nel 1989. La scelta è motivata dalla flessibilità ed estendibilità del sistema, che consente di implementare vincoli di integrità complessi e di gestire grandi quantità di dati in modo efficiente.]
 
+Nei paragrafi successivi si riporta i
+
+== Definizione dei tipi e creazione dei domini
+In primo luogo
 
 == Creazione delle tabelle
 Il codice per la creazione delle tabelle è banalmente ottenuto dal modello relazionale, tuttavia, alcuni si riportano alcune scelte progettuali circa la definizione dei vincoli sulle chiavi esterne.
@@ -728,7 +790,7 @@ CREATE TABLE Gene_genoma (
     [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame. (_i.e._ tabella).],
     [Entità debole], [Entità che non ha una chiave primaria propria, ma dipende da un'altra entità per la sua identificazione.],
     [Generalizzazione],[In riferimento al modello E-R, relazione che associa ad un'entità genitore una o più entità figlie, che ereditano le proprietà del genitore. (_i.e._ specializzazione).],
-    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 30].],
+    [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite( <LineeGuida>, form:"normal" ), «Linee guida per la prevenzione ed il controllo della legionellosi», p. 30].],
     [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica.],
   ),
   caption: "Glossario",
