@@ -240,9 +240,9 @@ CREATE TABLE Gene_genoma (
     posizione_predecessore INTEGER,
     codice_genoma_predecessore CHAR(6),
     protein_ID_predecessore CHAR(6),
-    query_cover FLOAT NOT NULL,
-    percent_identity FLOAT NOT NULL,
-    e_value FLOAT NOT NULL,
+    query_cover PERCENT NOT NULL,
+    percent_identity PERCENT NOT NULL,
+    e_value FLOAT_POS NOT NULL,
 
     PRIMARY KEY (posizione, codice_genoma, protein_ID),
 
