@@ -449,6 +449,11 @@ Di seguito è riportata la definizione dei domini per ciascuna tabella.
 )
 */
 
+== Creazione delle tabelle
+Il codice per la creazione delle tabelle è banalmente ottenuto dal modello relazionale, tuttavia, alcuni si riportano alcune scelte progettuali circa la definizione dei vincoli sulle chiavi esterne.
+
+Per una corretta gestione dei dati, le tabelle coinvolte in diverse relazioni
+
 == Definizione dei vincoli di integrità
 #annotation[A questo punto si dispone di una visione completa e definitiva della struttura del database, che rende possibile analizzare le criticità non risolte dallo schema attuale. In questa sezione sono presentati i vincoli di integrità necessari per garantire la consistenza dei dati all'interno del database, insieme alle motivazioni che ne determinano l'introduzione.]
 
@@ -463,29 +468,13 @@ Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, 
 Infine, per quanto riguarda l'entità _gene del genoma_ è necessario fare alcune considerazioni sulla relazione di sequenzialità tra i geni. In particolare, si propone di introdurre diversi vincoli che assicurino che a un gene di un genoma non possa essere associato un gene di un genoma diverso né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto al gene con cui si intende stabilire la relazione di sequenzialità, ma minore rispetto al gene considerato.
 Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e per evitare situazioni di inconsistenza.
 
-== Implementazione
-#annotation[Il DBMS scelto per la realizzazione del database è PostgreSQL, un sistema di gestione di basi di dati relazionali rilasciato per la prima volta nel 1989. La scelta è motivata dalla flessibilità ed estendibilità del sistema, che consente di implementare vincoli di integrità complessi e di gestire grandi quantità di dati in modo efficiente.]
-
-Nei paragrafi successivi si riporta i
-
-== Definizione dei tipi e creazione dei domini
-In primo luogo
-
-== Creazione delle tabelle
-Il codice per la creazione delle tabelle è banalmente ottenuto dal modello relazionale, tuttavia, alcuni si riportano alcune scelte progettuali circa la definizione dei vincoli sulle chiavi esterne.
-
-Per una corretta gestione dei dati, le tabelle coinvolte in diverse relazioni
-
-
-== Implementazione dei vincoli di integrità
-
 ==== query sui campioni positivi in una certa data, in una certa via di una certa città
 <query>
 
 #pagebreak()
 = Appendice
 
-
+== Codice SQL per la creazione delle tabelle
 ```SQL
 
 CREATE SCHEMA Legionella;
