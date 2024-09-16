@@ -454,6 +454,7 @@ Di seguito è riportata la definizione dei domini per ciascuna tabella.
 Per ragioni di spazio vengono forniti alcuni esempi di creazione delle tabelle, mentre il codice completo è riportato in appendice.
 
 #linebreak()
+*Analisi*
 
 Un aspetto rilevante riguarda la cancellazione di un campione. In generale si ritiene opportuno di eliminare i dati associate al campione, poiché perderebbero di significato in sua assenza. Tuttavia, si propone di impedire l'operazione di cancellazione qualora il campione sia associato ad un'analisi del genoma. Tale decisione è finalizzata a interrompere la catena di eliminazione, che coinvolgerebbe tutte le informazioni relative ai dati genomici osservati, al fine di evitare l'eliminazione accidentale di una grande quantità di dati.
 Si osserva che, per eliminare un campione, sarà sufficiente rimuovere preventivamente l'eventuale analisi genomica associata, dopodiché sarà possibile procedere con la cancellazione del campione stesso.
@@ -491,10 +492,13 @@ CREATE TABLE Analisi_genomica (
 
 ```
 
-#annotation[Un secondo caso di particolare rilevanza riguarda la tabella _gene del genoma_.
+#linebreak()
+*Gene del genoma*
+
+Un secondo caso di particolare rilevanza riguarda la tabella _gene del genoma_.
 Per quanto concerne la relazione con i geni noti di Legionella, si propone di propagare l'aggiornamento della chiave protein-ID a cascata e di impedire la cancellazione dei geni noti per i quali esistano geni del genoma associati.
 Relativamente alla relazione con i genomi di Legionella sequenziati, invece, è opportuno eseguire sia le operazioni di aggiornamento che di cancellazione a cascata. Tale comportamento è motivato dal fatto che, in caso di modifica di un genoma, è necessario aggiornare i geni del genoma associati; mentre, in caso di cancellazione del genoma, risulta opportuno eliminare anche i geni del genoma collegati, per evitare inconsistenze dovute alla presenza di dati orfani.
-Infine, riguardo alla relazione di sequenzialità tra i geni del genoma, la soluzione è immediatamente determinata dalla cardinalità della relazione: sostituire i dati registrati con il valore NULL.]
+Infine, riguardo alla relazione di sequenzialità tra i geni del genoma, la soluzione è immediatamente determinata dalla cardinalità della relazione: sostituire i dati registrati con il valore NULL.
 
 ```SQL
 CREATE TABLE Gene_del_genoma (
@@ -522,7 +526,10 @@ CREATE TABLE Gene_del_genoma (
 );
 ```
 
-#annotation[In ultimo, si riporta una nota riguardante la tabella sito. Poiché si desidera collegare ciascun sito alla stazione meteorologica più vicina, le operazioni di aggiornamento e cancellazione delle stazioni sono risolte mediante l'applicazione di un trigger, che associa automaticamente tutti i siti legati alla stazione interessata alla stazione meteorologica più vicina. Di conseguenza, non è necessario definire un vincolo di chiave esterna per tale tabella. Una trattazione più approfondita sarà  fornita nei capitoli successuvi.]
+#linebreak()
+*Sito*
+
+In ultimo, si riporta una nota riguardante la tabella sito. Poiché si desidera collegare ciascun sito alla stazione meteorologica più vicina, le operazioni di aggiornamento e cancellazione delle stazioni sono risolte mediante l'applicazione di un trigger, che associa automaticamente tutti i siti legati alla stazione interessata alla stazione meteorologica più vicina. Di conseguenza, non è necessario definire un vincolo di chiave esterna per tale tabella. Una trattazione più approfondita sarà  fornita nei capitoli successuvi.]
 
 ```SQL
 CREATE TABLE Sito (
@@ -556,27 +563,10 @@ CREATE TABLE Sito (
 #annotation[In questo paragrafo si affrontano le problematiche relative alla cancellazione e all'aggiornamento di una stazione meteorologica, come accennato nel capitolo precedente. Poiché si desidera associare ciascun sito alla stazione meteorologica più vicina, si propone di implementare un trigger che, in caso di cancellazione o aggiornamento di una stazione meteorologica, assegni automaticamente a tutti i siti precedentemente collegati alla stazione interessata la stazione meteorologica più vicina. Questa soluzione evita l'utilizzo di un vincolo RESTRICT, il quale renderebbe più complessa la gestione delle operazioni di cancellazione e aggiornamento.]
 
 In dettaglio, il trigger di aggiornamento si occupa di aggiornare la stazione meteorologica associata a ciascun sito, sostituendola con quella più vicina in seguito alla modifica delle coordinate, o all'inserimento, di una stazione meteorologica. Il trigger di cancellazione, invece, impedisce l'eliminazione totale delle stazioni meteorologiche, assicurando che almeno una stazione meteorologica sia associata a ciascun sito. Se la cancellazione è possibile, il trigger aggiorna le coordinate riferite alle stazioni meteorologiche dei siti coinvolti con quelle degli osservatori più vicini a ciascuno.
-In entrambi i casi, la distanza tra le i centri meteorologici e i siti viene calcolata utilizzando la formula di Haversine, che consente di determinare la distanza tra due punti sulla superficie di una sfera, come la Terra, conoscendone le coordinate geografiche.
-```SQL
--- Funnzione di Haversine
-CREATE OR REPLACE FUNCTION distance(lat1 LATITUDINE, lon1 LONGITUDINE, lat2 LATITUDINE, lon2 LONGITUDINE)
-RETURNS FLOAT LANGUAGE plpgsql AS
-$$
-DECLARE
-    R FLOAT := 6371; -- Raggio medio della Terra in km
-    phi1 FLOAT := RADIANS(lat1);
-    phi2 FLOAT := RADIANS(lat2);
-    delta_phi FLOAT := RADIANS(lat2 - lat1);
-    delta_lambda FLOAT := RADIANS(lon2 - lon1);
-    a FLOAT;
-    c FLOAT;
-BEGIN
-    a := SIN(delta_phi / 2) * SIN(delta_phi / 2) + COS(phi1) * COS(phi2) * SIN(delta_lambda / 2) * SIN(delta_lambda / 2);
-    c := 2 * ATAN2(SQRT(a), SQRT(1 - a));
-    RETURN R * c;
-END;
-$$;
+In entrambi i casi, la distanza tra le i centri meteorologici e i siti viene calcolata utilizzando la formula di Haversine, il cui codice è riportato in appendice, che consente di determinare la distanza tra due punti sulla superficie di una sfera, come la Terra, conoscendone le coordinate geografiche.
+Di seguito è presentato solo il codice relativo alla definizione del trigger per le operazioni di aggiornamento e inserimento. Il codice per la gestione della cancellazione, simile a quello mostrato, è riportato in appendice.
 
+```SQL
 -- Trigger insert/update on Stazione_meteorologica
 CREATE OR REPLACE FUNCTION update_stazione_meteorologica()
 RETURNS TRIGGER LANGUAGE plpgsql AS $$
@@ -624,63 +614,6 @@ CREATE TRIGGER update_stazione_meteorologica_trigger
 AFTER INSERT OR UPDATE ON Stazione_meteorologica
 FOR EACH ROW
 EXECUTE FUNCTION update_stazione_meteorologica();
-
--- Trigger delete on Stazione_meteorologica
-CREATE OR REPLACE FUNCTION delete_stazione_meteorologica()
-RETURNS TRIGGER LANGUAGE plpgsql AS $$
-DECLARE
-    lat_sito FLOAT;
-    lon_sito FLOAT;
-    lat_stazione FLOAT;
-    lon_stazione FLOAT;
-    current_distance FLOAT;
-    min_distance FLOAT;
-    lat_stazione_vicina FLOAT;
-    lon_stazione_vicina FLOAT;
-BEGIN
-
-    -- Controllo che ci siano stazioni meteorologiche rimaste
-    IF (SELECT COUNT(*) FROM Stazione_meteorologica) = 1 THEN
-        RAISE EXCEPTION 'Non è possibile eliminare tutte le stazioni meteorologiche.';
-        RETURN OLD;
-    END IF;
-
-    -- Aggiorna i siti per riflettere la stazione meteorologica più vicina rimasta
-    FOR lat_sito, lon_sito IN
-        SELECT lat, lon
-        FROM Sito
-        WHERE latitudine_stazione_meteorologica = OLD.lat AND
-              longitudine_stazione_meteorologica = OLD.lon
-    LOOP
-        min_distance := 'infinity'; -- Inizializzo la distanza minima a infinito
-        FOR lat_stazione, lon_stazione IN
-            SELECT lat, lon
-            FROM Stazione_meteorologica
-        LOOP
-            current_distance := calculate_distance(lat_sito, lon_sito,
-                                                   lat_stazione, lon_stazione);
-            IF current_distance < min_distance THEN
-                min_distance := current_distance;
-                lat_stazione_vicina := lat_stazione;
-                lon_stazione_vicina := lon_stazione;
-            END IF;
-        END LOOP;
-
-        -- Aggiorna il sito con la nuova stazione meteorologica più vicina
-        UPDATE Sito
-        SET latitudine_stazione_meteorologica = lat_stazione_vicina,
-            longitudine_stazione_meteorologica = lon_stazione_vicina
-        WHERE lat = lat_sito AND lon = lon_sito;
-    END LOOP;
-
-    RETURN OLD;
-END;
-$$;
-
-CREATE TRIGGER delete_stazione_meteorologica_trigger
-BEFORE DELETE ON Stazione_meteorologica
-FOR EACH ROW
-EXECUTE FUNCTION delete_stazione_meteorologica();
 ```
 
 
@@ -1018,6 +951,261 @@ CREATE TABLE Gene_genoma (
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
+```
+
+== Codice SQL che implementa i trigger
+```SQL
+-- TRIGGER
+
+-- TABELLA SITO
+
+-- Funnzione di Haversine
+CREATE OR REPLACE FUNCTION distance(lat1 LATITUDINE, lon1 LONGITUDINE, lat2 LATITUDINE, lon2 LONGITUDINE)
+RETURNS FLOAT LANGUAGE plpgsql AS
+$$
+DECLARE
+    R FLOAT := 6371; -- Raggio medio della Terra in km
+    phi1 FLOAT := RADIANS(lat1);
+    phi2 FLOAT := RADIANS(lat2);
+    delta_phi FLOAT := RADIANS(lat2 - lat1);
+    delta_lambda FLOAT := RADIANS(lon2 - lon1);
+    a FLOAT;
+    c FLOAT;
+BEGIN
+    a := SIN(delta_phi / 2) * SIN(delta_phi / 2) + COS(phi1) * COS(phi2) * SIN(delta_lambda / 2) * SIN(delta_lambda / 2);
+    c := 2 * ATAN2(SQRT(a), SQRT(1 - a));
+    RETURN R * c;
+END;
+$$;
+
+-- Trigger insert/update on Stazione_meteorologica
+CREATE OR REPLACE FUNCTION update_stazione_meteorologica()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+DECLARE
+    lat_sito FLOAT;
+    lon_sito FLOAT;
+    lat_stazione FLOAT;
+    lon_stazione FLOAT;
+    current_distance FLOAT;
+    min_distance FLOAT;
+    lat_stazione_vicina FLOAT;
+    lon_stazione_vicina FLOAT;
+BEGIN
+    -- Aggiorna i siti per riflettere la stazione meteorologica più vicina
+    FOR lat_sito, lon_sito IN
+        SELECT lat, lon
+        FROM Sito
+    LOOP
+        min_distance := 'infinity'; -- Inizializzo la distanza minima a infinito
+        FOR lat_stazione, lon_stazione IN
+            SELECT lat, lon
+            FROM Stazione_meteorologica
+        LOOP
+            current_distance := calculate_distance(lat_sito, lon_sito,
+                                                   lat_stazione, lon_stazione);
+            IF current_distance < min_distance THEN
+                min_distance := current_distance;
+                lat_stazione_vicina := lat_stazione;
+                lon_stazione_vicina := lon_stazione;
+            END IF;
+        END LOOP;
+
+        -- Aggiorna il sito con la stazione meteorologica più vicina
+        UPDATE Sito
+        SET latitudine_stazione_meteorologica = lat_stazione_vicina,
+            longitudine_stazione_meteorologica = lon_stazione_vicina
+        WHERE lat = lat_sito AND lon = lon_sito;
+    END LOOP;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER update_stazione_meteorologica_trigger
+AFTER INSERT OR UPDATE ON Stazione_meteorologica
+FOR EACH ROW
+EXECUTE FUNCTION update_stazione_meteorologica();
+
+-- Trigger delete on Stazione_meteorologica
+CREATE OR REPLACE FUNCTION delete_stazione_meteorologica()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+DECLARE
+    lat_sito FLOAT;
+    lon_sito FLOAT;
+    lat_stazione FLOAT;
+    lon_stazione FLOAT;
+    current_distance FLOAT;
+    min_distance FLOAT;
+    lat_stazione_vicina FLOAT;
+    lon_stazione_vicina FLOAT;
+BEGIN
+
+    -- Controllo che ci siano stazioni meteorologiche rimaste
+    IF (SELECT COUNT(*) FROM Stazione_meteorologica) = 1 THEN
+        RAISE EXCEPTION 'Non è possibile eliminare tutte le stazioni meteorologiche.';
+        RETURN OLD;
+    END IF;
+
+    -- Aggiorna i siti per riflettere la stazione meteorologica più vicina rimasta
+    FOR lat_sito, lon_sito IN
+        SELECT lat, lon
+        FROM Sito
+        WHERE latitudine_stazione_meteorologica = OLD.lat AND
+              longitudine_stazione_meteorologica = OLD.lon
+    LOOP
+        min_distance := 'infinity'; -- Inizializzo la distanza minima a infinito
+        FOR lat_stazione, lon_stazione IN
+            SELECT lat, lon
+            FROM Stazione_meteorologica
+        LOOP
+            current_distance := calculate_distance(lat_sito, lon_sito,
+                                                   lat_stazione, lon_stazione);
+            IF current_distance < min_distance THEN
+                min_distance := current_distance;
+                lat_stazione_vicina := lat_stazione;
+                lon_stazione_vicina := lon_stazione;
+            END IF;
+        END LOOP;
+
+        -- Aggiorna il sito con la nuova stazione meteorologica più vicina
+        UPDATE Sito
+        SET latitudine_stazione_meteorologica = lat_stazione_vicina,
+            longitudine_stazione_meteorologica = lon_stazione_vicina
+        WHERE lat = lat_sito AND lon = lon_sito;
+    END LOOP;
+
+    RETURN OLD;
+END;
+$$;
+
+CREATE TRIGGER delete_stazione_meteorologica_trigger
+BEFORE DELETE ON Stazione_meteorologica
+FOR EACH ROW
+EXECUTE FUNCTION delete_stazione_meteorologica();
+
+
+-- TRIGGER ANALISI PCR E COLTURALE
+-- Analisi PCR
+CREATE OR REPLACE FUNCTION check_esito_PCR()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF NEW.esito = TRUE AND NEW.µg_l = 0 THEN
+        RAISE EXCEPTION 'Il valore µg/l deve essere maggiore di 0 quando l''esito è positivo.';
+    ELSIF NEW.esito = FALSE AND NEW.µg_l > 0 THEN
+        RAISE EXCEPTION 'Il valore µg/l deve essere 0 quando l''esito è negativo.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_esito_PCR
+BEFORE INSERT OR UPDATE ON Analisi_PCR
+FOR EACH ROW
+EXECUTE FUNCTION check_esito_PCR();
+
+
+-- Analisi colturale
+CREATE OR REPLACE FUNCTION check_esito_Colturale()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF NEW.esito = TRUE AND NEW.ufc_l = 0 THEN
+        RAISE EXCEPTION 'Il valore ufc/l deve essere maggiore di 0 quando l''esito è positivo.';
+    ELSIF NEW.esito = FALSE AND NEW.ufc_l > 0 THEN
+        RAISE EXCEPTION 'Il valore ufc/l deve essere 0 quando l''esito è negativo.';
+    ELSIF NEW.esito = FALSE AND NEW.sierotipo IS NOT NULL THEN
+        RAISE EXCEPTION 'Il sierotipo non può essere specificato quando l''esito è negativo.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_esito_Colturale
+BEFORE INSERT OR UPDATE ON Analisi_culturale
+FOR EACH ROW
+EXECUTE FUNCTION check_esito_Colturale();
+
+
+-- Campioni di una stessa indagine devono essere raccolti nello stesso sito
+CREATE OR REPLACE FUNCTION check_campione_indagine()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Indagine_ambientale JOIN Campione ON codice = codice_indagine
+        WHERE codice = NEW.codice_indagine
+        AND (latitudine_sito != NEW.latitudine_sito OR longitudine_sito != NEW.longitudine_sito)
+    ) THEN
+        RAISE EXCEPTION 'I campioni raccolti nell''ambito di una stessa indagine devono essere prelevati nel medesimo sito.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_campione_indagine
+BEFORE INSERT OR UPDATE ON Campione
+FOR EACH ROW
+EXECUTE FUNCTION check_campione_indagine();
+
+
+-- Vincoli geni del genoma
+
+  posizione INTEGER NOT NULL,
+    codice_genoma CHAR(6) NOT NULL,
+    protein_ID CHAR(6) NOT NULL,
+    posizione_predecessore INTEGER,
+    codice_genoma_predecessore CHAR(6),
+    protein_ID_predecessore CHAR(6),
+    query_cover PERCENT NOT NULL,
+    percent_identity PERCENT NOT NULL,
+    e_value FLOAT_POS NOT NULL,
+
+-- Non posso associare a un gene un gene di un genoma differente
+--Non posso associare un gene a se stesso
+CREATE OR REPLACE FUNCTION check_genoma()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF NEW.codice_genoma != NEW.codice_genoma_predecessore THEN
+        RAISE EXCEPTION 'Non è possibile associare un gene a un genoma differente.';
+    END IF;
+    IF NEW.posizione = NEW.posizione_predecessore AND NEW.codice_genoma = NEW.codice_genoma_predecessore AND NEW.protein_ID = NEW.protein_ID_predecessore THEN
+        RAISE EXCEPTION 'Non è possibile associare un gene a se stesso.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_genoma
+BEFORE INSERT OR UPDATE ON Gene_genoma
+FOR EACH ROW
+EXECUTE FUNCTION check_genoma();
+
+
+-- Vincoli geni del genoma
+-- Controllo che sia il corretto predecessore
+
+CREATE OR REPLACE FUNCTION check_predecessore()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Gene_genoma
+        WHERE codice_genoma = NEW.codice_genoma_predecessore AND posizione > NEW.posizione_predecessore AND posizione < NEW.posizione
+    ) THEN
+        RAISE EXCEPTION 'Il gene predecessore non è corretto: esiste un gene con posizione compresa tra la posizione del gene e quella del gene predecessore.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_predecessore
+BEFORE INSERT OR UPDATE ON Gene_genoma
+FOR EACH ROW
+EXECUTE FUNCTION check_predecessore();
 ```
 
 
