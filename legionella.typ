@@ -745,6 +745,7 @@ FOR EACH ROW
 EXECUTE FUNCTION check_campione_indagine();
 ```
 
+#linebreak()
 *Geni*
 
 Infine, per quanto riguarda l'entità _gene del genoma_ è necessario considerare attentamente la relazione di sequenzialità tra i geniproponendo l'introduzione di vincoli che garantiscano che a un gene di un genoma non possa essere associato un gene di un genoma diverso, né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto a quello con cui si intende stabilire la relazione, ma minore rispetto al gene considerato.
