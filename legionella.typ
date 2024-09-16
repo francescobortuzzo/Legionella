@@ -791,6 +791,12 @@ FOR EACH ROW
 EXECUTE FUNCTION check_predecessore();
 ```
 
+=== Gestione di cancellazioni e aggiornamenti
+
+*CANCELLAZIONE DI TUTTI I CAMPIONI -> ELIMINO INDAGINE*
+*CANCELLAZIONE DI TUTTE LE INDAGINI -> ELIMINO IL RICHIEDENTE E IL FOLLOW_UP*
+*IL RESTO NON CAMBIA*
+
 ==== query sui campioni positivi in una certa data, in una certa via di una certa città
 <query>
 
