@@ -386,10 +386,7 @@ FOR EACH ROW
 EXECUTE FUNCTION delete_stazione_meteorologica();
 
 
-
-
-
-
+-- TRIGGER ANALISI PCR E COLTURALE
 -- Analisi PCR
 CREATE OR REPLACE FUNCTION check_esito_PCR()
 RETURNS TRIGGER LANGUAGE plpgsql AS
@@ -419,8 +416,6 @@ BEGIN
         RAISE EXCEPTION 'Il valore ufc/l deve essere maggiore di 0 quando l''esito è positivo.';
     ELSIF NEW.esito = FALSE AND NEW.ufc_l > 0 THEN
         RAISE EXCEPTION 'Il valore ufc/l deve essere 0 quando l''esito è negativo.';
-    ELSIF NEW.esito = TRUE AND NEW.sierotipo IS NULL THEN
-        RAISE EXCEPTION 'Il sierotipo deve essere specificato quando l''esito è positivo.';
     ELSIF NEW.esito = FALSE AND NEW.sierotipo IS NOT NULL THEN
         RAISE EXCEPTION 'Il sierotipo non può essere specificato quando l''esito è negativo.';
     END IF;
@@ -432,3 +427,86 @@ CREATE TRIGGER check_esito_Colturale
 BEFORE INSERT OR UPDATE ON Analisi_culturale
 FOR EACH ROW
 EXECUTE FUNCTION check_esito_Colturale();
+
+
+-- Campioni di una stessa indagine devono essere raccolti nello stesso sito
+CREATE OR REPLACE FUNCTION check_campione_indagine()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Indagine_ambientale JOIN Campione ON codice = codice_indagine
+        WHERE codice = NEW.codice_indagine
+        AND (latitudine_sito != NEW.latitudine_sito OR longitudine_sito != NEW.longitudine_sito)
+    ) THEN
+        RAISE EXCEPTION 'I campioni raccolti nell''ambito di una stessa indagine devono essere prelevati nel medesimo sito.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_campione_indagine
+BEFORE INSERT OR UPDATE ON Campione
+FOR EACH ROW
+EXECUTE FUNCTION check_campione_indagine();
+
+
+-- Vincoli geni del genoma
+
+  posizione INTEGER NOT NULL,
+    codice_genoma CHAR(6) NOT NULL,
+    protein_ID CHAR(6) NOT NULL,
+    posizione_predecessore INTEGER,
+    codice_genoma_predecessore CHAR(6),
+    protein_ID_predecessore CHAR(6),
+    query_cover PERCENT NOT NULL,
+    percent_identity PERCENT NOT NULL,
+    e_value FLOAT_POS NOT NULL,
+
+-- Non posso associare a un gene un gene di un genoma differente
+--Non posso associare un gene a se stesso
+CREATE OR REPLACE FUNCTION check_genoma()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF NEW.codice_genoma != NEW.codice_genoma_predecessore THEN
+        RAISE EXCEPTION 'Non è possibile associare un gene a un genoma differente.';
+    END IF;
+    IF NEW.posizione = NEW.posizione_predecessore AND NEW.codice_genoma = NEW.codice_genoma_predecessore AND NEW.protein_ID = NEW.protein_ID_predecessore THEN
+        RAISE EXCEPTION 'Non è possibile associare un gene a se stesso.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_genoma
+BEFORE INSERT OR UPDATE ON Gene_genoma
+FOR EACH ROW
+EXECUTE FUNCTION check_genoma();
+
+
+-- Vincoli geni del genoma
+-- Controllo che sia il corretto predecessore
+
+CREATE OR REPLACE FUNCTION check_predecessore()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Gene_genoma
+        WHERE codice_genoma = NEW.codice_genoma_predecessore AND posizione > NEW.posizione_predecessore AND posizione < NEW.posizione
+    ) THEN
+        RAISE EXCEPTION 'Il gene predecessore non è corretto: esiste un gene con posizione compresa tra la posizione del gene e quella del gene predecessore.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_predecessore
+BEFORE INSERT OR UPDATE ON Gene_genoma
+FOR EACH ROW
+EXECUTE FUNCTION check_predecessore();
+
+

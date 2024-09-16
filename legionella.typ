@@ -552,7 +552,7 @@ CREATE TABLE Sito (
 == Definizione dei vincoli
 #annotation[A questo punto si dispone di una visione completa e definitiva della struttura del database, che rende possibile analizzare le criticità non risolte dallo schema attuale. In questa sezione sono presentati i vincoli di integrità necessari per garantire la consistenza dei dati all'interno del database, insieme alle motivazioni che ne determinano l'introduzione.]
 
-=== Vincoli di chiave esterna della tabella _Sito_
+=== Gestione della chiave esterna relativa alla tabella _Sito_
 #annotation[In questo paragrafo si affrontano le problematiche relative alla cancellazione e all'aggiornamento di una stazione meteorologica, come accennato nel capitolo precedente. Poiché si desidera associare ciascun sito alla stazione meteorologica più vicina, si propone di implementare un trigger che, in caso di cancellazione o aggiornamento di una stazione meteorologica, assegni automaticamente a tutti i siti precedentemente collegati alla stazione interessata la stazione meteorologica più vicina. Questa soluzione evita l'utilizzo di un vincolo RESTRICT, il quale renderebbe più complessa la gestione delle operazioni di cancellazione e aggiornamento.]
 
 In dettaglio, il trigger di aggiornamento si occupa di aggiornare la stazione meteorologica associata a ciascun sito, sostituendola con quella più vicina in seguito alla modifica delle coordinate, o all'inserimento, di una stazione meteorologica. Il trigger di cancellazione, invece, impedisce l'eliminazione totale delle stazioni meteorologiche, assicurando che almeno una stazione meteorologica sia associata a ciascun sito. Se la cancellazione è possibile, il trigger aggiorna le coordinate riferite alle stazioni meteorologiche dei siti coinvolti con quelle degli osservatori più vicini a ciascuno.
@@ -685,16 +685,111 @@ EXECUTE FUNCTION delete_stazione_meteorologica();
 
 
 === Vincoli relativi ai dati
-Si consideri, in primo luogo, l'entità _analisi colturale_. La corretta formazione dei dati registrati a seguito di ciascuna analisi prevede l'introduzione dei seguenti vincoli di integrità relativi ai casi di positività del campione: ad ogni campione positivo deve essere associato un sierogruppo di Legionella, ovvero quello individuato dall'analisi, mentre ad ogni campione negativo non deve essere associato alcun sierogruppo; ad ogni campione positivo deve essere associato un valore di unità formanti colonia su litro (ufc/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore zero.
 
-Per quanto riguarda l'entità _analisi PCR_, è individuato il seguente vincolo: ad ogni campione positivo deve essere associato un valore di microgrammi su litro (µg/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore zero.
+*Analisi*
+#annotation[Per quanto riguarda le analisi, si propone di introdurre vincoli che assicurino la coerenza dei dati registrati.]
 
-Per l'entità _analisi del pH_, è opportuno introdurre una restrizione che garantisca che il valore del pH sia compreso tra 0 e 14, parametri che definiscono il range di valori ammissibili per il pH.
+Si consideri, in primo luogo, l'entità analisi colturale. La corretta formazione dei dati registrati a seguito di ciascuna analisi richiede l'applicazione dei seguenti vincoli di integrità relativi ai casi di positività del campione: ad ogni campione negativo non deve essere associato alcun sierogruppo; ad ogni campione positivo deve essere associato un valore di unità formanti colonia per litro (ufc/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore pari a zero.
 
-Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, come già accenntato, poichè un'indagine ambientale è una collezione di campioni raccolti in una stessa data, in un sito specifico, è necessario garantire che tutti i campioni associati a un'indagine siano prelevati nello stesso sito.
+Per quanto riguarda l'entità analisi PCR, invece, si applica il seguente vincolo: ad ogni campione positivo deve essere associato un valore di microgrammi per litro (µg/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore pari a zero.
 
-Infine, per quanto riguarda l'entità _gene del genoma_ è necessario fare alcune considerazioni sulla relazione di sequenzialità tra i geni. In particolare, si propone di introdurre diversi vincoli che assicurino che a un gene di un genoma non possa essere associato un gene di un genoma diverso né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto al gene con cui si intende stabilire la relazione di sequenzialità, ma minore rispetto al gene considerato.
-Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e per evitare situazioni di inconsistenza.
+Per ragioni di spazio, si riporta esclusivamente il codice relativo ai vincoli riguardanti l'_analisi colturale_. Il codice che implementa la funzione di controllo per la tabella _analisi PCR_ è analogo, con l'eccezione che non prevede condizioni relative al sierotipo, ed è consultabile in appendice.
+
+```SQL
+CREATE OR REPLACE FUNCTION check_esito_Colturale()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF NEW.esito = TRUE AND NEW.ufc_l = 0 THEN
+        RAISE EXCEPTION 'Il valore ufc/l deve essere maggiore di 0 quando l''esito è positivo.';
+    ELSIF NEW.esito = FALSE AND NEW.ufc_l > 0 THEN
+        RAISE EXCEPTION 'Il valore ufc/l deve essere 0 quando l''esito è negativo.';
+    ELSIF NEW.esito = FALSE AND NEW.sierotipo IS NOT NULL THEN
+        RAISE EXCEPTION 'Il sierotipo non può essere specificato quando l''esito è negativo.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_esito_Colturale
+BEFORE INSERT OR UPDATE ON Analisi_culturale
+FOR EACH ROW
+EXECUTE FUNCTION check_esito_Colturale();
+```
+
+#linebreak()
+*Campioni*
+#annotation[Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, come già accenntato, poichè un'indagine ambientale è una collezione di campioni raccolti in una stessa data, in un sito specifico, è necessario garantire che tutti i campioni associati a un'indagine siano prelevati nello stesso sito.
+In termini pratici si propone di introdurre un trigger che, in caso di inserimento o aggiornamento di un campione, verifichi che il sito associato al campione sia lo stesso per tutti i campioni associati all'indagine a cui il campione appartiene.]
+
+```SQL
+CREATE OR REPLACE FUNCTION check_campione_indagine()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Indagine_ambientale JOIN Campione ON codice = codice_indagine
+        WHERE codice = NEW.codice_indagine
+        AND (latitudine_sito != NEW.latitudine_sito OR longitudine_sito != NEW.longitudine_sito)
+    ) THEN
+        RAISE EXCEPTION 'I campioni raccolti nell''ambito di una stessa indagine devono essere prelevati nel medesimo sito.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_campione_indagine
+BEFORE INSERT OR UPDATE ON Campione
+FOR EACH ROW
+EXECUTE FUNCTION check_campione_indagine();
+```
+
+*Geni*
+
+Infine, per quanto riguarda l'entità _gene del genoma_ è necessario considerare attentamente la relazione di sequenzialità tra i geniproponendo l'introduzione di vincoli che garantiscano che a un gene di un genoma non possa essere associato un gene di un genoma diverso, né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto a quello con cui si intende stabilire la relazione, ma minore rispetto al gene considerato.
+Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e prevenire eventuali situazioni di inconsistenza.
+
+```SQL
+CREATE OR REPLACE FUNCTION check_genoma()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF NEW.codice_genoma != NEW.codice_genoma_predecessore THEN
+        RAISE EXCEPTION 'Non è possibile associare un gene a un genoma differente.';
+    END IF;
+    IF NEW.posizione = NEW.posizione_predecessore AND NEW.codice_genoma = NEW.codice_genoma_predecessore AND NEW.protein_ID = NEW.protein_ID_predecessore THEN
+        RAISE EXCEPTION 'Non è possibile associare un gene a se stesso.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_genoma
+BEFORE INSERT OR UPDATE ON Gene_genoma
+FOR EACH ROW
+EXECUTE FUNCTION check_genoma();
+
+CREATE OR REPLACE FUNCTION check_predecessore()
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Gene_genoma
+        WHERE codice_genoma = NEW.codice_genoma_predecessore AND posizione > NEW.posizione_predecessore AND posizione < NEW.posizione
+    ) THEN
+        RAISE EXCEPTION 'Il gene predecessore non è corretto: esiste un gene con posizione compresa tra la posizione del gene e quella del gene predecessore.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER check_predecessore
+BEFORE INSERT OR UPDATE ON Gene_genoma
+FOR EACH ROW
+EXECUTE FUNCTION check_predecessore();
+```
 
 ==== query sui campioni positivi in una certa data, in una certa via di una certa città
 <query>
