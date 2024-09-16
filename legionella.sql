@@ -44,7 +44,7 @@ CREATE DOMAIN PERCENT AS FLOAT
 -- DEFINIZIONE DELLE TABELLE
 
 -- Stazione meteorologica
-CREATE TABLE Stazione_meterologica (
+CREATE TABLE Stazione_meteorologica (
     latitudine LATITUDINE NOT NULL,
     longitudine LONGITUDINE NOT NULL,
     via VARCHAR(25) NOT NULL,
@@ -56,8 +56,8 @@ CREATE TABLE Stazione_meterologica (
 );
 
 -- Dati meteorologici
-CREATE TABLE Dati_meterologici (
-    data_ora DATE,
+CREATE TABLE Dati_meteorologici (
+    data_ora DATETIME,
     latitudine_stazione LATITUDINE NOT NULL,
     longitudine_stazione LONGITUDINE NOT NULL,
     temperatura FLOAT NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE Dati_meterologici (
     PRIMARY KEY (data_ora, latitudine_stazione, longitudine_stazione),
 
     FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meterologica(latitudine, longitudine)
-        ON DELETE RESTRICT
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
@@ -75,8 +75,8 @@ CREATE TABLE Dati_meterologici (
 CREATE TABLE Sito (
     latitudine LATITUDINE NOT NULL,
     longitudine LONGITUDINE NOT NULL,
-    latitudine_stazione LATITUDINE NOT NULL,
-    longitudine_stazione LONGITUDINE NOT NULL,
+    latitudine_stazione_meteorologica LATITUDINE NOT NULL,
+    longitudine_stazione_meteorologica LONGITUDINE NOT NULL,
     CAP CAP NOT NULL,
     via_piazza VARCHAR(25) NOT NULL,
     civico INTEGER NOT NULL,
@@ -90,9 +90,8 @@ CREATE TABLE Sito (
 
     PRIMARY KEY (latitudine, longitudine),
 
-    FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meterologica(latitudine, longitudine)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
+    FOREIGN KEY (latitudine_stazione_meteorologica, longitudine_stazione_meteorologica) REFERENCES Stazione_meterologica(latitudine, longitudine)
+    -- gestito con trigger
 );
 
 -- Punto di prelievo
@@ -108,7 +107,7 @@ CREATE TABLE Punto_di_prelievo (
 
     FOREIGN KEY (latitudine_sito, longitudine_sito) REFERENCES Sito(latitudine, longitudine)
         ON DELETE RESTRICT
-        ON UPDATE CASCADE
+        ON UPDATE UPDATE
 );
 
 -- FollowUp clinico
@@ -136,10 +135,10 @@ CREATE TABLE Indagine_ambientale (
     PRIMARY KEY (codice),
 
     FOREIGN KEY (codice_FollowUp) REFERENCES FollowUp_clinico(codice)
-        ON DELETE RESTRICT
+        ON DELETE SET NULL
         ON UPDATE CASCADE,
     FOREIGN KEY (codice_Richiedente) REFERENCES Richiedente(codice)
-        ON DELETE RESTRICT
+        ON DELETE SET NULL
         ON UPDATE CASCADE
 );
 
@@ -176,7 +175,7 @@ CREATE TABLE Analisi_PCR (
     PRIMARY KEY (codice),
 
     FOREIGN KEY (codice_campione) REFERENCES Campione(codice)
-        ON DELETE RESTRICT
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
@@ -192,7 +191,7 @@ CREATE TABLE Analisi_culturale (
     PRIMARY KEY (codice),
 
     FOREIGN KEY (codice_campione) REFERENCES Campione(codice)
-        ON DELETE RESTRICT
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
@@ -206,7 +205,7 @@ CREATE TABLE Analisi_pH (
     PRIMARY KEY (codice),
 
     FOREIGN KEY (codice_campione) REFERENCES Campione(codice)
-        ON DELETE RESTRICT
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
@@ -215,7 +214,7 @@ CREATE TABLE Analisi_genomica (
     codice CHAR(6) NOT NULL,
     codice_campione CHAR(6) NOT NULL,
     data_ora DATE NOT NULL,
-    genoma VARCHAR(3800000) NOT NULL,
+    genoma TEXT NOT NULL,
 
     PRIMARY KEY (codice),
 
@@ -258,7 +257,138 @@ CREATE TABLE Gene_genoma (
 );
 
 
--- Vincoli di integrità
+-- TRIGGER
+
+-- TABELLA SITO
+
+-- Funnzione di Haversine
+CREATE OR REPLACE FUNCTION distance(lat1 LATITUDINE, lon1 LONGITUDINE, lat2 LATITUDINE, lon2 LONGITUDINE)
+RETURNS FLOAT LANGUAGE plpgsql AS
+$$
+DECLARE
+    R FLOAT := 6371; -- Raggio medio della Terra in km
+    phi1 FLOAT := RADIANS(lat1);
+    phi2 FLOAT := RADIANS(lat2);
+    delta_phi FLOAT := RADIANS(lat2 - lat1);
+    delta_lambda FLOAT := RADIANS(lon2 - lon1);
+    a FLOAT;
+    c FLOAT;
+BEGIN
+    a := SIN(delta_phi / 2) * SIN(delta_phi / 2) + COS(phi1) * COS(phi2) * SIN(delta_lambda / 2) * SIN(delta_lambda / 2);
+    c := 2 * ATAN2(SQRT(a), SQRT(1 - a));
+    RETURN R * c;
+END;
+$$;
+
+-- Trigger insert/update on Stazione_meteorologica
+CREATE OR REPLACE FUNCTION update_stazione_meteorologica()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+DECLARE
+    lat_sito FLOAT;
+    lon_sito FLOAT;
+    lat_stazione FLOAT;
+    lon_stazione FLOAT;
+    current_distance FLOAT;
+    min_distance FLOAT;
+    lat_stazione_vicina FLOAT;
+    lon_stazione_vicina FLOAT;
+BEGIN
+    -- Aggiorna i siti per riflettere la stazione meteorologica più vicina
+    FOR lat_sito, lon_sito IN
+        SELECT lat, lon
+        FROM Sito
+    LOOP
+        min_distance := 'infinity'; -- Inizializzo la distanza minima a infinito
+        FOR lat_stazione, lon_stazione IN
+            SELECT lat, lon
+            FROM Stazione_meteorologica
+        LOOP
+            current_distance := calculate_distance(lat_sito, lon_sito,
+                                                   lat_stazione, lon_stazione);
+            IF current_distance < min_distance THEN
+                min_distance := current_distance;
+                lat_stazione_vicina := lat_stazione;
+                lon_stazione_vicina := lon_stazione;
+            END IF;
+        END LOOP;
+
+        -- Aggiorna il sito con la stazione meteorologica più vicina
+        UPDATE Sito
+        SET latitudine_stazione_meteorologica = lat_stazione_vicina,
+            longitudine_stazione_meteorologica = lon_stazione_vicina
+        WHERE lat = lat_sito AND lon = lon_sito;
+    END LOOP;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER update_stazione_meteorologica_trigger
+AFTER INSERT OR UPDATE ON Stazione_meteorologica
+FOR EACH ROW
+EXECUTE FUNCTION update_stazione_meteorologica();
+
+-- Trigger delete on Stazione_meteorologica
+CREATE OR REPLACE FUNCTION delete_stazione_meteorologica()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+DECLARE
+    lat_sito FLOAT;
+    lon_sito FLOAT;
+    lat_stazione FLOAT;
+    lon_stazione FLOAT;
+    current_distance FLOAT;
+    min_distance FLOAT;
+    lat_stazione_vicina FLOAT;
+    lon_stazione_vicina FLOAT;
+BEGIN
+
+    -- Controllo che ci siano stazioni meteorologiche rimaste
+    IF (SELECT COUNT(*) FROM Stazione_meteorologica) = 1 THEN
+        RAISE EXCEPTION 'Non è possibile eliminare tutte le stazioni meteorologiche.';
+        RETURN OLD;
+    END IF;
+
+    -- Aggiorna i siti per riflettere la stazione meteorologica più vicina rimasta
+    FOR lat_sito, lon_sito IN
+        SELECT lat, lon
+        FROM Sito
+        WHERE latitudine_stazione_meteorologica = OLD.lat AND
+              longitudine_stazione_meteorologica = OLD.lon
+    LOOP
+        min_distance := 'infinity'; -- Inizializzo la distanza minima a infinito
+        FOR lat_stazione, lon_stazione IN
+            SELECT lat, lon
+            FROM Stazione_meteorologica
+        LOOP
+            current_distance := calculate_distance(lat_sito, lon_sito,
+                                                   lat_stazione, lon_stazione);
+            IF current_distance < min_distance THEN
+                min_distance := current_distance;
+                lat_stazione_vicina := lat_stazione;
+                lon_stazione_vicina := lon_stazione;
+            END IF;
+        END LOOP;
+
+        -- Aggiorna il sito con la nuova stazione meteorologica più vicina
+        UPDATE Sito
+        SET latitudine_stazione_meteorologica = lat_stazione_vicina,
+            longitudine_stazione_meteorologica = lon_stazione_vicina
+        WHERE lat = lat_sito AND lon = lon_sito;
+    END LOOP;
+
+    RETURN OLD;
+END;
+$$;
+
+CREATE TRIGGER delete_stazione_meteorologica_trigger
+BEFORE DELETE ON Stazione_meteorologica
+FOR EACH ROW
+EXECUTE FUNCTION delete_stazione_meteorologica();
+
+
+
+
+
 
 -- Analisi PCR
 CREATE OR REPLACE FUNCTION check_esito_PCR()
