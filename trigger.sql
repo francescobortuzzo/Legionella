@@ -2,6 +2,8 @@
 
 --1. Trigger per aggiornamento automatico della stazione meteorologica più vicina
 -- 1.A : On Insert or Update
+SET search_path TO legionella;
+
 CREATE OR REPLACE FUNCTION update_stazione_meteorologica()
 RETURNS TRIGGER LANGUAGE plpgsql AS $$
 BEGIN
@@ -20,7 +22,7 @@ BEGIN
         ON ST_DWithin(
             geography(sito.geom), 
             geography(stazione.geom), 
-            100000
+            100000 -- 100 km
         )
     ) AS stazione
     WHERE Sito.latitudine = stazione.sito_latitudine
@@ -39,7 +41,8 @@ EXECUTE FUNCTION update_stazione_meteorologica();
 
 -- 1.B : On Delete
 CREATE OR REPLACE FUNCTION update_stazione_meteorologica_on_delete()
-RETURNS TRIGGER LANGUAGE plpgsql AS $$
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
 BEGIN
     -- Verifica se ci sono più di una stazione meteorologica
     IF (SELECT COUNT(*) FROM Stazione_meteorologica) = 1 THEN
@@ -57,7 +60,12 @@ BEGIN
                ROW_NUMBER() OVER (PARTITION BY sito.latitudine, sito.longitudine ORDER BY ST_Distance(sito.geom, stazione.geom)) AS rn
 
         FROM Sito sito
-        CROSS JOIN Stazione_meteorologica stazione
+        JOIN Stazione_meteorologica stazione
+        ON ST_DWithin(
+            geography(sito.geom), 
+            geography(stazione.geom), 
+            100000 -- 100 km
+        )
         WHERE (stazione.latitudine != OLD.latitudine OR stazione.longitudine != OLD.longitudine)
 
     ) AS stazione
