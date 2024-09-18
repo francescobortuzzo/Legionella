@@ -5,7 +5,8 @@
 SET search_path TO legionella;
 
 CREATE OR REPLACE FUNCTION update_stazione_meteorologica()
-RETURNS TRIGGER LANGUAGE plpgsql AS $$
+RETURNS TRIGGER LANGUAGE plpgsql AS
+$$
 BEGIN
     UPDATE Sito
     SET latitudine_stazione_meteorologica = stazione.latitudine,

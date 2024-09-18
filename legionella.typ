@@ -27,7 +27,7 @@ Il genere comprende sessantadue specie diverse, suddivise in settantuno sierotip
 I dati raccolti sono utilizzati per valutare il rischio di diffusione del batterio e adottare le misure di prevenzione e controllo indicate dal Ministero della Salute nelle "Linee guida per la prevenzione
 ed il controllo della legionellosi"#footnote[#cite(<LineeGuida>, form: "full")].
 
-In questo ambito, l'ARPA FVG ha effettuato numerose indagini sul territorio e ha pubblicato i risultati in vari report. Ad esempio, nel 2019, una collaborazione con l'Università degli Studi di Udine ha portato alla pubblicazione di un articolo#footnote[#cite(<EnvironmentalSurveillance>, form: "full")], relativo alla presenza di Legionella nei sistemi di raccolta e distribuzione dell'acqua nella regione. Lo studio ha coperto un periodo di sedici anni, dal 2002 al 2017, durante il quale sono stati raccolti e analizzati 20.319 campioni attraverso 3.983 indagini ambientali.
+In questo ambito, l'ARPA FVG ha effettuato numerose indagini sul territorio e ha pubblicato i risultati in vari report. Ad esempio, nel 2019, una collaborazione con l'Università degli Studi di Udine ha portato alla pubblicazione di un articolo#footnote[#cite(<EnvironmentalSurveillance>, form: "full")] relativo alla presenza di Legionella nei sistemi di raccolta e distribuzione dell'acqua nella regione. Lo studio ha coperto un periodo di sedici anni, dal 2002 al 2017, durante il quale sono stati raccolti e analizzati 20.319 campioni attraverso 3.983 indagini ambientali.
 
 I risultati riferiti alle indagini non clinciche e dunque eseguite routinariamente nell'ambito del piano regionale di sorveglianza ambientale hanno evidenziato che la presenza di Legionella è diffusa sopratutto nei cluster di impianti termali, nei quali il batterio è stato individuato nel 57,8% dei siti indagati, e in quelli ospedalieri, in cui nel 50,8% delle strutture è stata riscontrata la Legionella almeno una volta, con picchi dei campioni positivi soprattutto nei mesi che segnano l'inizio del periodo autunnale.
 
@@ -39,7 +39,7 @@ Inoltre, si è osservato che la presenza del batterio ha registrato un notevole 
 
 In questo contesto, i sistemi di basi di dati giocano un ruolo fondamentale, in quanto permettono di memorizzare grandi quantità di dati e di effettuare ricerche complesse in modo rapido ed efficiente.
 
-Il presente documento si propone di delineare gli aspetti principali per la progettazione di un database relazionale destinato alla memorizzazione dei dati relativi alla diffusione della Legionella. 
+Il presente elaborato si propone di delineare gli aspetti principali per la progettazione di un database relazionale destinato alla memorizzazione dei dati relativi alla diffusione della Legionella. 
 Più specificamente, nei prossimi capitoli viene condotta un'analisi critica di una soluzione esistente, rispetto alla quale sono proposte alcune modifiche al fine di adattarla alle nuove esigenze emerse dai colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. Successivamente, vengono descritte le fasi di ristrutturazione, traduzione in modello relazionale e implementazione della base di dati, con particolare attenzione rivolta alla definizione dei domini e dei vincoli che garantiscono l'integrità dei dati.
 
 #pagebreak()
@@ -161,7 +161,7 @@ Ogni entry della tabella _gene di un genoma_ è distinta dall'insieme formato da
 Infine, si intende registrare per ciascun _gene del genoma_ la sua posizione relativa rispetto agli altri geni all'interno del profilo genetico sequenziato. Questa informazione è essenziale per valutare la prossimità tra i geni e per identificare eventuali pattern di distribuzione specifici all'interno del genoma di Legionella.
 In termini pratici, si suggerisce l'introduzione di una relazione auto-referenziale che coinvolga l'entità _gene del genoma_, al fine di stabilire un legame tra i geni identificati e la loro posizione, relativa#footnote("Definita in relazione alla prossimità ad altri geni all'interno del genoma sequenziato.") all'interno del genoma sequenziato.
 La cardinalità di tale relazione sarà definita come (0,1) a (0,1), indicando che ogni gene può essere associato a zero o un gene rispetto al quale è sequenziale nel profilo genetico. Questa configurazione tiene conto della limitata conoscenza attuale sui geni di Legionella, che potrebbe comportare l'assenza di associazioni per alcune aree del genoma.
-Si noti che la relazione di sequenzialità tra i geni è monodirezionale, ovvero è conservata, per ogni gene, solamente l'informazione relativa al predecessore nel profilo genetico. Tale scelta è dettata dalla proposizione di mantenere basso il costo computazionale per la gestione delle informazioni, evitando così il rischio di inconsistenza dovuto alla duplicazione dei dati. In questo modo si elude l'introduzione di vincoli di integrità aggiuntivi, preferendovi piuttosto l'aumento della complessità di un' eventuale query finalizzate a ottenere l'informazione nel senso opposto a quello definito dalla relazione.
+Si noti che la relazione di sequenzialità tra i geni è monodirezionale, ovvero è conservata, per ogni gene, solamente l'informazione relativa al predecessore nel profilo genetico. Tale scelta è dettata dal proposito di mantenere basso il costo computazionale per la gestione delle informazioni, evitando così il rischio di inconsistenza dovuto alla duplicazione dei dati. In questo modo si elude l'introduzione di vincoli di integrità aggiuntivi, preferendovi piuttosto l'aumento della complessità di un'eventuale query finalizzata a ottenere l'informazione nel senso opposto a quello definito dalla relazione.
 Si osserva che gli unici vincoli di integrità che si rendono necessari sono i seguenti: un gene del genoma non può essere associato a se stesso, né può essere associato a un altro gene se esistono geni noti che hanno posizione assoluta maggiore rispetto al gene con il quale si vuole stabilire la relazione di sequenzialità, ma minore rispetto al gene inserito.
 
 #pagebreak()
@@ -189,9 +189,9 @@ Si osserva che gli unici vincoli di integrità che si rendono necessari sono i s
 
 #pagebreak()
 === Note
-#annotation[Si noti come che l'introduzione di nuove entità e relazioni, sebbene arricchisca il quadro di informazioni memorizzate nel database, comporta un forte aumento della complessità del sistema. Più specificamente, l'aggiunta delle entità coinvolte nella memorizzazione delle informazioni genomiche richiede maggiore attenzione, in quanto, per garantire la coerenza dei dati con le informazioni disponibili nei database di BLAST o degli altri strumenti che possono essere utilizzati per l'individuazione e la classificazione dei geni, è necessario aggiornare costantemente le istanze dell'entità _gene_ con i dati più recenti.]
+#annotation[Si noti come l'introduzione di nuove entità e relazioni, sebbene arricchisca il quadro di informazioni memorizzate nel database, comporta un forte aumento della complessità del sistema. Più specificamente, l'aggiunta delle entità coinvolte nella memorizzazione delle informazioni genomiche richiede maggiore attenzione, in quanto, per garantire la coerenza dei dati con le informazioni disponibili nei database di BLAST o degli altri strumenti che possono essere utilizzati per l'individuazione e la classificazione dei geni, è necessario aggiornare costantemente le istanze dell'entità _gene_ con i dati più recenti.]
 
-In ultimo si segnala che le principali operazioni eseguite sulla base di dati riguardano l'inserimento, la modifica e la cancellazione dei dati. Al contrario, le operazioni di interrogazione sono limitate a un numero ristretto di query, finalizzate a ottenere informazioni di tipo spaziale sui campioni, sulle analisi effettuate e sui risultati ottenuti oppure informazioni genetiche. Pertanto, si preferisce adottare una struttura facilmente manutenibile e ottimizzata per le operazioni fondamentali, che risulta già adeguata per l'esecuzione delle operazioni sopra menzionate, piuttosto che una struttura più complessa, progettata per ottimizzare le interrogazioni, ma che comporterebbe un costo maggiore per la gestione dei dati.
+In ultimo, si segnala che le principali operazioni eseguite sulla base di dati riguardano l'inserimento, la modifica e la cancellazione dei dati. Al contrario, le operazioni di interrogazione sono limitate a un numero ristretto di query, finalizzate a ottenere informazioni di tipo spaziale sui campioni, sulle analisi effettuate e sui risultati ottenuti oppure informazioni genetiche. Pertanto, si preferisce adottare una struttura facilmente manutenibile e ottimizzata per le operazioni fondamentali, che risulta già adeguata per l'esecuzione delle operazioni sopra menzionate, piuttosto che una struttura più complessa, progettata per ottimizzare le interrogazioni, ma che comporterebbe un costo maggiore per la gestione dei dati.
 
 Le considerazioni relative ai vincoli di integrità sono posticipate al capitolo successivo, nel quale, terminata la fase di progettazione, sarà possibile ottenere una visione del tutto trasparente e definitiva delle entità coinvolte nel sistema dei relativi attributi e delle relazioni tra di esse.
 
@@ -202,28 +202,25 @@ Le considerazioni relative ai vincoli di integrità sono posticipate al capitolo
 
 #annotation[Ultimata la fase di progettazione concettuale della base di dati, è opportuno effettuare un'ultima revisione del modello al fine di elaborarne la struttura finale, priva di elementi discrezionali. In questa unità sono riportate le modifiche, congiuntamente alle motivazioni che le guidano, apportate allo schema E-R proposto al #ref(<ER_aggiornato>, supplement: "paragrafo"), con l'obbiettivo di risolvere generalizzazioni, attributi composti e attributi multivalori presenti in figura.]
 
-In prima istanza sono trattati gli aspetti riguardanti le entità coinvolte nelle relazioni di generalizzazione.
+In prima istanza, sono trattati gli aspetti riguardanti le entità coinvolte nelle relazioni di generalizzazione.
 
 Per quanto concerne l'entità _analisi_, si propone di rimuovere, in tutto il suo complesso, la relazione di generalizzazione associando piuttosto le differenti tipologie di analisi ai campioni su cui sono eseguite. Ognuna delle analisi è identificata in modo esclusivo da un codice e caratterizzata sia della data di esecuzione, proprietà ereditata dall'entità soppressa _analisi_, sia dagli attributi caratterizzanti di ciascuna specializzazione. Inoltre, pur non essendo del tutto rigoroso dal punto di vista scientifico, si propone di riassumere le tabelle rappresentative delle analisi _PCR qualitativa_ e _PCR quantitativa_ in un'unica soluzione denominata _analisi PCR_, che conserva informazioni di entrambe le nature sui campioni analizzati. Questa semplificazione è ritenuta lecita in quanto i risultati prodotti dalle due analisi sono intrinsecamente correlati e possono essere memorizzati in modo più efficiente all'interno di un'unica entità. Infatti la PCR qualitativa, che rileva la presenza del DNA di Legionella, è, nell'ipotesi in cui restituisce un risultato positivo, seguita dala PCR quantitativa, la quale misura la concentrazione del batterio nel campione. La soluzione proposta consente di alleggerire la struttura del database e di semplificare le operazioni di inserimento e consultazione dei dati, senza introdurre perdite di informazioni né comportare un'aumento della complessità del sistema inteso come l'introduzione di vincoli di integrità.
 Si noti che non tutte le analisi sono eseguite su tutti i campioni, ma, talvolta, solo su una parte di essi.
-Ad esempio, come suggerito dalle linee guida per la prevenzione ed il controllo della legionellosi, «poichè la q-PCR è effettivamente vantaggiosa per molteplici aspetti ma non ancora validata a livello internazionale, essa può, ad oggi, essere solo consigliata per una rapida analisi di numerosi campioni prelevati da siti probabilmente associati ad un caso o ancor più a un cluster di legionellosi, potendo in tempi brevi escludere i siti negativi ed identificare quelli positivi» #footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 21]. In altre parole, le stesse linee guida suggeriscono di eseguire l'analisi colturale solo in caso di risultato positivo alla q-PCR, senza tuttavia stabilire una convenzione. Tale mancanza consente diverse interpretazioni e, pertanto, si è deciso di definire la cardinalità della relazione tra _campione_ e le diverse _analisi_ come "(0,1) a (1,1)", stabilendo che un campione può essere associato a zero o una sola analisi specifica, mentre ogni analisi è sempre associata a un campione. Questa scelta garantisce anche la retrocompatibilità del sistema. Infatti non essendo possibile associare a campioni già esistenti le analisi aggiunte successivamente, ovvero _analisi del pH_ e _analisi genomica_, è opportuno che i campioni non siano obbligatoriamente associati a tutte le tipologie di analisi.
+Ad esempio, come suggerito dalle linee guida per la prevenzione ed il controllo della legionellosi, «poiché la q-PCR è effettivamente vantaggiosa per molteplici aspetti ma non ancora validata a livello internazionale, essa può, ad oggi, essere solo consigliata per una rapida analisi di numerosi campioni prelevati da siti probabilmente associati ad un caso o ancor più a un cluster di legionellosi, potendo in tempi brevi escludere i siti negativi ed identificare quelli positivi» #footnote[#cite( <LineeGuida>, form:"normal" ), _Linee guida per la prevenzione ed il controllo della legionellosi_, p. 21]. In altre parole, le stesse linee guida suggeriscono di eseguire l'analisi colturale solo in caso di risultato positivo alla q-PCR, senza tuttavia stabilire una convenzione. Tale mancanza consente diverse interpretazioni e, pertanto, si è deciso di definire la cardinalità della relazione tra _campione_ e le diverse _analisi_ come "(0,1) a (1,1)", stabilendo che un campione può essere associato a zero o una sola analisi specifica, mentre ogni analisi è sempre associata a un campione. Questa scelta garantisce anche la retrocompatibilità del sistema. Infatti non essendo possibile associare a campioni già esistenti le analisi aggiunte successivamente, ovvero _analisi del pH_ e _analisi genomica_, è opportuno che i campioni non siano obbligatoriamente associati a tutte le tipologie di analisi.
 
 Per quanto concerne la specializzazione relativa all'_analisi colturale_, ovvero l'_analisi colturale positiva_, se ne suggerisce la sostituzione con un attributo denominato sierogruppo, che è proprio dell'entità _analisi colturale_.
 Tale modifica permette di conservare le informazioni relative al sierogruppo di Legionella identificato nel campione, senza introdurre una nuova entità e risparmiando dunque spazio.
 Si noti che questa modifica implica l'introduzione di un vincolo di integrità che assicuri che solamente le analisi colturali positive siano associate a un sierogruppo. Maggiori dettagli sui vincoli di integrità saranno forniti nel capitolo successivo.
 
-Un'ulteriore elemento di riflessione riguarda la risoluzione degli attributi composti.
+Un ulteriore elemento di riflessione riguarda la risoluzione degli attributi composti.
 
 In riferimento alla relazione _simile a_ che coinvolge le entità _gene_ e _gene del genoma_, si propone di scomporre l'attributo similarità nelle tre componenti che lo costituiscono: percent identity, query-cover e e-value. Inoltre, la cardinalità della relazione suggerisce di ricollocare questi attributi in modo tale che siano riferiti all'entità _gene del genoma_.
 
-In merito all'attributo composto e multivalotre _dati registrati_, afferente all'entità _stazione meteorologica_, a soluzione più adeguata consiste nella sua sostituzione con una nuova tabella denominata _dati meterelogici_ associata tramite una relazione del tipo 1 a N all'entità _stazione meteorologica_. Questa nuova entità è debole rispetto alla _stazione meteorologica_ e conserva le seguenti informazioni: la data di acquisizione di ogni set di dati, che costituisce parte della chiave primaria, la temperatura, l'umidità e la pressione atmosferica.
+In merito all'attributo composto e multivalotre _dati registrati_, afferente all'entità _stazione meteorologica_, la soluzione più adeguata consiste nella sua sostituzione con una nuova tabella denominata _dati meterelogici_ associata tramite una relazione del tipo 1 a N all'entità _stazione meteorologica_. Questa nuova entità è debole rispetto alla _stazione meteorologica_ e conserva le seguenti informazioni: la data di acquisizione di ogni set di dati, che costituisce parte della chiave primaria, la temperatura, l'umidità e la pressione atmosferica.
 
-In conclusione, relativamente agli attributi indirizzo e coordinate, si ritiene opportuno adottare la medesima soluzione per tutte le apparizioni nello schema: l'attributo coordinata è sostituito dalla coppia di latitudine e longitudine, che costituiscono la chiave primaria delle entità cui sono riferite, ovvero _sito_ e _stazione meteorologica_;l'attributo indirizzo è risolto in modo analogo, sostituendolo con i campi via, numero civico, CAP e città. Questa soluzione è dettata dall'intenzione di sfruttare le informazioni geografiche per condurre analisi mirate sulla diffusione della Legionella e per identificare eventuali cluster. In particolare, la soluzione proposta consente di semplificare notevolmente la struttura delle interrogazioni necessarie per ottenere tali informazioni. 
+In conclusione, relativamente agli attributi indirizzo e coordinate, si ritiene opportuno adottare la medesima soluzione per tutte le apparizioni nello schema: l'attributo coordinata è sostituito dalla coppia di latitudine e longitudine, che costituiscono la chiave primaria delle entità cui sono riferite, ovvero _sito_ e _stazione meteorologica_; l'attributo indirizzo è risolto in modo analogo, sostituendolo con i campi via, numero civico, CAP e città. Questa soluzione è dettata dall'intenzione di sfruttare le informazioni geografiche per condurre analisi mirate sulla diffusione della Legionella e per identificare eventuali cluster. In particolare, la soluzione proposta consente di semplificare notevolmente la struttura delle interrogazioni necessarie per ottenere tali informazioni. 
 
-*
-Da sistemare:
-Ad esempio, l'implementazione della query @query di ricerca di tutti i campioni positivi prelevati in una certa data in un certa via di una certa città, potrebbe restituire risultati inesatti qualora l'indirizzo fosse un'unica stringa di testo, perchè non sarebbe possibile distinguere gli elementi via e città. La soluzione proposta, invece, permette di ottenere risultati corretti e coerenti con le aspettative.
-*
+Per esempio, l'implementazione di un'interrogazione per la ricerca di tutti i campioni positivi  raccolti in una determinata data, in una specifica via di una certa città, potrebbe restituire risultati non corretti qualora l'indirizzo fosse  memorizzato come un'unica stringa di testo, poiché non sarebbe possibile fare una distinzione tra le componenti via e città. Al contrario, la soluzione proposta consente di ottenere risultati corretti e coerenti con le aspettative.
 
 #pagebreak()
 == Diagramma E-R finale
@@ -250,18 +247,18 @@ Ad esempio, l'implementazione della query @query di ricerca di tutti i campioni 
 
 La traduzione delle entità in tabelle è diretta e non comporta particolari difficoltà. Ogni entità, infatti, è rappresentata mediante una matrice in cui ogni attributo corrisponde a una colonna.
 
-Per quanto riguarda le relazioni è essenziale considerare tre tipologie fondamentali: le relazioni uno a uno, le relazioni uno a molti e le relazioni molti a molti. Le relazioni uno a uno sono le più complesse in quanto non è immediatamente chiaro quale entità debba essere scelta per mappare la relazione, ovvero in quale entità inserire la chiave esterna. Nel nostro contesto si presentano due situazioni principali: la relazione autoreferenziale tra i geni del genoma e la relazione tra i campioni e le analisi.
-Nel primo caso, la relazione è mappata sull'entità _gene del genoma_ poichè, sebbene gli strumenti di analisi presentino alcune limitazioni, nella maggioranza dei genomi analizzati esiste un'effettiva sequenzialità tra i geni. Pertanto lo spazio sprecato a causa della mancanza di informazioni è limitato e dunque non giustifica l'introduzione di una nuova tabella che, pur limitando lo spazio utilizzato, porterebbe problemi di integrità e complessità.
+Per quanto riguarda le relazioni, è essenziale considerare tre tipologie fondamentali: le relazioni uno a uno, le relazioni uno a molti e le relazioni molti a molti. Le relazioni uno a uno sono le più complesse in quanto non è immediatamente chiaro quale entità debba essere scelta per mappare la relazione, ovvero in quale entità inserire la chiave esterna. Nel nostro contesto si presentano due situazioni principali: la relazione autoreferenziale tra i geni del genoma e la relazione tra i campioni e le analisi.
+Nel primo caso, la relazione è mappata sull'entità _gene del genoma_ poiché, sebbene gli strumenti di analisi presentino alcune limitazioni, nella maggioranza dei genomi analizzati esiste un'effettiva sequenzialità tra i geni. Pertanto lo spazio sprecato a causa della mancanza di informazioni è limitato e dunque non giustifica l'introduzione di una nuova tabella che, pur limitando lo spazio utilizzato, porterebbe problemi di integrità e complessità.
 
 Per quanto riguarda le relazioni tra campioni e analisi, si è deciso di mappare la relazione sull'entità _analisi_. Si osserva che la soluzione alternativa, ovvero quella di mappare la relazione sull'entità _campione_, potrebbe comportare perdite di spazio a causa della presenza di campioni non analizzati rispetto ad un esame specifico.
 
-Le relazioni uno a molti, invece, sono più semplici da gestire, in quanto la chiave esterna è necessariamente inserita nell'entità che rappresenta il lato "uno" della relazione. Infine, le relazioni molti a molti sono gestite mediante l'introduzione di una tabella di associazione, che contiene le chiavi esterne delle due entità coinvolte.
+Le relazioni uno a molti, invece, sono più semplici da gestire, in quanto la chiave esterna è necessariamente inserita nell'entità che rappresenta il lato "uno" della relazione. Infine, le relazioni molti a molti sono gestite mediante l'introduzione di una tabella di associazione che contiene le chiavi esterne delle due entità coinvolte.
 
-Per concludere, le entità deboli, come _dati meteorologici_, _punto di prelievo_ e _gene del genoma_ la chiave primaria è composta dalla chiave primaria dell'entità forte, o delle entità forti, a cui sono associate e un attributo che ne identifica univocamente l'istanza all'interno dell'entità forte.
+Per concludere, le entità deboli, come _dati meteorologici_, _punto di prelievo_ e _gene del genoma_, la chiave primaria è composta dalla chiave primaria dell'entità forte, o delle entità forti, a cui sono associate e un attributo che ne identifica univocamente l'istanza all'interno dell'entità forte.
 
 
 == Schema relazionale
-Sulla base delle considerazioni precedenti, si procede con la definizione dello schema relazionale, che rappresenta la struttura logica del database.
+Sulla base delle considerazioni precedenti, si procede alla definizione dello schema relazionale, che rappresenta la struttura logica del database.
 
 #figure(
   image("/img/relazionale.png", width: 100%),
@@ -271,16 +268,16 @@ Sulla base delle considerazioni precedenti, si procede con la definizione dello 
 #pagebreak()
 
 
-= Progettazione fisica della base di dati: definizione dei domini, dei vincoli di integrità e impplementazione del codice SQL
+= Progettazione fisica della base di dati: definizione dei domini, dei vincoli di integrità e implementazione del codice SQL
 In questa sezione viene eseguita l'implementazione della base di dati, iniziando dalla definizione dei domini, ovvero l'insieme dei valori ammissibili per ciascuna colonna, e proseguendo con la creazione delle tabelle e delle funzioni che implementano i vincoli che assicurano l'integrità dei dati.
 
 Il DBMS scelto per la realizzazione del database è PostgreSQL, un sistema di gestione di basi di dati relazionali rilasciato per la prima volta nel 1989. La scelta è motivata dalla flessibilità ed estendibilità del sistema, che consente di implementare vincoli di integrità complessi e di gestire grandi quantità di dati in modo efficiente.
 
 
 == Definizione dei domini
-#annotation[Per prima cosa è necessario definire i vincoliLa maggior parte dei domini relativi alle colonne di ciascuna tabella è facilmente determinabile. Tuttavia, alcuni domini richiedono una definizione più dettagliata per garantire una corretta rappresentazione dei dati e facilitare l'esecuzione delle operazioni di interrogazione.]
+#annotation[La maggior parte dei domini relativi alle colonne di ciascuna tabella è facilmente determinabile. Tuttavia, alcuni domini richiedono una definizione più dettagliata per garantire una corretta rappresentazione dei dati e facilitare l'esecuzione delle operazioni di interrogazione.]
 
-Primariamente si considerino i domini relativi alla quantificazione della Legionella nei campioni, espressi in ufc/l e µg/l. Per entrambi è opportuno ridururre il dominio ai valori interi positivi, poichè non ha senso esprimere la presenza di Legionella con valori negativi.
+Primariamente, si considerino i domini relativi alla quantificazione della Legionella nei campioni, espressi in ufc/l e µg/l. Per entrambi è opportuno ridururre il dominio ai valori interi positivi, poiché non ha senso esprimere la presenza di Legionella con valori negativi.
 Un caso analogo si presenta per i valori che misurano il volume di un campione, l'umidità e la pressione atmosferica, per i quali si propone di definire il dominio come un numero decimale positivo, in quanto non ha senso avere valori negativi per queste grandezze fisiche.
 
 ```SQL
@@ -312,7 +309,7 @@ CREATE TYPE MATRICE AS
     ENUM ('acqua',  'aria', 'biofilm', 'sedimento');
 ```
 
-#annotation[La colonna CAP delle tabelle _sito_ e _stazione meteorologica_ rappresenta un aggiuntivo aspetto notevole. Poichè il CAP è un codice numerico formato da cinque cifre, si suggerisce di definire un dominio di tipo integer che accetti esclusivamente valori numerici di tale lunghezza.]
+#annotation[La colonna CAP delle tabelle _sito_ e _stazione meteorologica_ rappresenta un aggiuntivo aspetto notevole. Poiché il CAP è un codice numerico formato da cinque cifre, si suggerisce di definire un dominio di tipo integer che accetti esclusivamente valori numerici di tale lunghezza.]
 
 ```SQL
 CREATE DOMAIN CAP AS INTEGER
@@ -456,7 +453,7 @@ Per ragioni di spazio vengono forniti alcuni esempi di creazione delle tabelle, 
 #linebreak()
 *Analisi*
 
-Un aspetto rilevante riguarda la cancellazione di un campione. In generale si ritiene opportuno di eliminare i dati associate al campione, poiché perderebbero di significato in sua assenza. Tuttavia, si propone di impedire l'operazione di cancellazione qualora il campione sia associato ad un'analisi del genoma. Tale decisione è finalizzata a interrompere la catena di eliminazione, che coinvolgerebbe tutte le informazioni relative ai dati genomici osservati, al fine di evitare l'eliminazione accidentale di una grande quantità di dati.
+Un aspetto rilevante riguarda la cancellazione di un campione. In generale, si ritiene opportuno di eliminare i dati associate al campione, poiché perderebbero di significato in sua assenza. Tuttavia, si propone di impedire l'operazione di cancellazione qualora il campione sia associato ad un'analisi del genoma. Tale decisione è finalizzata a interrompere la catena di eliminazione che coinvolgerebbe tutte le informazioni relative ai dati genomici osservati, al fine di evitare l'eliminazione accidentale di una grande quantità di dati.
 Si osserva che, per eliminare un campione, sarà sufficiente rimuovere preventivamente l'eventuale analisi genomica associata, dopodiché sarà possibile procedere con la cancellazione del campione stesso.
 A  titolo di esempio si riportano le tabelle _analisi PCR_ e _analisi del genoma_
 
@@ -568,7 +565,7 @@ Inoltre, l'operazione di aggiunta di una nuova _stazione meteorologica_ o _sito_
 === Gestione della chiave esterna relativa alla tabella _Sito_ <gestione_sito>
 #annotation[In questo paragrafo si affrontano le problematiche relative alla cancellazione e all'aggiornamento di una stazione meteorologica, come accennato nel capitolo precedente. Poiché si desidera associare ciascun sito alla stazione meteorologica più vicina, si propone di implementare un trigger che, in caso di cancellazione o aggiornamento di una stazione meteorologica, assegni automaticamente a tutti i siti precedentemente collegati alla stazione interessata la stazione meteorologica più vicina. Questa soluzione evita l'utilizzo di un vincolo RESTRICT, il quale renderebbe più complessa la gestione delle operazioni di cancellazione e aggiornamento.]
 
-In dettaglio, il trigger di aggiornamento si occupa di aggiornare la stazione meteorologica associata a ciascun sito, sostituendola con quella più vicina in seguito alla modifica delle coordinate, o all'inserimento, di una stazione meteorologica. Il trigger di cancellazione, invece, impedisce l'eliminazione totale delle stazioni meteorologiche, assicurando che almeno una stazione meteorologica sia associata a ciascun sito. Se la cancellazione è possibile, il trigger aggiorna le coordinate riferite alle stazioni meteorologiche dei siti coinvolti, sostituendole con quelle degli osservatori più vicini.
+In dettaglio, il trigger di aggiornamento si occupa di aggiornare la stazione meteorologica associata a ciascun sito, sostituendola con quella più vicina in seguito alla modifica delle coordinate o all'inserimento di una stazione meteorologica. Il trigger di cancellazione, invece, impedisce l'eliminazione totale delle stazioni meteorologiche, assicurando che almeno una stazione meteorologica sia associata a ciascun sito. Se la cancellazione è possibile, il trigger aggiorna le coordinate riferite alle stazioni meteorologiche dei siti coinvolti, sostituendole con quelle degli osservatori più vicini.
 Per garantire precisione ed efficienza, l'implementazione di questi trigger si avvale della funzione ST_Distance#footnote("https://postgis.net/docs/ST_Distance.html") del pacchetto PostGis che calcola la distanza tra due punti sulla superficie terrestre. Inoltre, si utilizza la funzione e ST_DWithin#footnote("https://postgis.net/docs/ST_DWithin.html"), che opera sugli indici spaziali, per determinare se due punti si trovano entro una certa distanza l'uno dall'altro e ridurre il numero di confronti necessari.
 
 Di seguito è presentato solo il codice relativo alla definizione del trigger per le operazioni di aggiornamento e inserimento di una nuovo centro meteorologico. Il codice per la gestione della cancellazione, simile a quello mostrato, è riportato in appendice.
@@ -653,7 +650,7 @@ EXECUTE FUNCTION check_esito_Colturale();
 
 #linebreak()
 *Campioni*
-#annotation[Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, come già accenntato, poichè un'indagine ambientale è una collezione di campioni raccolti in una stessa data, in un sito specifico, è necessario garantire che tutti i campioni associati a un'indagine siano prelevati nello stesso sito.
+#annotation[Un ulteriore accorgimento deve essere impiegato nel caso dei campioni. Infatti, come già accenntato, poiché un'indagine ambientale è una collezione di campioni raccolti in una stessa data, in un sito specifico, è necessario garantire che tutti i campioni associati a un'indagine siano prelevati nello stesso sito.
 In termini pratici si propone di introdurre un trigger che, in caso di inserimento o aggiornamento di un campione, verifichi che il sito associato al campione sia lo stesso per tutti i campioni associati all'indagine a cui il campione appartiene.]
 
 ```SQL
@@ -682,7 +679,7 @@ EXECUTE FUNCTION check_campione_indagine();
 #linebreak()
 *Geni*
 
-Infine, per quanto riguarda l'entità _gene del genoma_ è necessario considerare attentamente la relazione di sequenzialità tra i geni. É consigliabile l'introduzione di vincoli che garantiscano che a un gene di un genoma non possa essere associato un gene di un genoma diverso, né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto a quello con cui si intende stabilire la relazione, ma minore rispetto al gene considerato.
+Infine, per quanto riguarda l'entità _gene del genoma_ è necessario considerare attentamente la relazione di sequenzialità tra i genii è consigliabile l'introduzione di vincoli che garantiscano che a un gene di un genoma non possa essere associato un gene di un genoma diverso, né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto a quello con cui si intende stabilire la relazione, ma minore rispetto al gene considerato.
 Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e prevenire eventuali situazioni di inconsistenza.
 
 ```SQL
@@ -727,17 +724,17 @@ EXECUTE FUNCTION check_predecessore();
 ```
 
 = Trigger per la gesione di operazioni di cancellazione e aggiornamento
-Prima di procedere con l'implementazione di alcune operazioni notevoli, è essenziale definire opportuni trigger che consentano di gestire, in modo conforme a una politica ben definita, le operazioni di cancellazione e aggiornamento relative a determinate tabelle. Questi trigger servono a prevenire situazioni in cui alcune entry risultano "prive" di significato a seguito di modifiche o cancellazioni di altre entry a cui erano precedentemente collegate.
+Prima di procedere con l'implementazione di alcune operazioni notevoli, è essenziale definire opportuni trigger che consentano di gestire, in modo conforme a una politica ben definita, le operazioni di cancellazione e aggiornamento relative a determinate tabelle. Questi trigger servono a prevenire situazioni in cui alcune entry risultino "prive" di significato a seguito di modifiche o cancellazioni di altre entry a cui erano precedentemente collegate.
 
 #linebreak()
 *Indagine ambientale*
 
-Un primo caso riguarda la gestione delle indagini ambientali, definite come una collezione di campioni raccolti in una data specifica e in un sito particolare. A seguito della modifica o della cancellazione delle entry relative ai campioni afferenti a un'indagine questa risulterebbe priva di collegamenti con alcun campione, ovvero, di fatto, priva di significato. Per evitare tale situazione, si propone di definire un trigger che, in caso di cancellazione di tutti i campioni associati ad un'indagine, elimini automaticamente anche l'indagine stessa.
+Un primo caso riguarda la gestione delle indagini ambientali, definite come una collezione di campioni raccolti in una data specifica e in un sito particolare. A seguito della modifica o della cancellazione delle entry relative ai campioni afferenti a un'indagine, questa risulterebbe priva di collegamenti con alcun campione, ovvero, di fatto, priva di significato. Per evitare tale situazione, si propone di definire un trigger che, in caso di cancellazione di tutti i campioni associati a un'indagine, elimini automaticamente anche l'indagine stessa.
 
 #linebreak()
 *Richiedente e Follow-up Clinico*
 
-Un'altro aspetto fondamentale riguarda la gestione delle entry relative ai richiedenti e ai follow-up clinici. È opportuno che, qualora tutte le indagini associate a un determinato richiedente o follow-up clinico vengano cancellate, anche il richiedente o il follow-up clinico vengano rimossi. Anche in questo caso, l'introduzione di un trigger automatizza il processo di cancellazione.
+Un altro aspetto fondamentale riguarda la gestione delle entry relative ai richiedenti e ai follow-up clinici. È opportuno che, qualora tutte le indagini associate a un determinato richiedente o follow-up clinico vengano cancellate, anche il richiedente o il follow-up clinico vengano rimossi. Anche in questo caso, l'introduzione di un trigger automatizza il processo di cancellazione.
 
 Per quanto concerne le altre tabelle del database, si ritiene non necessario implementare trigger per gestire le operazioni di cancellazione o aggiornamento. Queste tabelle, infatti, contengono entità sostanzialmente stabili che mantengono la loro validità anche in assenza di entry collegate, poiché potrebbero essere riutilizzate in futuro.
 
@@ -766,17 +763,15 @@ FOR EACH ROW
 EXECUTE FUNCTION delete_indagine();
 ```
 
-== Operazioni <query>
+== Operazioni di inserimento e aggiornamento<query>
 
-#annotation[L'ultima sezione di questo documento è dedicata alla definizione di alcune query significative che consentono di estrarre informazioni utili dal database oppure che riorganizzano le operazioni di inserimento o aggiornamento dei dati.]
+#annotation[L'ultima sezione di questo documento è dedicata alla ridefinizione di alcune operazioni di inserimento o aggiornamento, con l'obbiettivo di aggevolare la fruizione della base di dati per gli utenti.]
 
-=== Inserimento di una nuova stazione meteorologica o di un nuovo sito
-#annotation[Una prima operazione di rilievo riguarda l'inserimento di un nuovo sito o di una nuova stazione meteo. In entrambi i casi è opportuno definire una funzione che, a partire dalle coordinate geografiche, calcoli il punto geografico associato e lo inserisca nella tabella corrispondente. Questa soluzione è particolarmente utile per garantire la coerenza dei dati, infatti evita che le coordinate geografiche e il punto geografico associato siano inseriti in modo non corrispondente e semplifica l'operazione di inserimento per l'utente.
-Inoltre si nota che, nel caso di inserimento di un nuovo sito, è necessario associare automaticamente il sito alla stazione meteorologica più vicina. Tale collegamento al momento della creazione di una nuova entry nella tabella sito è garantita dall'impiego, nella funzione di inserimento, di una udf quasi del tutto analoga a quelle viste nel @gestione_sito[paragrafo] che calcola la distanza tra il sito e le stazioni meteorologiche presenti nel database e associa il sito alla stazione più vicina. Si sottolinea che l'operazione di aggiornamento di un sito è del tutto analoga a quella di inserimento.
-Di seguito si riporta il codice per l'inserimento di una nuova stazione meteorologica, mentre il codice relativo all'inserimento di un nuovo sito è consultabile in appendice.]
+=== Inserimento e aggiornamento di una nuova stazione meteorologica
+
+Una prima operazione di rilievo riguarda l'inserimento di una nuova stazione meteo. Per questa operzione è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Questa soluzione è particolarmente utile per garantire la coerenza dei dati: infatti, evita che le coordinate geografiche e il punto geografico associato siano inseriti in modo non corrispondente e semplifica l'operazione per l'utente. Si sottolinea che l'operazione di aggiornamento è del tutto analoga a quella di inserimento; pertanto, di seguito, si riporta solamente il codice per l'inserimento di una nuova stazione meteo, mentre quello relativo all'aggiornamento è consultabile in appendice.
 
 ```SQL
--- 1. Inserimento di una stazione meteorologica
 CREATE OR REPLACE FUNCTION insert_stazione_meteorologica(
     latitudine FLOAT,
     longitudine FLOAT,
@@ -793,50 +788,81 @@ BEGIN
     -- Crea un punto geometrico a partire da latitudine e longitudine
     point := ST_SetSRID(ST_MakePoint(longitudine, latitudine), 4326);
 
-    -- Inserisci i valori nella tabella Sito
-    INSERT INTO Sito (latitudine, longitudine, via_piazza, civico, CAP, città, geom)
+    -- Inserisci i valori nella tabella Stazione_meteorologica
+    INSERT INTO Stazione_meteorologica (latitudine, longitudine, via_piazza, civico, CAP, città, geom)
     VALUES (latitudine, longitudine, via_piazza, numero_civico, CAP, città, point);
 
     RETURN;
 END;
 $$;
+```
 
--- 2. Aggiornamento di una stazione meteorologica
-CREATE OR REPLACE FUNCTION update_stazione_meteorologica(
+#linebreak()
+=== Inserimento e aggiornamento di un nuovo sito
+
+Un secondo aspetto di rilievo riguarda l'inserimento o l'aggiornamento di sito. Anche in questo caso, è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Inoltre, è necessario referenziare automaticamente il sito alla stazione meteorologica più vicina. Tale collegamento al momento della creazione di una nuova entry nella tabella sito è garantita dall'impiego, nella funzione di inserimento, di una user define function quasi del tutto analoga a quelle viste nel @gestione_sito[paragrafo] che calcola la distanza tra il sito e le stazioni meteorologiche presenti nel database e associa il sito alla stazione più vicina.
+Di seguito si riporta il codice per l'operazione di aggiornamento. Per la consoltazione del codice relativo all'inserimento si rimanda all'appendice.
+
+```SQL
+CREATE OR REPLACE FUNCTION update_sito(
     old_latitudine LATITUDINE,
     old_longitudine LONGITUDINE,
     new_latitudine LATITUDINE,
     new_longitudine LONGITUDINE,
-    via_piazza VARCHAR(25),
-    numero_civico INTEGER,
-    CAP CAP,
-    città VARCHAR(25)
+    new_via_piazza VARCHAR(25),
+    new_numero_civico INTEGER,
+    new_CAP CAP,
+    new_città VARCHAR(25),
+    new_nome VARCHAR(25),
+    new_categoria CATEGORIA,
+    new_materiale_tubature VARCHAR(25),
+    new_cloro BOOLEAN,
+    new_anno_ultima_ristrutturazione DATE,
+    new_caldaia VARCHAR(25)
 )
 RETURNS VOID LANGUAGE plpgsql AS
 $$
 DECLARE
     point GEOMETRY;
+    new_latitudine_stazione_meteorologica LATITUDINE;
+    new_longitudine_stazione_meteorologica LONGITUDINE;
 BEGIN
     point := ST_SetSRID(ST_MakePoint(new_longitudine, new_latitudine), 4326);
+
+    SELECT stazione.latitudine, stazione.longitudine
+    INTO new_latitudine_stazione_meteorologica, new_longitudine_stazione_meteorologica
+    FROM Stazione_meteorologica stazione
+    WHERE ST_DWithin(
+        geography(point),
+        geography(stazione.geom),
+        100000 -- 100 km
+    )
+    ORDER BY ST_Distance(point, stazione.geom)
+    LIMIT 1;
 
     UPDATE Sito
     SET latitudine = new_latitudine,
         longitudine = new_longitudine,
-        via_piazza = via_piazza,
-        civico = numero_civico,
-        CAP = CAP,
-        città = città,
+        latitudine_stazione_meteorologica = new_latitudine_stazione_meteorologica,
+        longitudine_stazione_meteorologica = new_longitudine_stazione_meteorologica,
+        via_piazza = new_via_piazza,
+        civico = new_numero_civico,
+        CAP = new_CAP,
+        città = new_città,
+        nome = new_nome,
+        categoria = new_categoria,
+        materiale_tubature = new_materiale_tubature,
+        cloro = new_cloro,
+        anno_ultima_ristrutturazione = new_anno_ultima_ristrutturazione,
+        caldaia = new_caldaia,
         geom = point
     WHERE latitudine = old_latitudine
       AND longitudine = old_longitudine;
 
     RETURN;
 END;
+$$;
 ```
-
-=== query sui campioni positivi in una certa data, in una certa via di una certa città
-
-=== query che restituisce tutti le coordinate geografiche dei siti presso cui sono stati prelevati campioni dove il genoma vede un gene x come predecessore di un gene y
 
 #pagebreak()
 = Appendice
@@ -849,8 +875,8 @@ END;
 CREATE TABLE Stazione_meteorologica (
     latitudine LATITUDINE NOT NULL,
     longitudine LONGITUDINE NOT NULL,
-    via VARCHAR(25) NOT NULL,
-    numero_civico INTEGER NOT NULL,
+    via_piazza VARCHAR(25) NOT NULL,
+    civico INTEGER NOT NULL,
     CAP CAP NOT NULL,
     città VARCHAR(25) NOT NULL,
     geom GEOMETRY(Point, 4326) NOT NULL,
@@ -1056,6 +1082,7 @@ CREATE TABLE Gene_genoma (
     FOREIGN KEY (posizione_predecessore, codice_genoma_predecessore, protein_ID_predecessore) REFERENCES Gene_genoma(posizione, codice_genoma, protein_ID)
         ON DELETE SET NULL
         ON UPDATE CASCADE
+);
 
 -- DEFINIZIONE DEGLI INDICI
 
@@ -1313,8 +1340,176 @@ FOR EACH ROW
 EXECUTE FUNCTION delete_richiedente_follow_up();
 ```
 
+== Codice SQL per la definizione delle funzioni di inserimento e aggiornamento
 
-//necessario implementare un vincolo di integrità che assicuri che a un campione positivo sia associato un valore UG_L positivo.
+```SQL
+-- 1. Inserimento di una stazione meteorologica
+CREATE OR REPLACE FUNCTION insert_stazione_meteorologica(
+    latitudine FLOAT,
+    longitudine FLOAT,
+    via_piazza VARCHAR(25),
+    numero_civico INTEGER,
+    CAP INTEGER,
+    città VARCHAR(25)
+)
+RETURNS VOID LANGUAGE plpgsql AS
+$$
+DECLARE
+    point GEOMETRY;
+BEGIN
+    -- Crea un punto geometrico a partire da latitudine e longitudine
+    point := ST_SetSRID(ST_MakePoint(longitudine, latitudine), 4326);
+
+    -- Inserisci i valori nella tabella Stazione_meteorologica
+    INSERT INTO Stazione_meteorologica (latitudine, longitudine, via_piazza, civico, CAP, città, geom)
+    VALUES (latitudine, longitudine, via_piazza, numero_civico, CAP, città, point);
+
+    RETURN;
+END;
+$$;
+
+-- 2. Aggiornamento di una stazione meteorologica
+CREATE OR REPLACE FUNCTION update_stazione_meteorologica(
+    old_latitudine FLOAT,
+    old_longitudine FLOAT,
+    new_latitudine FLOAT,
+    new_longitudine FLOAT,
+    new_via_piazza VARCHAR(25),
+    new_numero_civico INTEGER,
+    new_CAP CAP,
+    new_città VARCHAR(25)
+)
+RETURNS VOID LANGUAGE plpgsql AS
+$$
+DECLARE
+    point GEOMETRY;
+BEGIN
+    -- Crea il punto geometrico a partire dalle nuove coordinate
+    point := ST_SetSRID(ST_MakePoint(new_longitudine, new_latitudine), 4326);
+
+    -- Esegui l'aggiornamento della stazione meteorologica
+    UPDATE Stazione_meteorologica
+    SET latitudine = new_latitudine,
+        longitudine = new_longitudine,
+        via_piazza = new_via_piazza,
+        civico = new_numero_civico,
+        CAP = new_CAP,
+        città = new_città,
+        geom = point
+    WHERE latitudine = old_latitudine
+      AND longitudine = old_longitudine;
+
+    RETURN;
+END;
+$$;
+
+-- 3. Inserimento di un sito
+
+CREATE OR REPLACE FUNCTION insert_sito(
+    latitudine LATITUDINE,
+    longitudine LONGITUDINE,
+    via_piazza VARCHAR(25),
+    numero_civico INTEGER,
+    CAP CAP,
+    città VARCHAR(25),
+    nome VARCHAR(25),
+    categoria CATEGORIA,
+    materiale_tubature VARCHAR(25),
+    cloro BOOLEAN,
+    anno_ultima_ristrutturazione DATE,
+    caldaia VARCHAR(25)
+)
+
+RETURNS VOID LANGUAGE plpgsql AS
+$$
+DECLARE
+    point GEOMETRY;
+    latitudine_stazione_meteorologica LATITUDINE;
+    longitudine_stazione_meteorologica LONGITUDINE;
+BEGIN
+    -- Crea un punto geometrico per il sito
+    point := ST_SetSRID(ST_MakePoint(longitudine, latitudine), 4326);
+
+    SELECT stazione.latitudine, stazione.longitudine
+    INTO latitudine_stazione_meteorologica, longitudine_stazione_meteorologica
+    FROM Stazione_meteorologica stazione
+    WHERE ST_DWithin(
+        geography(point),
+        geography(stazione.geom),
+        100000 -- 100 km
+    )
+    ORDER BY ST_Distance(point, stazione.geom)
+    LIMIT 1;
+
+    -- Inserisci i valori nella tabella Sito
+    INSERT INTO Sito (latitudine, longitudine, latitudine_stazione_meteorologica, longitudine_stazione_meteorologica, via_piazza, civico, CAP, città, nome, categoria, materiale_tubature, cloro, anno_ultima_ristrutturazione, caldaia, geom)
+
+    VALUES (latitudine, longitudine, latitudine_stazione_meteorologica, longitudine_stazione_meteorologica, via_piazza, numero_civico, CAP, città, nome, categoria, materiale_tubature, cloro, anno_ultima_ristrutturazione, caldaia, point);
+
+    RETURN;
+END;
+$$;
+
+-- 4. Aggiornamento di un sito
+CREATE OR REPLACE FUNCTION update_sito(
+    old_latitudine LATITUDINE,
+    old_longitudine LONGITUDINE,
+    new_latitudine LATITUDINE,
+    new_longitudine LONGITUDINE,
+    new_via_piazza VARCHAR(25),
+    new_numero_civico INTEGER,
+    new_CAP CAP,
+    new_città VARCHAR(25),
+    new_nome VARCHAR(25),
+    new_categoria CATEGORIA,
+    new_materiale_tubature VARCHAR(25),
+    new_cloro BOOLEAN,
+    new_anno_ultima_ristrutturazione DATE,
+    new_caldaia VARCHAR(25)
+)
+RETURNS VOID LANGUAGE plpgsql AS
+$$
+DECLARE
+    point GEOMETRY;
+    new_latitudine_stazione_meteorologica LATITUDINE;
+    new_longitudine_stazione_meteorologica LONGITUDINE;
+BEGIN
+    point := ST_SetSRID(ST_MakePoint(new_longitudine, new_latitudine), 4326);
+
+    SELECT stazione.latitudine, stazione.longitudine
+    INTO new_latitudine_stazione_meteorologica, new_longitudine_stazione_meteorologica
+    FROM Stazione_meteorologica stazione
+    WHERE ST_DWithin(
+        geography(point),
+        geography(stazione.geom),
+        100000 -- 100 km
+    )
+    ORDER BY ST_Distance(point, stazione.geom)
+    LIMIT 1;
+
+    UPDATE Sito
+    SET latitudine = new_latitudine,
+        longitudine = new_longitudine,
+        latitudine_stazione_meteorologica = new_latitudine_stazione_meteorologica,
+        longitudine_stazione_meteorologica = new_longitudine_stazione_meteorologica,
+        via_piazza = new_via_piazza,
+        civico = new_numero_civico,
+        CAP = new_CAP,
+        città = new_città,
+        nome = new_nome,
+        categoria = new_categoria,
+        materiale_tubature = new_materiale_tubature,
+        cloro = new_cloro,
+        anno_ultima_ristrutturazione = new_anno_ultima_ristrutturazione,
+        caldaia = new_caldaia,
+        geom = point
+    WHERE latitudine = old_latitudine
+      AND longitudine = old_longitudine;
+
+    RETURN;
+END;
+$$;
+```
 
 #pagebreak()
 
@@ -1339,7 +1534,7 @@ EXECUTE FUNCTION delete_richiedente_follow_up();
     [Aerosol], [Particelle sospese nell'aria, contenenti gocce d'acqua, che possono trasportare il batterio Legionella.],
     [Analisi], [Esame di laboratorio effettuato su campioni di acqua prelevati durante un'indagine ambientale.],
     [Analisi Colturale], [Esame di laboratorio che permette di isolare e identificare le unità formanti colonia (UFC_L) di Legionella in un campione di acqua.],
-    [Attributo],[Concetto che descrive una proprietà o una componente di una entità o di una relazione. (_i.e._ campo).],
+    [Attributo],[Concetto che descrive una proprietà o una componente di una entità o di una relazione (_i.e._ campo).],
     [Attributo composto],[Attributo dalla struttura complessa, costituito da diversi sotto-attributi.],
     [Attributo multivalore],[Attributo che, per ogni istanza dell'entità cui è associato, può assumere più di un valore.],
     [Campione], [Piccola quantità di acqua da sottoporre a esame.],
@@ -1358,9 +1553,9 @@ EXECUTE FUNCTION delete_richiedente_follow_up();
 
     [*Termine*], [*Definizione*],
     [Componente idraulica], [Componente di un sistema idraulico da cui viene prelevato un campione di acqua, come un rubinetto o un filtro di un impianto di condizionamento.],
-    [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame. (_i.e._ tabella).],
+    [Entità], [In riferimento allo schema E-R, descrive una classe di oggetti con esistenza autonoma, con particolare significato nel contesto in esame (_i.e._ tabella).],
     [Entità debole], [Entità che non ha una chiave primaria propria, ma dipende da un'altra entità per la sua identificazione.],
-    [Generalizzazione],[In riferimento al modello E-R, relazione che associa ad un'entità genitore una o più entità figlie, che ereditano le proprietà del genitore. (_i.e._ specializzazione).],
+    [Generalizzazione],[In riferimento al modello E-R, relazione che associa ad un'entità genitore una o più entità figlie, che ereditano le proprietà del genitore (_i.e._ specializzazione).],
     [FollowUp Clinico], [Indagine ambientale, o indagini ambientali, condotte a seguito di uno o più casi di legionellosi. Tali indagini non si limitano al domicilio del paziente, ma possono estendersi a tutti i luoghi frequentati dal malato nei dieci giorni precedenti l'insorgenza dei sintomi. La decisione di effettuare tali indagini è lasciata al competente servizio territoriale che «deve valutare di volta in volta l'opportunità di effettuare o meno dei campionamenti ambientali, sulla base della valutazione dei rischio»#footnote[#cite( <LineeGuida>, form:"normal" ), «Linee guida per la prevenzione ed il controllo della legionellosi», p. 30].],
     [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica.],
   ),
@@ -1376,7 +1571,7 @@ EXECUTE FUNCTION delete_richiedente_follow_up();
     [*Termine*], [*Definizione*],
     [PCR],[Polymerase Chain Reaction, è una «tecnica di laboratorio per produrre rapidamente (amplificare) milioni o miliardi di copie di uno specifico segmento di DNA, che può poi essere studiato in modo più dettagliato. La PCR prevede l'uso di brevi frammenti di DNA sintetico chiamati primer per selezionare un segmento del genoma da amplificare, e quindi più cicli di sintesi del DNA per amplificare quel segmento»#footnote[#cite(<PCR>, form: "full")].],
     [PCR Qualitativa], [Esame di laboratorio che fornisce un'informazione dicotomica sulla presenza di Legionella in un campione.],
-    [PCR Quantitativa], [Esame di laboratorio rapido che rileva e quantifica il DNA o l'RNA di Legionella presenti in un campione. (_i.e._ Real-Time PCR o qPCR).],
+    [PCR Quantitativa], [Esame di laboratorio rapido che rileva e quantifica il DNA o l'RNA di Legionella presenti in un campione (_i.e._ Real-Time PCR o qPCR).],
     [Relazione],[In riferimento allo schema E-R, legame che rappresenta la connessione logica e significativa per la realtà modellata, tra due o più entità.],
     [Relazione Ricorsiva],[Relazione che associa una entità a se stessa (_i.e._ relazione autoreferenziale).],
     [Richiedente], [Ente o istituzione che richiede un'indagine ambientale.],
