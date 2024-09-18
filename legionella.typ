@@ -517,7 +517,8 @@ CREATE TABLE Gene_del_genoma (
     FOREIGN KEY (protein_ID) REFERENCES Gene(protein_ID)
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
-    FOREIGN KEY (posizione_predecessore, codice_genoma_predecessore, protein_ID_predecessore) REFERENCES Gene_genoma(posizione, codice_genoma, protein_ID)
+    FOREIGN KEY (posizione_predecessore, codice_genoma_predecessore, protein_ID_predecessore)
+        REFERENCES Gene_genoma(posizione, codice_genoma, protein_ID)
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
@@ -551,7 +552,8 @@ CREATE TABLE Sito (
 
     PRIMARY KEY (latitudine, longitudine),
 
-    FOREIGN KEY (latitudine_stazione, longitudine_stazione) REFERENCES Stazione_meterologica(latitudine, longitudine)
+    FOREIGN KEY (latitudine_stazione, longitudine_stazione)
+        REFERENCES Stazione_meterologica(latitudine, longitudine)
 );
 
 ```
@@ -722,9 +724,10 @@ BEFORE INSERT OR UPDATE ON Gene_genoma
 FOR EACH ROW
 EXECUTE FUNCTION check_predecessore();
 ```
+#pagebreak()
 
-= Trigger per la gesione di operazioni di cancellazione e aggiornamento
-Prima di procedere con l'implementazione di alcune operazioni notevoli, è essenziale definire opportuni trigger che consentano di gestire, in modo conforme a una politica ben definita, le operazioni di cancellazione e aggiornamento relative a determinate tabelle. Questi trigger servono a prevenire situazioni in cui alcune entry risultino "prive" di significato a seguito di modifiche o cancellazioni di altre entry a cui erano precedentemente collegate.
+== Definizione dei trigger per la gestione delle istanze divenute isolate a seguito di operazioni di cancellazione o aggiornamento
+#annotation[Prima di procedere con l'implementazione di alcune operazioni notevoli, è essenziale definire opportuni trigger che consentano di gestire, in modo conforme a una politica ben definita, le operazioni di cancellazione e aggiornamento relative a determinate tabelle. Questi trigger servono a prevenire situazioni in cui alcune entry risultino "prive" di significato a seguito di modifiche o cancellazioni di altre entry a cui erano precedentemente collegate.]
 
 #linebreak()
 *Indagine ambientale*
@@ -765,11 +768,11 @@ EXECUTE FUNCTION delete_indagine();
 
 == Operazioni di inserimento e aggiornamento<query>
 
-#annotation[L'ultima sezione di questo documento è dedicata alla ridefinizione di alcune operazioni di inserimento o aggiornamento, con l'obbiettivo di aggevolare la fruizione della base di dati per gli utenti.]
+#annotation[L'ultima sezione di questo elaborato è dedicata alla ridefinizione di alcune operazioni di inserimento o aggiornamento, con l'obbiettivo di aggevolare la fruizione della base di dati per gli utenti.]
 
 === Inserimento e aggiornamento di una nuova stazione meteorologica
 
-Una prima operazione di rilievo riguarda l'inserimento di una nuova stazione meteo. Per questa operzione è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Questa soluzione è particolarmente utile per garantire la coerenza dei dati: infatti, evita che le coordinate geografiche e il punto geografico associato siano inseriti in modo non corrispondente e semplifica l'operazione per l'utente. Si sottolinea che l'operazione di aggiornamento è del tutto analoga a quella di inserimento; pertanto, di seguito, si riporta solamente il codice per l'inserimento di una nuova stazione meteo, mentre quello relativo all'aggiornamento è consultabile in appendice.
+#annotation[Una prima operazione di rilievo riguarda l'inserimento di una nuova stazione meteo. Per questa operzione è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Questa soluzione è particolarmente utile per garantire la coerenza dei dati: infatti, evita che le coordinate geografiche e il punto geografico associato siano inseriti in modo non corrispondente e semplifica l'operazione per l'utente. Si sottolinea che l'operazione di aggiornamento è del tutto analoga a quella di inserimento; pertanto, di seguito, si riporta solamente il codice per l'inserimento di una nuova stazione meteo, mentre quello relativo all'aggiornamento è consultabile in appendice.]
 
 ```SQL
 CREATE OR REPLACE FUNCTION insert_stazione_meteorologica(
@@ -800,8 +803,8 @@ $$;
 #linebreak()
 === Inserimento e aggiornamento di un nuovo sito
 
-Un secondo aspetto di rilievo riguarda l'inserimento o l'aggiornamento di sito. Anche in questo caso, è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Inoltre, è necessario referenziare automaticamente il sito alla stazione meteorologica più vicina. Tale collegamento al momento della creazione di una nuova entry nella tabella sito è garantita dall'impiego, nella funzione di inserimento, di una user define function quasi del tutto analoga a quelle viste nel @gestione_sito[paragrafo] che calcola la distanza tra il sito e le stazioni meteorologiche presenti nel database e associa il sito alla stazione più vicina.
-Di seguito si riporta il codice per l'operazione di aggiornamento. Per la consoltazione del codice relativo all'inserimento si rimanda all'appendice.
+#annotation[Un secondo aspetto di rilievo riguarda l'inserimento o l'aggiornamento di sito. Anche in questo caso, è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Inoltre, è necessario referenziare automaticamente il sito alla stazione meteorologica più vicina. Tale collegamento al momento della creazione di una nuova entry nella tabella sito è garantita dall'impiego, nella funzione di inserimento, di una user define function quasi del tutto analoga a quelle viste nel @gestione_sito[paragrafo] che calcola la distanza tra il sito e le stazioni meteorologiche presenti nel database e associa il sito alla stazione più vicina.
+Di seguito si riporta il codice per l'operazione di aggiornamento. Per la consoltazione del codice relativo all'inserimento si rimanda all'appendice.]
 
 ```SQL
 CREATE OR REPLACE FUNCTION update_sito(
