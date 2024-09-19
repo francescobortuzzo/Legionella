@@ -9,8 +9,14 @@ par(
 )
 }
 
+#let appendix(body) = {
+  set heading(numbering: "A", supplement: [Appendix])
+  counter(heading).update(0)
+  body
+}
 
-= Introduzione e obiettivo del progetto
+
+= Introduzione
 == Introduzione al batterio Legionella 
 
 #annotation[Il batterio Legionella è un bacillo gram-negativo aerobio, non mobile, che prospera in ambienti acquatici e umidi, sia naturali, come acque sorgive, termali, di fiumi o laghi, sia artificiali, come tubature, serbatoi, fontane e piscine. La Legionella è in grado di sopravvivere in una vasta gamma di condizioni ambientali, tra cui temperature comprese tra venti e quarantacinque gradi Celsius, pH neutro o leggermente alcalino, e presenza di nutrienti organici.]
@@ -34,19 +40,19 @@ I risultati riferiti alle indagini non clinciche e dunque eseguite routinariamen
 Inoltre, si è osservato che la presenza del batterio ha registrato un notevole incremento tra la seconda metà del 2006 e l'inizio del 2009, seguito da una diminuzione fino al 2013 e da un nuovo aumento negli anni successivi. Questo andamento indica chiaramente che, per ridurre il rischio di diffusione del batterio, è essenziale implementare un piano di prevenzione adeguato, che comprenda sia la manutenzione degli impianti sia la sorveglianza ambientale.
 
 
-== Obiettivo del progetto
+== Obiettivo della tesi
 #annotation[Pur riconoscendo l'importanza cruciale della sorveglianza ambientale per il controllo della legionellosi, in Friuli Venezia Giulia, come in molte altre regioni, manca un sistema efficiente per la memorizzazione, la gestione e l'analisi dei dati raccolti. Tale carenza rende estremamente oneroso lavorare con la mole di informazioni raccolte nelle indagini ambientali, ostacolando così lo svolgimento di analisi e ricerche mirate.]
 
 In questo contesto, i sistemi di basi di dati giocano un ruolo fondamentale, in quanto permettono di memorizzare grandi quantità di dati e di effettuare ricerche complesse in modo rapido ed efficiente.
 
 Il presente elaborato si propone di delineare gli aspetti principali per la progettazione di un database relazionale destinato alla memorizzazione dei dati relativi alla diffusione della Legionella. 
-Più specificamente, nei prossimi capitoli viene condotta un'analisi critica di una soluzione esistente, rispetto alla quale sono proposte alcune modifiche al fine di adattarla alle nuove esigenze emerse dai colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. Successivamente, vengono descritte le fasi di ristrutturazione, traduzione in modello relazionale e implementazione della base di dati, con particolare attenzione rivolta alla definizione dei domini e dei vincoli che garantiscono l'integrità dei dati.
+Più specificamente, nel @Analisi_critica[capitolo] viene condotta un'analisi critica approfondita di una soluzione pre-esistente, individuandone vantaggi e criticità. Tale analisi costituisce la base per le modifiche proposte nel capitolo successivo, dove vengono introdotte soluzioni migliorative volte ad adattare il sistema alle nuove esigenze emerse durante i colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. La @Progettazione_logica[sezione], invece, è dedicata alla ristrutturazione dello schema originario e alla sua traduzione in un modello logico. Infine, il @Progettazione_fisica[capitolo] si concentra sull'implementazione della base di dati, ponendo particolare attenzione alla definizione dei domini e dei vincoli che garantiscono l'integrità dei dati, oltre che la definizione di alcune relative all'inserimento e alla modifica dei dati.
 
 #pagebreak()
 
 #set par(justify: true)
 
-= Analisi critica di una soluzione pre-esistente: Valutazione e proposte di modifica
+= Analisi critica di una soluzione pre-esistente <Analisi_critica>
 
 #annotation[Come accennato nel capitolo introduttivo, una delle principali sfide riscontrate nell'attuale sistema di gestione dei dati riguarda la realizzazione di soluzioni efficienti per la memorizzazione delle informazioni raccolte durante le indagini ambientali.
 In questa sezione si procede a un'analisi critica di un database relazionale utilizzato per archiviare i dati relativi alla diffusione della Legionella. Il database oggetto di analisi è stato sviluppato dal dottor Dario Garlatti nell'ambito della sua tesi di laurea triennale in informatica, dal titolo "Base di dati e applicazione web per il monitoraggio del batterio della Legionella"#footnote[#cite(<TesiGarlatti>, form: "full")].]
@@ -98,7 +104,7 @@ L'entità _follow-up clinico_ potrebbe essere ulteriormente arricchita con attri
 Per quanto concerne l'entità _campione_, è opportuno valutare l'introduzione di un attributo volume per specificare la quantità d'acqua prelevata per l'analisi. Sebbene non strettamente necessario, tale attributo trova pertinenza nel definire parametri di riferimento relativi al prelievo dei campioni, come il volume minimo d'acqua richiesto per eseguire tutte le analisi previste.
 Inoltre, poiché è possibile prelevare campioni di diversa matrice ambientale, come acqua, biofilm o aria, si presenta la proposta di introdurre un attributo "matrice" che consenta di specificare il tipo di campione analizzato.
 
-Infine, si propone di riorganizzare la disposizione delle entità _indagine ambientale_ e _campione_ all'interno dello schema. In particolare, per come definita nella @glossario[sezione], un'indagine ambientale non è altro che una collezione di campioni prelevati in un sito specifico in una data determinata. Pertanto, risulta più coerente associare solo l'entità _campione_ alle informazioni spaziali contenute nelle tabelle _punto di prelievo_ e _sito_. Si noti che tale modifica comporta l'introduzione di un vincolo di integrità che stabilisce che tutti i campioni associati a un'indagine devono essere prelevati nello stesso sito.
+Infine, si propone di riorganizzare la disposizione delle entità _indagine ambientale_ e _campione_ all'interno dello schema. In particolare, per come definita nel glossario, un'indagine ambientale non è altro che una collezione di campioni prelevati in un sito specifico in una data determinata. Pertanto, risulta più coerente associare solo l'entità _campione_ alle informazioni spaziali contenute nelle tabelle _punto di prelievo_ e _sito_. Si noti che tale modifica comporta l'introduzione di un vincolo di integrità che stabilisce che tutti i campioni associati a un'indagine devono essere prelevati nello stesso sito.
 
 In questo contesto, appare vantaggioso apportare una modifica alla struttura delle entità _sito_ e _punto di prelievo_ nel modo seguente: si consiglia di aggiungere l'attributo coordinate all'entità _sito_, associandolo a una coppia di coordinate, ad esempio riferite al centro geografico o all'ingresso principale dell'edificio, che costituirebbero una chiave per l'entità. Inoltre, l'entità _punto di prelievo_ potrebbe essere trasformata in un'entità debole rispetto al _sito_, implicitando il vincolo imposto dall'associazione di un punto di prelievo a un sito, secondo il quale un punto di prelievo deve essere situato all'interno del perimetro del sito di cui fa parte. Al _punto di prelievo_ potrebbero essere attribuite proprietà che ne descrivano la posizione all'interno del sito, come il piano, la stanza o il tipo di componente idraulico, da cui è stato prelevato il campione.
 
@@ -196,7 +202,7 @@ In ultimo, si segnala che le principali operazioni eseguite sulla base di dati r
 Le considerazioni relative ai vincoli di integrità sono posticipate al capitolo successivo, nel quale, terminata la fase di progettazione, sarà possibile ottenere una visione del tutto trasparente e definitiva delle entità coinvolte nel sistema dei relativi attributi e delle relazioni tra di esse.
 
 #pagebreak()
-= Progettazione logica della base di dati
+= Progettazione logica della base di dati <Progettazione_logica>
 
 == Ristrutturazione del modello concettuale: Sempliﬁcazione delle generalizzazioni e degli attributi composti
 
@@ -268,7 +274,7 @@ Sulla base delle considerazioni precedenti, si procede alla definizione dello sc
 #pagebreak()
 
 
-= Progettazione fisica della base di dati: definizione dei domini, dei vincoli di integrità e implementazione del codice SQL
+= Progettazione fisica della base di dati <Progettazione_fisica>
 In questa sezione viene eseguita l'implementazione della base di dati, iniziando dalla definizione dei domini, ovvero l'insieme dei valori ammissibili per ciascuna colonna, e proseguendo con la creazione delle tabelle e delle funzioni che implementano i vincoli che assicurano l'integrità dei dati.
 
 Il DBMS scelto per la realizzazione del database è PostgreSQL, un sistema di gestione di basi di dati relazionali rilasciato per la prima volta nel 1989. La scelta è motivata dalla flessibilità ed estendibilità del sistema, che consente di implementare vincoli di integrità complessi e di gestire grandi quantità di dati in modo efficiente.
@@ -336,114 +342,13 @@ CREATE DOMAIN LONGITUDINE AS REAL
 ```
 
 === Note
-Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici del batterio, come ad esempio _Draft genome sequences from 127 Legionella spp. strains isolated in water systems linked to legionellosis outbreaks_#footnote[#cite(<DraftGenome>, form:"full")], è emerso che la lunghezza media del genoma di Legionella pneumophila è di circa 3.500.000 coppie di basi, con una significativa variabilità tra i genomi sequenziati.
+Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici del batterio, come ad esempio _Draft genome sequences from 127 Legionella spp. strains isolated in water systems linked to legionellosis outbreaks_#footnote[#cite(<DraftGenome>, form:"full")], è emerso che la lun
+ghezza media del genoma di Legionella pneumophila è di circa 3.500.000 coppie di basi, con una significativa variabilità tra i genomi sequenziati.
 
 In considerazione alle dimensioni dell'oggetto, si propone di assegnare un dominio di tipo text#footnote("https://www.postgresql.org/docs/current/datatype-character.html"). Questo tipo di dato consente la memorizzazione di stringhe di lunghezza arbitraria, risultando particolarmente adatto per la conservazione di sequenze di DNA.
 
-#linebreak()
-
-*Si potrebbe anche impostare un limite superiore e usare varchar, ma sarebbe meglio aggiungere uno step di conferma per valori superiori a 7.000.000 bp (il doppio rispetto alla media, ovvero un possibile errore di duplicazione dei dati) in un'eventuale interfaccia per interagire con il database per lasciare flessibilità a questo livello*
-
-#linebreak()
-
 Si evidenzia inoltre che, in termini di occupazione della memoria, la politica TOAST#footnote("https://www.postgresql.org/docs/current/storage-toast.html") tipica di PostgreSQL consente una gestione efficiente anche per attributi di grandi dimensioni, allocando i dati in pagine separate e comprimendoli per ridurre lo spazio complessivo occupato.
 #pagebreak()
-
-/*
-
-Di seguito è riportata la definizione dei domini per ciascuna tabella.
-
-
-#box(height: 570pt,
- columns(2)[
-   #set par(justify: true)
-    *Dati meteorologici*
-    - data e ora: timestamp
-    - temperatura: float
-    - umidità: float (>0)
-    - pressione atmosferica: float (>0)
-
-    *Stazione meteorologica*
-    - latitudine: float (-90, 90)
-    - longitudine: float (-180, 180)
-    - via: varchar(25)
-    - numero_civico: int
-    - CAP: int (5 cifre)
-    - città: varchar(25)
-
-    *Sito*
-    - latitudine: float (-90, 90)
-    - longitudine: float (-180, 180)
-    - CAP: int (5 cifre)
-    - via/piazza: varchar(25)
-    - civico: int
-    - città: varchar(25)
-    - nome: varchar(25)
-    - categoria: categoria
-    - materiale tubature: varchar(25)
-    - cloro: boolean
-    - anno ultima ristrutturazione: date
-    - caldaia: varchar(25)
-
-    *Indagini ambientali*
-    - codice: char(5)
-    - data: date
-   
-    *Punto di prelievo*
-    - piano: int
-    - stanza: varchar(15)
-    - descrizione: varchar(100)
-    - componente idraulica: varchar(25)
-
-    *Richiedente*
-    - codice: char(5)
-    - nome: varchar(25)
-
-    *FollowUp Clinico*
-    - codice: char(5)
-
-    *Campione*
-    - codice: char(5)
-    - temperatura: float
-    - matrice: matrice
-    - volume: float (>0)
-
-    *Analisi PCR*
-    - codice: char(5)
-    - data: date
-    - esito: boolean
-    - µg/l: int (≥0)
-
-    *Analisi colturale*
-    - codice: char(5)
-    - data: date
-    - esito: boolean
-    - ufc/l: int (≥0)
-    - sierotipo: varchar(50)
-
-    *Analisi del pH*
-    - codice: char(5)
-    - data: date
-    - ph: float (0, 14)
-
-    *Analisi genomica*
-    - codice: char(5)
-    - data: date
-    // Sulla base di quanto detto in numerosi articoli scientifici riferiti allo stuido degli aspetti genetici di Legionella, è emerso che mediamente la lunghezza del genoma di Legionella è di circa 3.500.000 basi azotate. Pertanto si è deciso di definire il dominio del genoma come una stringa di lunghezza massima 3.700.000.
-    - genoma: text
-
-    *Gene del genoma*
-    - posizione: int
-    - query-cover: float
-    - percent-identity: float
-    - e-value: float
-
-    *Gene*
-    - protein-ID: char(5)
-    - nome: varchar(75)
- ]
-)
-*/
 
 == Creazione delle tabelle
 #annotation[Il codice per la creazione delle tabelle è banalmente ottenuto dal modello relazionale. Tuttavia, merita particolare attenzione la gestione dei vincoli di chiave esterna. In particolare, è necessario considerare il comportamento delle chiavi esterne nei casi di eliminazione o aggiornamento di una riga a cui queste fanno riferimento. In questo ambito vi sono tre principali opzioni, ovvero l'impedimento dell'operazione (RESTRICT), che comporta il rifiuto dell'operazione stessa, l'azione di cascata (CASCADE), che comporta l'aggiornamento o la cancellazione delle righe collegate alla riga interessata, e l'assegnazione di un valore nullo (SET NULL), che imposta il valore nullo nelle righe che fanno riferimento alla riga eliminata o modificata.]
@@ -868,9 +773,21 @@ $$;
 ```
 
 #pagebreak()
+
+= Conclusioni
+#annotation[Questa tesi ha illustrato l'intero processo di sviluppo di un database relazionale per la gestione dei dati relativi al monitoraggio del batterio Legionella raccolti nell'ambito delle indagini svolte dall'ARPA FVG. In particolare, nei primi capitoli è stata condotta un'analisi approfondita di un progetto pre-esistente, evidenziandone i punti di forza e le criticità, e proponendo un nuovo modello concettuale in grado di risolvere le problematiche riscontrate e integrare nuove funzionalità richieste dagli stakeholders. Successivamente, nel @Progettazione_logica[capitolo] è stato definito lo schema logico del database, seguendo i principi del modello relazionale descritti nel volume "Database Systems#footnote[#cite(<DatabaseSystems>) «_Database Systems: Concepts, Languages & Architectures_»]".
+Infine, nella @Progettazione_fisica[seizione] è stato presentato il codice SQL per la creazione delle tabelle, la definizione degli indici spaziali e dei vincoli di integrità, oltre che per la gestione di alcune operazioni di inserimento e aggiornamento, corredato delle motivazioni che ne hanno guidato l'implementazione.]
+
+Il prodotto di questo elaborato costituisce una risorsa iniziale per l'ARPA FVG per il monitoraggio della Legionella nella nostra regione, la quale consente di costruire analisi per monitorare e prevedere la diffusione del batterio permettendo di definire le misure di prevenzione e controllo maggiormente efficaci.
+Tuttavia, il lavoro svolto lascia spazio a ulteriori sviluppi e miglioramenti, come, per esempio, l'introduzione di applicativi software per la raccolta e l'inserimento dei dati, attualmente eseguiti manualmente attraverso schede cartacee o fogli elettronici senza l'impiego di procedure standardizzate, e per la consultazione del sistema, che potrebbe risultare complessa per utenti non esperti.
+
+#pagebreak()
+
+#set heading(numbering: none)
+
 = Appendice
 
-== Codice SQL per la creazione delle tabelle e la definizione degli indici spaziali
+== Creazione delle tabelle e la definizione degli indici spaziali
 ```SQL
 -- DEFINIZIONE DELLE TABELLE
 
@@ -1096,7 +1013,7 @@ CREATE INDEX idx_stazione_geom ON Stazione_meteorologica USING GIST (geom);
 CREATE INDEX idx_sito_geom ON Sito USING GIST (geom);
 ```
 
-== Codice SQL che implementa i trigger
+== Implementazione dei trigger
 ```SQL
 -- TRIGGER
 
@@ -1343,7 +1260,7 @@ FOR EACH ROW
 EXECUTE FUNCTION delete_richiedente_follow_up();
 ```
 
-== Codice SQL per la definizione delle funzioni di inserimento e aggiornamento
+== Creazione di user define function per inserimento e aggiornamento
 
 ```SQL
 -- 1. Inserimento di una stazione meteorologica
@@ -1513,16 +1430,15 @@ BEGIN
 END;
 $$;
 ```
+]
+#pagebreak()
+
+#bibliography("bibliografia.bib", title: "Bibliografia" , style: "ieee")
 
 #pagebreak()
 
-#pagebreak()
-= Bibliografia
+= Glossario
 
-#bibliography("bibliografia.bib", title:none , style: "ieee")
-
-#pagebreak()
-= Glossario  <glossario>
 #annotation[Al fine di facilitare la comprensione del documento, è redatto il seguente glossario contenente le definizioni dei termini tecnici utilizzati.]
 
 #set par(justify: false)
@@ -1563,7 +1479,7 @@ $$;
     [Indagine Ambientale], [Collezione di campioni prelevati da un sito specifico in una data specifica.],
   ),
   caption: "Glossario",
-) <dictionary>
+) <dictionary_2>
 
 #figure(
   supplement: none,
@@ -1581,7 +1497,7 @@ $$;
     [Sierotipo], [Livello di classificazione di batteri di Legionella inferiore a quello specie. Il laboratorio ARPA distingue tre sierotipi: sierotipo 1, sierotipo 2-15 e sierotipo sp (_i.e._ sierogruppo).]
   ),
   caption: "Glossario",
-) <dictionary>
+)
 
 #figure(
   supplement: none,
@@ -1595,4 +1511,4 @@ $$;
     [UG_L], [Microgrammi per litro: ovvero unità di misura utilizzata per determinare la concentrazione di Legionella in un campione d'acqua mediante PCR quantitativa.],
     ),
   caption: "Glossario",
-) <dictionary>
+)
