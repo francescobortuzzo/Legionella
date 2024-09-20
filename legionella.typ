@@ -40,13 +40,26 @@ I risultati riferiti alle indagini non clinciche e dunque eseguite routinariamen
 Inoltre, si è osservato che la presenza del batterio ha registrato un notevole incremento tra la seconda metà del 2006 e l'inizio del 2009, seguito da una diminuzione fino al 2013 e da un nuovo aumento negli anni successivi. Questo andamento indica chiaramente che, per ridurre il rischio di diffusione del batterio, è essenziale implementare un piano di prevenzione adeguato, che comprenda sia la manutenzione degli impianti sia la sorveglianza ambientale.
 
 
-== Obiettivo della tesi
-#annotation[Pur riconoscendo l'importanza cruciale della sorveglianza ambientale per il controllo della legionellosi, in Friuli Venezia Giulia, come in molte altre regioni, manca un sistema efficiente per la memorizzazione, la gestione e l'analisi dei dati raccolti. Tale carenza rende estremamente oneroso lavorare con la mole di informazioni raccolte nelle indagini ambientali, ostacolando così lo svolgimento di analisi e ricerche mirate.]
+== Basi di dati relazionali
+#annotation[Pur riconoscendo l'importanza cruciale della sorveglianza ambientale per il controllo della legionellosi, in Friuli Venezia Giulia, come in molte altre regioni, manca un sistema efficiente per la memorizzazione, la gestione e l'analisi dei dati raccolti. Tale carenza rende estremamente oneroso lavorare con la mole di informazioni raccolte nelle indagini ambientali, ostacolando così lo svolgimento di analisi e ricerche mirate.
+Inoltre, tale mancanza rende poco sicura la conservazione dei dati. La memorizzazione delle informazioni in file di testo o in fogli di calcolo, infatti, non assicura né la protezione né l'integrità dei dati, che potrebbero essere facilmente persi, alterati o resi inconsistenti a causa di errori umani.]
 
 In questo contesto, i sistemi di basi di dati giocano un ruolo fondamentale, in quanto permettono di memorizzare grandi quantità di dati e di effettuare ricerche complesse in modo rapido ed efficiente.
 
-Il presente elaborato si propone di delineare gli aspetti principali per la progettazione di un database relazionale destinato alla memorizzazione dei dati relativi alla diffusione della Legionella. 
-Più specificamente, nel @Analisi_critica[capitolo] viene condotta un'analisi critica approfondita di una soluzione pre-esistente, individuandone vantaggi e criticità. Tale analisi costituisce la base per le modifiche proposte nel capitolo successivo, dove vengono introdotte soluzioni migliorative volte ad adattare il sistema alle nuove esigenze emerse durante i colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. La @Progettazione_logica[sezione], invece, è dedicata alla ristrutturazione dello schema originario e alla sua traduzione in un modello logico. Infine, il @Progettazione_fisica[capitolo] si concentra sull'implementazione della base di dati, ponendo particolare attenzione alla definizione dei domini e dei vincoli che garantiscono l'integrità dei dati, oltre che la definizione di alcune relative all'inserimento e alla modifica dei dati.
+In particolare, il modello relazionale rappresenta la soluzione più largamente adottata per la memorizzazione delle informazioni. Tale rappresentazione, introdotta per la prima volta dall'informatico inglese Edgar F. Codd attraverso la pubblicazione, nel 1970, dell'articolo "_A Relational Model of Data for Large Shared Data Banks_"#footnote[#cite(<RelationalModel>, form: "full")], sfrutta il concetto di relazione, nella sua coniugazione matematica, per organizzare i dati mediante tabelle, che rappresentano l'insieme delle entità coinvolte nel sistema e dele associazioni tra di esse.
+
+Nello specifico, l'architettura relazionale si propone di rappresentare il dominio informativo, ovvero l'insieme dei dati che si vogliono memorizzare, attraverso tabelle identificate da un nome, con un numero fisso di colonne, dette attributi, e un insieme di righe, denominate tuple, tutte distinte tra loro.
+Questa struttura, in contrapposizione a quelle precedentemente in voga, come quella gerarchica o reticolare, si è rivelata particolarmente adatta per la memorizzazione di dati e per la gestione delle relazioni tra essi. 
+In particolare, l'efficacia del modello relazionale si deve a caratteristiche fondamentali, come la possibilità di definire chiavi primarie ed esterne e la gestione delle operazioni sui dati mediante software specializzati, ovvero i RDBMS#footnote("Relational Database Management Systems"). Questi sistemi assicurano, tra le altre, la corretta applicazione di vincoli di integrità e l'esecuzione di transazioni ACID#footnote("Acronimo per Atomicity, Consistency, Isolation, Durability"), che garantiscono la coerenza dei dati in ogni momento e la loro persistenza nel tempo.
+
+L'adozione del modello relazionale rimane prevalente nell'ambito della gestione dei dati, nonostante siano emerse soluzioni alternative come i database NoSQL. Tale successo è attribuibile diversi fattori: la struttura a tabelle del modello garantisce intuitività e chiarezza nella rappresentazione dei dati e favorisce elevati standard di sicurezza e integrità dei dati. Inoltre è supportata l'indipendenza dei dati, ovvero la possibilità di modificare la struttura del database senza dover modificare le applicazioni che vi accedono. Infine, l'introduzione dei RDBMS ha assicurato, grazie all'integrazione degli indici, che migliorano l'efficienza delle operazioni, la definizione di linguaggi specifici, come SQL, e l'adozione di alcuni linguaggi di programmazione noti, tra cui python, che il modello relazionale rimanga una soluzione attuale e facilmente adattabile alle esigenze più moderne.
+
+Nell'ambito di questa tesi si ritiene opportuno implementare il sistema tramite un database relazionale. Tale scelta è motivata dalla necessità di garantire la sicurezza, l'integrità e la coerenza dei dati raccolti durante il monitoraggio della Legionella. Inoltre, si ritiene fondamentale fornire un sistema intuitivo e facilmente integrabile con le applicazioni pre-esistenti già in uso dai ricercatori dell'ARPA.
+In questo contesto, si ritiene che il modello relazionale e, più specificamente, il RDBMS PostgreSQL rappresentino una soluzione appropriata per la memorizzazione e la gestione dei dati. D'altra parte, soluzioni alternative, come i database NoSQL, potrebbero presentare limitazioni in termini di integrità e coerenza dei dati, senza tuttavia garantire vantaggi significativi in termini di prestazioni.
+
+== Obiettivo della tesi
+#annotation[Il presente elaborato si propone di delineare gli aspetti principali per la progettazione di un database relazionale destinato alla memorizzazione dei dati relativi alla diffusione della Legionella. 
+Più specificamente, nel @Analisi_critica[capitolo] viene condotta un'analisi critica approfondita di una soluzione pre-esistente, individuandone vantaggi e criticità. Tale analisi costituisce la base per le modifiche proposte nel capitolo successivo, dove vengono introdotte soluzioni migliorative volte ad adattare il sistema alle nuove esigenze emerse durante i colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. La @Progettazione_logica[sezione], invece, è dedicata alla ristrutturazione dello schema originario e alla sua traduzione in un modello logico. Infine, il @Progettazione_fisica[capitolo] si concentra sull'implementazione della base di dati, ponendo particolare attenzione alla definizione dei domini e dei vincoli che garantiscono l'integrità dei dati, oltre che la definizione di alcune relative all'inserimento e alla modifica dei dati.]
 
 #pagebreak()
 
@@ -159,7 +172,7 @@ Una seconda considerazione riguarda l'opportunità di ampliare il campo di azion
 
 Sempre in relazione alle analisi condotte sui campioni, durante i colloqui è emerso il proposito di memorizzare le informazioni genomiche relative al batterio. In particolare, si intende raccogliere dati sulla presenza, o assenza, di specifici geni e individuare i fattori genetici che influenzano la diffusione del batterio. A tale scopo, è necessario eseguire un'analisi genomica sui campioni prelevati per identificare la sequenza del DNA di Legionella. Questa informazione è memorizzata in un'entità _analisi genomica_, che rappresenta una specializzazione dell'entità _analisi_, e contiene l'intera sequenza del DNA di Legionella, espressa mediante le quattro lettere che indicano le basi azotate (A, T, C, G).
 
-A ciascun genoma sequenziato si intende associare i geni noti di Legionella, presenti nei database di riferimento di BLAST#footnote("Basic Local Alignment Search Tool. https://blast.ncbi.nlm.nih.gov/Blast.cgi") corrispondenti. Tali geni sono memorizzati in un'entità _gene_, identificata univocamente mediante una chiave corrispondente al relativo protein ID#footnote("Identificativo univoco associato a ciascuna proteina mappata nei database di riferimento di BLAST.") e caratterizzata dal nome del gene, se presente nel database utilizzato per l'analisi.
+A ciascun genoma sequenziato si intende associare i geni noti di Legionella, presenti nei database di riferimento di BLAST#footnote[«Basic Local Alignment Search Tool (Altschul et al., 1990 & 1997) is a sequence comparison algorithm optimized for speed used to search sequence databases for optimal local alignments to a query.» #cite(<BLAST>, form: "full")] corrispondenti. Tali geni sono memorizzati in un'entità _gene_, identificata univocamente mediante una chiave corrispondente al relativo protein ID#footnote("Identificativo univoco associato a ciascuna proteina mappata nei database di riferimento di BLAST.") e caratterizzata dal nome del gene, se presente nel database utilizzato per l'analisi.
 A questa entità, che ha lo scopo di conservare informazini stabili e ben definite sui geni noti di Legionella, si propone di associare un'entità _gene del genoma_, che rappresenta i geni individuati per ogni genoma sequenziato. Si tiene traccia, tramite i principali parametri restituiti dalle query BLAST, del fattore di similarità tra i geni noti e quelli individuati tramite l'analisi.
 Questo approccio ha lo scopo di consentire, in futuro, a seguito del progresso delle tecniche di riconoscimento genetico e dell'aumento dei dati disponibili, una rivalutazione dei geni identificati, al fine di determinare se emergono geni con maggiore somiglianza rispetto a quelli attualmente presenti nel genoma analizzato.
 Ogni entry della tabella _gene di un genoma_ è distinta dall'insieme formato dal protein-ID, dal genoma di cui è parte e dalla posizione assoluta all'interno del genoma.
@@ -277,7 +290,7 @@ Sulla base delle considerazioni precedenti, si procede alla definizione dello sc
 = Progettazione fisica della base di dati <Progettazione_fisica>
 In questa sezione viene eseguita l'implementazione della base di dati, iniziando dalla definizione dei domini, ovvero l'insieme dei valori ammissibili per ciascuna colonna, e proseguendo con la creazione delle tabelle e delle funzioni che implementano i vincoli che assicurano l'integrità dei dati.
 
-Il DBMS scelto per la realizzazione del database è PostgreSQL, un sistema di gestione di basi di dati relazionali rilasciato per la prima volta nel 1989. La scelta è motivata dalla flessibilità ed estendibilità del sistema, che consente di implementare vincoli di integrità complessi e di gestire grandi quantità di dati in modo efficiente.
+Il DBMS scelto per la realizzazione del database è PostgreSQL#footnote[#cite(<PostgreSQL>, form:"full")], un sistema di gestione di basi di dati relazionali rilasciato per la prima volta nel 1989. La scelta è motivata dalla flessibilità ed estendibilità del sistema, che consente di implementare vincoli di integrità complessi e di gestire grandi quantità di dati in modo efficiente.
 
 
 == Definizione dei domini
@@ -434,7 +447,7 @@ CREATE TABLE Gene_del_genoma (
 
 In ultimo, si riporta una nota riguardante la tabella sito. Poiché si desidera collegare ciascun sito alla stazione meteorologica più vicina, le operazioni di aggiornamento e cancellazione delle stazioni sono risolte mediante l'applicazione di un trigger, che associa automaticamente tutti i siti legati alla stazione interessata alla stazione meteorologica più vicina. Di conseguenza, non è necessario definire un vincolo di chiave esterna per tale tabella. Una trattazione più approfondita sarà fornita nei capitoli successuvi.]
 
-Per ragioni di efficienza è consigliabile definire un indice spaziale per le colonne latitudine e longitudine delle tabelle _sito_ e _stazione meteorologica_. Questo indice consente di migliorare le prestazioni delle interrogazioni che utilizzano operazioni di ricerca basate sulla distanza tra due punti sulla superficie terrestre. In termini implementativi, si introduce un campo di tipo geometry#footnote("https://postgis.net/docs/geometry.html") del pacchetto PostGis#footnote("https://postgis.net"), corrispondente alle coordinate geografiche. Successivamente, si definisce un indice spaziale su questo campo che permette di ottimizzare le operazioni di ricerca spaziale.
+Per ragioni di efficienza è consigliabile definire un indice spaziale per le colonne latitudine e longitudine delle tabelle _sito_ e _stazione meteorologica_. Questo indice consente di migliorare le prestazioni delle interrogazioni che utilizzano operazioni di ricerca basate sulla distanza tra due punti sulla superficie terrestre. In termini implementativi, si introduce un campo di tipo geometry#footnote("https://postgis.net/docs/geometry.html") del pacchetto PostGis#footnote[#cite(<PostGIS>, form: "full")], corrispondente alle coordinate geografiche. Successivamente, si definisce un indice spaziale su questo campo che permette di ottimizzare le operazioni di ricerca spaziale.
 
 ```SQL
 CREATE TABLE Sito (
@@ -778,7 +791,7 @@ $$;
 #annotation[Questa tesi ha illustrato l'intero processo di sviluppo di un database relazionale per la gestione dei dati relativi al monitoraggio del batterio Legionella raccolti nell'ambito delle indagini svolte dall'ARPA FVG. In particolare, nei primi capitoli è stata condotta un'analisi approfondita di un progetto pre-esistente, evidenziandone i punti di forza e le criticità, e proponendo un nuovo modello concettuale in grado di risolvere le problematiche riscontrate e integrare nuove funzionalità richieste dagli stakeholders. Successivamente, nel @Progettazione_logica[capitolo] è stato definito lo schema logico del database, seguendo i principi del modello relazionale descritti nel volume "Database Systems#footnote[#cite(<DatabaseSystems>) «_Database Systems: Concepts, Languages & Architectures_»]".
 Infine, nella @Progettazione_fisica[seizione] è stato presentato il codice SQL per la creazione delle tabelle, la definizione degli indici spaziali e dei vincoli di integrità, oltre che per la gestione di alcune operazioni di inserimento e aggiornamento, corredato delle motivazioni che ne hanno guidato l'implementazione.]
 
-Il prodotto di questo elaborato costituisce una risorsa iniziale per l'ARPA FVG per il monitoraggio della Legionella nella nostra regione, la quale consente di costruire analisi per monitorare e prevedere la diffusione del batterio permettendo di definire le misure di prevenzione e controllo maggiormente efficaci.
+Il prodotto di questo elaborato costituisce una risorsa iniziale per l'ARPA FVG per il monitoraggio della Legionella nella nostra regione e consente di costruire analisi per monitorare e prevedere la diffusione del batterio permettendo di definire le misure di prevenzione e controllo maggiormente efficaci.
 Tuttavia, il lavoro svolto lascia spazio a ulteriori sviluppi e miglioramenti, come, per esempio, l'introduzione di applicativi software per la raccolta e l'inserimento dei dati, attualmente eseguiti manualmente attraverso schede cartacee o fogli elettronici senza l'impiego di procedure standardizzate, e per la consultazione del sistema, che potrebbe risultare complessa per utenti non esperti.
 
 #pagebreak()
@@ -1430,7 +1443,6 @@ BEGIN
 END;
 $$;
 ```
-]
 #pagebreak()
 
 #bibliography("bibliografia.bib", title: "Bibliografia" , style: "ieee")
@@ -1439,7 +1451,7 @@ $$;
 
 = Glossario
 
-#annotation[Al fine di facilitare la comprensione del documento, è redatto il seguente glossario contenente le definizioni dei termini tecnici utilizzati.]
+#annotation[Al fine di facilitare la comprensione dell'elaborato, è redatto il seguente glossario contenente le definizioni dei termini tecnici utilizzati.]
 
 #set par(justify: false)
 
