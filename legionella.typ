@@ -40,24 +40,45 @@ I risultati riferiti alle indagini non clinciche e dunque eseguite routinariamen
 Inoltre, si è osservato che la presenza del batterio ha registrato un notevole incremento tra la seconda metà del 2006 e l'inizio del 2009, seguito da una diminuzione fino al 2013 e da un nuovo aumento negli anni successivi. Questo andamento indica chiaramente che, per ridurre il rischio di diffusione del batterio, è essenziale implementare un piano di prevenzione adeguato, che comprenda sia la manutenzione degli impianti sia la sorveglianza ambientale.
 
 
-== Basi di dati relazionali
-#annotation[Pur riconoscendo l'importanza cruciale della sorveglianza ambientale per il controllo della legionellosi, in Friuli Venezia Giulia, come in molte altre regioni, manca un sistema efficiente per la memorizzazione, la gestione e l'analisi dei dati raccolti. Tale carenza rende estremamente oneroso lavorare con la mole di informazioni raccolte nelle indagini ambientali, ostacolando così lo svolgimento di analisi e ricerche mirate.
-Inoltre, tale mancanza rende poco sicura la conservazione dei dati. La memorizzazione delle informazioni in file di testo o in fogli di calcolo, infatti, non assicura né la protezione né l'integrità dei dati, che potrebbero essere facilmente persi, alterati o resi inconsistenti a causa di errori umani.]
+== Basi di dati
+#annotation[Pur riconoscendo l'importanza cruciale della sorveglianza ambientale per il controllo della legionellosi, in Friuli Venezia Giulia, come in molte altre regioni, manca un sistema efficiente per la memorizzazione, la gestione e l'analisi dei dati raccolti. Tale carenza rende estremamente oneroso lavorare con la mole di informazioni collezionate nelle indagini ambientali, ostacolando così lo svolgimento di analisi e ricerche mirate.
+Inoltre, tale mancanza rende poco sicura la conservazione dei dati. La memorizzazione delle informazioni in file di testo o in fogli di calcolo, infatti, non garantisce né la protezione né l'integrità dei dati, che potrebbero essere facilmente persi, alterati o resi incoerenti a causa di errori umani.]
 
 In questo contesto, i sistemi di basi di dati giocano un ruolo fondamentale, in quanto permettono di memorizzare grandi quantità di dati e di effettuare ricerche complesse in modo rapido ed efficiente.
 
 In particolare, il modello relazionale rappresenta la soluzione più largamente adottata per la memorizzazione delle informazioni. Tale rappresentazione, introdotta per la prima volta dall'informatico inglese Edgar F. Codd attraverso la pubblicazione, nel 1970, dell'articolo "_A Relational Model of Data for Large Shared Data Banks_"#footnote[#cite(<RelationalModel>, form: "full")], sfrutta il concetto di relazione, nella sua coniugazione matematica, per organizzare i dati mediante tabelle, che rappresentano l'insieme delle entità coinvolte nel sistema e delle associazioni tra di esse.
 
-Nello specifico, l'architettura relazionale si propone di rappresentare il dominio informativo, ovvero l'insieme dei dati che si vogliono memorizzare, attraverso tabelle identificate da un nome, con un numero fisso di colonne, dette attributi, e un insieme di righe, denominate tuple, tutte distinte tra loro.
-Questa struttura, in contrapposizione a quelle precedentemente in voga, come quella gerarchica o quella reticolare, si è rivelata particolarmente adatta non solo per la memorizzazione di dati ma anche per la gestione delle relazioni tra essi e l'effettuazione di operazioni complesse. 
-L'efficacia del modello relazionale si deve a  diversi fattori: la struttura a tabelle del modello garantisce intuitività e chiarezza nella rappresentazione dei dati e favorisce elevati standard di sicurezza e integrità dei dati, grazie all'impiego di chiavi primarie ed esterne. Inoltre è supportata l'indipendenza dei dati, ovvero la possibilità di modificare la struttura del database senza dover modificare le applicazioni che vi accedono. Infine, l'introduzione dei RDBMS#footnote("Relational Database Management Systems") ha portato diversi vantaggi sia in termnini di sicurezza, grazie all'impiego delle transazioni ACID#footnote("Acronimo per Atomicity, Consistency, Isolation, Durability"), che garantiscono la coerenza dei dati in ogni momento e la loro persistenza nel tempo, sia in termni di efficienza ed efficacia. In fatti, l'integrazione degli indici, la definizione di linguaggi specifici, come SQL, e l'adozione di alcuni linguaggi di programmazione noti, tra cui python, garantiscono che il modello rimanga una soluzione attuale e facilmente adattabile alle esigenze più moderne.
+Nello specifico, l'architettura relazionale propone di rappresentare il dominio informativo, ovvero l'insieme dei dati che si vogliono memorizzare, attraverso tabelle identificate da un nome, con un numero fisso di colonne, dette attributi, e un insieme di righe, denominate tuple, tutte distinte tra loro.
+Questa struttura supera le principali limitazioni delle analoghe precedentemente in voga, come quella gerarchica e quella reticolare.
+Per essere più specifici, la struttura gerarchica risulta estremamente rigida e comporta, a causa della duplicazione di alcuni valori, un significativo spreco di spazio e un aumento esponenziale della complessità delle interrogazioni, nonché la quasi totale impossibilità di modificare la struttura del database in modo efficiente e a basso costo.
 
-Nell'ambito di questa tesi si ritiene opportuno implementare il sistema tramite un database relazionale. Tale scelta è motivata dalla necessità di garantire la sicurezza, l'integrità e la coerenza dei dati raccolti durante il monitoraggio della Legionella. Inoltre, si ritiene fondamentale fornire un sistema intuitivo e facilmente integrabile con le applicazioni pre-esistenti già in uso dai ricercatori dell'ARPA.
-In questo contesto, si ritiene che il modello relazionale e, più specificamente, il RDBMS PostgreSQL rappresentino una soluzione appropriata per la memorizzazione e la gestione dei dati. D'altra parte, soluzioni alternative, come i database NoSQL, potrebbero presentare limitazioni in termini di integrità e coerenza dei dati, senza tuttavia garantire vantaggi significativi in termini di prestazioni.
+Anche il modello reticolare presenta alcune criticità. Da una parte agevola la rappresentazione di quelle relazioni complesse che il modello gerarchico non riesce a gestire, poiché consente di costruire connessioni multiple per i nodi "figli" con diversi nodi "genitori"; dall'altra, queste stesse connessioni devono essere esplicitate nel processo di costruzione della base di dati e, pertanto, tale modello risulta difficile da mantenere.
+
+Al contrario, il modello relazionale si colloca in un'ottica di maggiore flessibilità, pur mantenendo un'organizzazione dei dati ben strutturata che garantisce la conservazione dell'integrità e della coerenza delle informazioni.
+Più specificamente, l'efficacia del modello relazionale si deve a diversi fattori.
+In primo luogo, la struttura a tabelle garantisce al tempo stesso intuitività e chiarezza nella rappresentazione delle informazioni e, grazie all'impiego di chiavi primarie ed esterne, l'integrità dei dati, nonché un netto miglioramento dell'efficienza delle operazioni di interrogazione e manipolazione dei valori.
+Inoltre, la flessibilità della struttura, relativamente ai modelli sopra citati, le conferisce la proprietà di indipendenza dei dati, sia fisica che logica, ovvero la possibilità di modificare il modo in cui questi sono organizzati oppure alterare lo schema logico del database senza dover riformulare il codice per la connessione con le applicazioni, non direttamente interessate ai campi introdotti o alterati, che vi interagiscono.
+Infine, l'introduzione dei sistemi per la gestione dei databse relazionali (RDBMS), come ad esempio Oracle, PostgreSQL e Mysql, ha introdotto ulteriori vantaggi.
+Questi sitemi, che sono coinvolti sia nella fase di creazione dello schema che in quella di manipolazione dei dati, offrono alcune funzionalità avanzate che facilitano il lavoro degli sviluppatori e degli utenti che interagiscono con il DB.
+Tra queste funzionalità si annoverano la gestione delle transazioni, che implementa la politica ACID#footnote[«_Atomicity represents the fact that a transaction is an indivisible unit of execution. Either all the effects of a transaction are made visible, or the transaction must have no effect on the database, with an 'all or nothing' approach ... Consistency demands that the carrying out of the transaction
+does not violate any of the integrity constraints defined on the database ... Isolation demands that the execution of a transaction is
+independent of the simultaneous execution of other transactions ... Durability, on the other hand, demands that the effect of a transaction that has correctly executed a commit is not lost_» #cite(<DatabaseSystems>, form:"full")] e l'impiego di un linguaggio specifico, ovvero SQL.
+
+Tale linguaggio è stato proposto per la prima volta nel 1974 presso i laboratori dell'IBM. È stato standardizzato a partire dal 1986, con lo sviluppo di SQL-86 da parte dell'American National Standards Institute (ANSI) e, nel 1987, dall'International Organization for Standardization (ISO).
+SQL rappresenta un punto di svolta nel mondo della gestione dei dati, in quanto racchiude tutte le funzionalità tipiche dei linguaggi di definizione, di manipolazione e di interrogazione dei dati, che in precedenza erano tra loro distinti.
+Le fortune di SQL sono legate a diversi aspetti. Su tutti, si notano: la sua semplicità, garantita dalla struttura simil dichiarativa, che lo rende più semplice da comprendere rispetto all'algebra relazionale; la sua portabilità, derivante dalla standardizzazione, che permette di utilizzare lo stesso linguaggio su diversi RDBMS.
+Grazie a queste caratteristiche, SQL è divenuto il linguaggio di riferimento per la gestione dei dati e, pertanto, è continuamente aggiornato e arricchito di nuove funzionalità.
+
+L'ultimo trentennio ha visto l'avvento di nuove tecnologie, come i DB NoSQL. Questi sistemi hanno un ambito applicativo simile a quello del modello relazionale, tuttavia vi sono alcune differenze significative. La principale riguarda la strutturazione delle informazioni che non sono organizzate in tabelle, ma mediante costrutti più flessibili, come documenti, ad esmpio in formato JSON, e grafi. Questa configurazione ha lo scopo di aumentare la scalabilità orizzontale, ovvero la capacità di introdurre nuovi elementi nel sistema, e l'efficienza di interrogazioni complesse, che coinvolgono concatenazioni di relazioni, su dati non strutturati o semi-strutturati. Per queste ragioni, i sistemi NoSQL sono particolarmente adatti per applicazioni real-time. Tuttavia, è preferibile non utilizzarli in contesti critici, dove è fondamentale garantire l'integrità dei dati oppure in cui i dati sono fortemente strutturati.
+
+#linebreak()
+
+Sulla base delle considerazioni precedenti, nell'ambito di questa tesi si ritiene opportuno implementare il sistema tramite un database relazionale. Tale scelta è motivata dalla necessità di garantire l'integrità e la coerenza dei dati raccolti durante il monitoraggio della Legionella. Inoltre, si ritiene fondamentale fornire un sistema intuitivo e facilmente integrabile con le applicazioni pre-esistenti già in uso dai ricercatori dell'ARPA.
+In questo contesto, si considera il modello relazionale e, più specificamente, il RDBMS PostgreSQL una soluzione appropriata per la memorizzazione e la gestione dei dati. Soluzioni alternative, come i database NoSQL, potrebbero presentare limitazioni in termini di integrità e coerenza dei dati, senza tuttavia garantire vantaggi significativi in termini di prestazioni e quindi non vengono prese in considerazione.
 
 == Obiettivo della tesi
 #annotation[Il presente elaborato si propone di delineare gli aspetti principali per la progettazione di un database relazionale destinato alla memorizzazione dei dati relativi alla diffusione della Legionella. 
-Più specificamente, nel @Analisi_critica[capitolo] viene condotta un'analisi critica approfondita di una soluzione pre-esistente, individuandone vantaggi e criticità. Tale analisi costituisce la base per le modifiche proposte nel capitolo successivo, dove vengono introdotte soluzioni migliorative volte ad adattare il sistema alle nuove esigenze emerse durante i colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. La @Progettazione_logica[sezione], invece, è dedicata alla ristrutturazione dello schema originario e alla sua traduzione in un modello logico. Infine, il @Progettazione_fisica[capitolo] si concentra sull'implementazione della base di dati, ponendo particolare attenzione alla definizione dei domini e dei vincoli che garantiscono l'integrità dei dati, oltre che la definizione di alcune relative all'inserimento e alla modifica dei dati.]
+Più specificamente, nel @Analisi_critica[capitolo] viene condotta un'analisi critica approfondita di una soluzione pre-esistente, individuandone vantaggi e criticità. Tale analisi costituisce la base per le modifiche proposte nel capitolo successivo, dove vengono introdotte soluzioni migliorative volte ad adattare il sistema alle nuove esigenze emerse durante i colloqui condotti in collaborazione con i ricercatori dell'ARPA FVG. La @Progettazione_logica[sezione], invece, è dedicata alla ristrutturazione dello schema originario e alla sua traduzione in un modello logico. Infine, il @Progettazione_fisica[capitolo] si concentra sull'implementazione della base di dati, ponendo particolare attenzione alla definizione dei domini e dei vincoli che garantiscono l'integrità dei dati, oltre che la definizione di alcune funzioni relative all'inserimento e alla modifica dei dati.]
 
 #pagebreak()
 
@@ -77,12 +98,12 @@ Il sistema deve consentire la registrazione delle indagini ambientali relative a
 
 
 === Note
-#annotation[Si segnala che la PCR non costituisce un metodo diagnostico definitivo per la legionellosi, ma piuttosto un test di screening che necessita di conferma attraverso la coltura. Infatti, «poiché, così come specificato nella norma ISO “_Water quality- Detection and quantification of Legionella spp and/or Legionella pneumophila by concentration and genic amplification by quantitative polymerase chain reaction (qPCR)_” (ISO/TS 12869, 2012), la qPCR non da informazione riguardo lo stato delle cellule, la quantificazione dovrà sempre essere determinata mediante esame colturale»#footnote[#cite( <LineeGuida>, form:"normal" ),«Linee guida per la prevenzione ed il controllo della legionellosi», p. 21].]
+#annotation[Si segnala che la PCR non costituisce un metodo diagnostico definitivo per la legionellosi, ma piuttosto un test di screening che necessita di conferma attraverso la coltura. Infatti, «poiché, così come specificato nella norma ISO “_Water quality- Detection and quantification of Legionella spp and/or Legionella pneumophila by concentration and genic amplification by quantitative polymerase chain reaction (qPCR)_” (ISO/TS 12869, 2012), la qPCR non da[sic] informazione riguardo lo stato delle cellule, la quantificazione dovrà sempre essere determinata mediante esame colturale»#footnote[#cite( <LineeGuida>, form:"normal" ),«Linee guida per la prevenzione ed il controllo della legionellosi», p. 21].]
 
 Inoltre, si osserva che i metodi analitici utilizzati per la rilevazione del batterio, come indicato nell'allegato 4 delle "Linee Guida per la prevenzione e il controllo della legionellosi"#footnote[#cite( <LineeGuida>, form:"normal" ), «Linee guida per la prevenzione ed il controllo della legionellosi», p. 91], variano in base alla matrice da analizzare (acqua, biofilm, aria); tuttavia, i risultati ottenuti sono espressi in modo uniforme, a prescindere dal tipo di analisi effettuata. Pertanto, considerata l'esigenza di conservare le informazioni relative ai risultati delle analisi sui campioni, si ritiene lecito mantenere le tre tipologie di analisi sopra menzionate, senza ulteriori distinzioni.
 
 == Schema concettuale-logico
-#annotation[Di seguito viene presentato lo schema concettuale-logico del database sviluppato dal dottor Garlatti. Tale schema è stato modellato utilizzando il linguaggio IDEF1X#footnote("Integration DEFinition for information modeling."). Questo linguaggio appartiene alla famiglia dei linguaggi di modellazione IDEF#footnote("https://www.idef.com/"). Per una corretta comprensione dello schema, è essenziale definire i concetti di entità e relazione, che rappresentano i fondamenti della modellazione dei dati.]
+#annotation[Di seguito viene presentato lo schema concettuale-logico del database sviluppato dal dottor Garlatti. Tale schema è stato modellato utilizzando il linguaggio IDEF1X#footnote("Integration DEFinition for information modeling."). Questo linguaggio appartiene alla famiglia dei linguaggi di modellazione IDEF#footnote[#cite(<IDEF>, form:"full")]. Per una corretta comprensione dello schema, è essenziale definire i concetti di entità e relazione, che rappresentano i fondamenti della modellazione dei dati.]
 
 === Notazione IDEF1X
 
@@ -101,7 +122,7 @@ Le relazioni di categorizzazione, invece, sono rappresentate da linee che colleg
 )
 
 
-== Analisi dello schema: Considerazioni e proposte di modifica
+== Considerazioni e proposte di modifica
 #annotation[Lo schema illustrato è stato concepito per rispondere ai requisiti di memorizzazione dei dati relativi alla diffusione della Legionella. Tuttavia, durante una prima fase di analisi del database, sono stati individuati alcuni difetti che richiedono un'accurata valutazione e una eventuale revisione dello schema.]
 
 Alcune entità, come _indirizzo_ e _categoria_, sono state inizialmente progettate come entità autonome, ma potrebbe essere più efficace trattarle come attributi dell'entità _sito_. Questo approccio non solo semplificherebbe lo schema, ma migliorerebbe anche la sua chiarezza strutturale. In particolare, l'attributo descrizione dell'entità _categoria_ è superfluo, poiché il nome della categoria dovrebbe essere sufficiente per identificarla in modo univoco. Inoltre, l'aggiunta di un attributo nome all'entità _sito_ potrebbe facilitare la consultazione dei dati, specialmente per quanto riguarda gli ospedali, che sono generalmente riconosciuti dalla combinazione di nome e città, piuttosto che unicamente dall'indirizzo.
@@ -117,14 +138,14 @@ Inoltre, poiché è possibile prelevare campioni di diversa matrice ambientale, 
 
 Infine, si propone di riorganizzare la disposizione delle entità _indagine ambientale_ e _campione_ all'interno dello schema. In particolare, per come definita nel glossario, un'indagine ambientale non è altro che una collezione di campioni prelevati in un sito specifico in una data determinata. Pertanto, risulta più coerente associare solo l'entità _campione_ alle informazioni spaziali contenute nelle tabelle _punto di prelievo_ e _sito_. Si noti che tale modifica comporta l'introduzione di un vincolo di integrità che stabilisce che tutti i campioni associati a un'indagine devono essere prelevati nello stesso sito.
 
-In questo contesto, appare vantaggioso apportare una modifica alla struttura delle entità _sito_ e _punto di prelievo_ nel modo seguente: si consiglia di aggiungere l'attributo coordinate all'entità _sito_, associandolo a una coppia di coordinate, ad esempio riferite al centro geografico o all'ingresso principale dell'edificio, che costituirebbero una chiave per l'entità. Inoltre, l'entità _punto di prelievo_ potrebbe essere trasformata in un'entità debole rispetto al _sito_, implicitando il vincolo imposto dall'associazione di un punto di prelievo a un sito, secondo il quale un punto di prelievo deve essere situato all'interno del perimetro del sito di cui fa parte. Al _punto di prelievo_ potrebbero essere attribuite proprietà che ne descrivano la posizione all'interno del sito, come il piano, la stanza o il tipo di componente idraulico, da cui è stato prelevato il campione.
+In questo contesto, appare vantaggioso apportare una modifica alla struttura delle entità _sito_ e _punto di prelievo_ nel modo seguente: si consiglia di aggiungere l'attributo coordinate all'entità _sito_, associandolo a una coppia di coordinate, ad esempio riferite al centro geografico o all'ingresso principale dell'edificio, che costituirebbero una chiave per l'entità. Inoltre, l'entità _punto di prelievo_ potrebbe essere trasformata in un'entità debole rispetto al _sito_, implicitando il vincolo imposto dall'associazione di un punto di prelievo a un sito, secondo il quale un punto di prelievo deve essere situato all'interno del perimetro del sito di cui fa parte. Al _punto di prelievo_ potrebbero essere attribuite proprietà che ne descrivano la posizione all'interno del sito, come il piano, la stanza o il tipo di componente idraulica, da cui è stato prelevato il campione.
 
 Complessivamente, gli adeguamenti proposti esercitano un impatto positivo sulla gestione dei vincoli di integrità del database, poiché risultano logicamente più immediati e più facili da implementare rispetto alle soluzioni precedenti, e contribuiscono a fornire una visione ordinata e completa dei dati relativi alla diffusione della Legionella.
 
 #pagebreak()
 === Diagramma E-R che raccoglie le modifiche proposte
 
-#annotation[A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica E-R#footnote[#cite(<DatabaseSystems>, form: "full")] che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.]
+#annotation[A seguito di queste considerazioni, si propone una revisione dello schema. La nuova versione è modellata secondo la notazione classica E-R#footnote[#cite(<DatabaseSystems>) «_Database Systems: Concepts, Languages & Architectures_»] che consente di rappresentare in modo chiaro e conciso le entità, le relazioni e gli attributi del database.]
 #linebreak()
 #linebreak()
 #linebreak()
@@ -158,12 +179,12 @@ Di seguito sono elencati i requisiti, non strutturati, che hanno guidato l'integ
 #linebreak()
 *Dati meteorologici*
 
-Si ritiene opportuno mantenere le informazioni relative agli aspetti meteorologici e climatici dei siti in cui vengono condotte le indagini ambientali, poiché tali dati possono essere utili per valutare l'impatto delle condizioni ambientali sulla diffusione del batterio e per individuare eventuali correlazioni tra la presenza di Legionella e particolari fattori climatici. Tali informazioni sono raccolte presso le stazioni meteorologiche presenti sul territorio e comprendono dati relativi a temperatura, umidità e pressione atmosferica. Nella base di dati si propone di introdurre un'entità denominata _stazione meteorologica_, identificata dalla posizione geografica, che può essere rappresentata attraverso l'indirizzo oppure le coordinate, e che conserva i dati meteorologici raccolti. Questa entità è associata alla tabella _sito_ nel seguente modo: ogni sito è in relazione con la stazione meteorologica più vicina, la quale forsnisce i dati relativi alle condizioni climatiche del luogo.
+Si ritiene opportuno mantenere le informazioni relative agli aspetti meteorologici e climatici dei siti in cui vengono condotte le indagini ambientali, poiché tali dati possono essere utili per valutare l'impatto delle condizioni ambientali sulla diffusione del batterio e per individuare eventuali correlazioni tra la presenza di Legionella e particolari fattori climatici. Tali informazioni sono raccolte presso le stazioni meteorologiche presenti sul territorio e comprendono dati relativi a temperatura, umidità e pressione atmosferica. Nella base di dati si propone di introdurre un'entità denominata _stazione meteorologica_, identificata dalla posizione geografica, che può essere rappresentata attraverso l'indirizzo oppure le coordinate, e che conserva i dati meteorologici raccolti. Questa entità è associata ad un _sito_ nel seguente modo: ogni sito è in relazione con la stazione meteorologica più vicina, la quale forsnisce i dati relativi alle condizioni climatiche del luogo.
 
 #linebreak()
 *Analisi del pH*
 
-Una seconda considerazione riguarda l'opportunità di ampliare il campo di azione delle analisi condotte sui campioni prelevati durante le indagini ambientali. In particolare, si suggerisce di introdurre un nuovo tipo di analisi, denominata _analisi del pH_, volta a misurare il livello di acidità o alcalinità dell'acqua campionata. Questo parametro è di fondamentale importanza per valutare la qualità dell'acqua e la presenza di Legionella, poiché il batterio prospera in acque con pH neutro o leggermente alcalino.
+Una seconda considerazione riguarda l'opportunità di ampliare il campo di azione delle analisi condotte sui campioni prelevati durante le indagini ambientali. In particolare, si suggerisce di introdurre un nuovo tipo di analisi, denominata _analisi del pH_, volta a misurare il livello di acidità o alcalinità dell'acqua campionata. Questo parametro è di fondamentale importanza per valutare la qualità dell'acqua e la presenza di Legionella, poiché, come visto in precedenza, il batterio prospera in acque con pH neutro o leggermente alcalino.
 
 #linebreak()
 *Informazioni genomiche*
@@ -210,12 +231,12 @@ Si osserva che gli unici vincoli di integrità che si rendono necessari sono i s
 
 In ultimo, si segnala che le principali operazioni eseguite sulla base di dati riguardano l'inserimento, la modifica e la cancellazione dei dati. Al contrario, le operazioni di interrogazione sono limitate a un numero ristretto di query, finalizzate a ottenere informazioni di tipo spaziale sui campioni, sulle analisi effettuate e sui risultati ottenuti oppure informazioni genetiche. Pertanto, si preferisce adottare una struttura facilmente manutenibile e ottimizzata per le operazioni fondamentali, che risulta già adeguata per l'esecuzione delle operazioni sopra menzionate, piuttosto che una struttura più complessa, progettata per ottimizzare le interrogazioni, ma che comporterebbe un costo maggiore per la gestione dei dati.
 
-Le considerazioni relative ai vincoli di integrità sono posticipate al capitolo successivo, nel quale, terminata la fase di progettazione, sarà possibile ottenere una visione del tutto trasparente e definitiva delle entità coinvolte nel sistema dei relativi attributi e delle relazioni tra di esse.
+Le considerazioni relative ai vincoli di integrità sono posticipate al @Progettazione_fisica[capitolo], nel quale, una volta terminata la fase di progettazione, sarà possibile ottenere una visione del tutto trasparente e definitiva delle entità coinvolte nel sistema dei relativi attributi e delle relazioni tra di esse.
 
 #pagebreak()
 = Progettazione logica della base di dati <Progettazione_logica>
 
-== Ristrutturazione del modello concettuale: Sempliﬁcazione delle generalizzazioni e degli attributi composti
+== Ristrutturazione del modello concettuale
 
 #annotation[Ultimata la fase di progettazione concettuale della base di dati, è opportuno effettuare un'ultima revisione del modello al fine di elaborarne la struttura finale, priva di elementi discrezionali. In questa unità sono riportate le modifiche, congiuntamente alle motivazioni che le guidano, apportate allo schema E-R proposto al #ref(<ER_aggiornato>, supplement: "paragrafo"), con l'obbiettivo di risolvere generalizzazioni, attributi composti e attributi multivalori presenti in figura.]
 
@@ -259,7 +280,7 @@ Per esempio, l'implementazione di un'interrogazione per la ricerca di tutti i ca
 #pagebreak()
 
 
-== Illustrazione delle decisioni di progettazione nella trasformazione dal modello concettuale a quello logico
+== Trasposizione del modello concettuale in modello logico
 #annotation[La trasposizione del modello concettuale in quello logico comporta la definizione delle tabelle, dei rispettivi campi, e quindi dei domini, delle chiavi primarie e delle modalità di associazione tra le tabelle. In questa sezione vengono presentate le scelte progettuali adottate.]
 
 La traduzione delle entità in tabelle è diretta e non comporta particolari difficoltà. Ogni entità, infatti, è rappresentata mediante una matrice in cui ogni attributo corrisponde a una colonna.
@@ -267,7 +288,7 @@ La traduzione delle entità in tabelle è diretta e non comporta particolari dif
 Per quanto riguarda le relazioni, è essenziale considerare tre tipologie fondamentali: le relazioni uno a uno, le relazioni uno a molti e le relazioni molti a molti. Le relazioni uno a uno sono le più complesse in quanto non è immediatamente chiaro quale entità debba essere scelta per mappare la relazione, ovvero in quale entità inserire la chiave esterna. Nel nostro contesto si presentano due situazioni principali: la relazione autoreferenziale tra i geni del genoma e la relazione tra i campioni e le analisi.
 Nel primo caso, la relazione è mappata sull'entità _gene del genoma_ poiché, sebbene gli strumenti di analisi presentino alcune limitazioni, nella maggioranza dei genomi analizzati esiste un'effettiva sequenzialità tra i geni. Pertanto lo spazio sprecato a causa della mancanza di informazioni è limitato e dunque non giustifica l'introduzione di una nuova tabella che, pur limitando lo spazio utilizzato, porterebbe problemi di integrità e complessità.
 
-Per quanto riguarda le relazioni tra campioni e analisi, si è deciso di mappare la relazione sull'entità _analisi_. Si osserva che la soluzione alternativa, ovvero quella di mappare la relazione sull'entità _campione_, potrebbe comportare perdite di spazio a causa della presenza di campioni non analizzati rispetto ad un esame specifico.
+Per quanto concerne le relazioni tra campioni e analisi, si è deciso di mappare la relazione sull'entità _analisi_. Si osserva che la soluzione alternativa, ovvero quella di mappare la relazione sull'entità _campione_, potrebbe comportare perdite di spazio a causa della presenza di campioni non analizzati rispetto ad un esame specifico.
 
 Le relazioni uno a molti, invece, sono più semplici da gestire, in quanto la chiave esterna è necessariamente inserita nell'entità che rappresenta il lato "uno" della relazione. Infine, le relazioni molti a molti sono gestite mediante l'introduzione di una tabella di associazione che contiene le chiavi esterne delle due entità coinvolte.
 
@@ -353,10 +374,10 @@ CREATE DOMAIN LONGITUDINE AS REAL
 ```
 
 === Note
-Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici del batterio, come ad esempio _Draft genome sequences from 127 Legionella spp. strains isolated in water systems linked to legionellosis outbreaks_#footnote[#cite(<DraftGenome>, form:"full")], è emerso che la lun
+Sulla base delle osservazioni riportate in diversi articoli scientifici riguardanti lo studio degli aspetti genetici del batterio, come ad esempio "_Draft genome sequences from 127 Legionella spp. strains isolated in water systems linked to legionellosis outbreaks_"#footnote[#cite(<DraftGenome>, form:"full")], è emerso che la lun
 ghezza media del genoma di Legionella pneumophila è di circa 3.500.000 coppie di basi, con una significativa variabilità tra i genomi sequenziati.
 
-In considerazione alle dimensioni dell'oggetto, si propone di assegnare un dominio di tipo text#footnote("https://www.postgresql.org/docs/current/datatype-character.html"). Questo tipo di dato consente la memorizzazione di stringhe di lunghezza arbitraria, risultando particolarmente adatto per la conservazione di sequenze di DNA.
+In considerazione alle dimensioni del dato, si propone di assegnare un dominio di tipo text#footnote("https://www.postgresql.org/docs/current/datatype-character.html"). Questo tipo di dato consente la memorizzazione di stringhe di lunghezza arbitraria, risultando particolarmente adatto per la conservazione di sequenze di DNA.
 
 Si evidenzia inoltre che, in termini di occupazione della memoria, la politica TOAST#footnote("https://www.postgresql.org/docs/current/storage-toast.html") tipica di PostgreSQL consente una gestione efficiente anche per attributi di grandi dimensioni, allocando i dati in pagine separate e comprimendoli per ridurre lo spazio complessivo occupato.
 #pagebreak()
@@ -371,7 +392,7 @@ Per ragioni di spazio vengono forniti alcuni esempi di creazione delle tabelle, 
 
 Un aspetto rilevante riguarda la cancellazione di un campione. In generale, si ritiene opportuno di eliminare i dati associate al campione, poiché perderebbero di significato in sua assenza. Tuttavia, si propone di impedire l'operazione di cancellazione qualora il campione sia associato ad un'analisi del genoma. Tale decisione è finalizzata a interrompere la catena di eliminazione che coinvolgerebbe tutte le informazioni relative ai dati genomici osservati, al fine di evitare l'eliminazione accidentale di una grande quantità di dati.
 Si osserva che, per eliminare un campione, sarà sufficiente rimuovere preventivamente l'eventuale analisi genomica associata, dopodiché sarà possibile procedere con la cancellazione del campione stesso.
-A  titolo di esempio si riportano le tabelle _analisi PCR_ e _analisi del genoma_
+A  titolo di esempio si riportano le tabelle _analisi PCR_ e _analisi del genoma_.
 
 ```SQL
 -- Analisi PCR
@@ -443,7 +464,7 @@ CREATE TABLE Gene_del_genoma (
 #linebreak()
 *Sito*
 
-In ultimo, si riporta una nota riguardante la tabella sito. Poiché si desidera collegare ciascun sito alla stazione meteorologica più vicina, le operazioni di aggiornamento e cancellazione delle stazioni sono risolte mediante l'applicazione di un trigger, che associa automaticamente tutti i siti legati alla stazione interessata alla stazione meteorologica più vicina. Di conseguenza, non è necessario definire un vincolo di chiave esterna per tale tabella. Una trattazione più approfondita sarà fornita nei capitoli successuvi.]
+In ultimo, si riporta una nota riguardante la tabella sito. Poiché si desidera collegare ciascun sito alla stazione meteorologica più vicina, le operazioni di aggiornamento e cancellazione delle stazioni sono risolte mediante l'applicazione di un trigger, che associa automaticamente tutti i siti legati alla stazione interessata alla stazione meteorologica più vicina. Di conseguenza, non è necessario definire un vincolo di chiave esterna per tale tabella. Una trattazione più approfondita sarà fornita nei capitoli successivi.
 
 Per ragioni di efficienza è consigliabile definire un indice spaziale per le colonne latitudine e longitudine delle tabelle _sito_ e _stazione meteorologica_. Questo indice consente di migliorare le prestazioni delle interrogazioni che utilizzano operazioni di ricerca basate sulla distanza tra due punti sulla superficie terrestre. In termini implementativi, si introduce un campo di tipo geometry#footnote("https://postgis.net/docs/geometry.html") del pacchetto PostGis#footnote[#cite(<PostGIS>, form: "full")], corrispondente alle coordinate geografiche. Successivamente, si definisce un indice spaziale su questo campo che permette di ottimizzare le operazioni di ricerca spaziale.
 
@@ -480,7 +501,7 @@ Inoltre, l'operazione di aggiunta di una nuova _stazione meteorologica_ o _sito_
 == Definizione dei vincoli
 #annotation[A questo punto si dispone di una visione completa e definitiva della struttura del database, che rende possibile analizzare le criticità non risolte dallo schema attuale. In questa sezione sono presentati i vincoli di integrità necessari per garantire la consistenza dei dati all'interno del database, insieme alle motivazioni che ne determinano l'introduzione.]
 
-=== Gestione della chiave esterna relativa alla tabella _Sito_ <gestione_sito>
+=== Chiave esterna relativa alla tabella _Sito_ <gestione_sito>
 #annotation[In questo paragrafo si affrontano le problematiche relative alla cancellazione e all'aggiornamento di una stazione meteorologica, come accennato nel capitolo precedente. Poiché si desidera associare ciascun sito alla stazione meteorologica più vicina, si propone di implementare un trigger che, in caso di cancellazione o aggiornamento di una stazione meteorologica, assegni automaticamente a tutti i siti precedentemente collegati alla stazione interessata la stazione meteorologica più vicina. Questa soluzione evita l'utilizzo di un vincolo RESTRICT, il quale renderebbe più complessa la gestione delle operazioni di cancellazione e aggiornamento.]
 
 In dettaglio, il trigger di aggiornamento si occupa di aggiornare la stazione meteorologica associata a ciascun sito, sostituendola con quella più vicina in seguito alla modifica delle coordinate o all'inserimento di una stazione meteorologica. Il trigger di cancellazione, invece, impedisce l'eliminazione totale delle stazioni meteorologiche, assicurando che almeno una stazione meteorologica sia associata a ciascun sito. Se la cancellazione è possibile, il trigger aggiorna le coordinate riferite alle stazioni meteorologiche dei siti coinvolti, sostituendole con quelle degli osservatori più vicini.
@@ -540,7 +561,7 @@ EXECUTE FUNCTION update_stazione_meteorologica_on_delete();
 
 Si consideri, in primo luogo, l'entità analisi colturale. La corretta formazione dei dati registrati a seguito di ciascuna analisi richiede l'applicazione dei seguenti vincoli di integrità relativi ai casi di positività del campione: ad ogni campione negativo non deve essere associato alcun sierogruppo; ad ogni campione positivo deve essere associato un valore di unità formanti colonia per litro (ufc/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore pari a zero.
 
-Per quanto riguarda l'entità analisi PCR, invece, si applica il seguente vincolo: ad ogni campione positivo deve essere associato un valore di microgrammi per litro (µg/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore pari a zero.
+Per quanto concerne l'entità analisi PCR, invece, si applica il seguente vincolo: ad ogni campione positivo deve essere associato un valore di microgrammi per litro (µg/l) maggiore di zero, mentre ad ogni campione negativo deve essere associato il valore pari a zero.
 
 Per ragioni di spazio, si riporta esclusivamente il codice relativo ai vincoli riguardanti l'_analisi colturale_. Il codice che implementa la funzione di controllo per la tabella _analisi PCR_ è analogo, con l'eccezione che non prevede condizioni relative al sierotipo, ed è consultabile in appendice.
 
@@ -597,8 +618,8 @@ EXECUTE FUNCTION check_campione_indagine();
 #linebreak()
 *Geni*
 
-Infine, per quanto riguarda l'entità _gene del genoma_ è necessario considerare attentamente la relazione di sequenzialità tra i genii è consigliabile l'introduzione di vincoli che garantiscano che a un gene di un genoma non possa essere associato un gene di un genoma diverso, né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto a quello con cui si intende stabilire la relazione, ma minore rispetto al gene considerato.
-Questo vincolo è necessario per garantire la corretta rappresentazione della sequenza genetica di Legionella e prevenire eventuali situazioni di inconsistenza.
+Infine, per quanto riguarda l'entità _gene del genoma_ è necessario considerare attentamente la relazione di sequenzialità tra i geni. È consigliabile l'introduzione di alcuni vincoli che garantiscano che a un gene di un genoma non possa essere associato un gene di un genoma diverso, né se stesso, né possa essere associato a un altro gene dello stesso genoma, qualora esistano altri geni con posizione assoluta maggiore rispetto a quello con cui si intende stabilire la relazione, ma minore rispetto al gene considerato.
+L'imposizione di queste condizioni è necessaria per garantire la corretta rappresentazione della sequenza genetica della Legionella e prevenire eventuali situazioni di inconsistenza dei dati.
 
 ```SQL
 CREATE OR REPLACE FUNCTION check_genoma()
@@ -642,7 +663,7 @@ EXECUTE FUNCTION check_predecessore();
 ```
 #pagebreak()
 
-== Definizione dei trigger per la gestione delle istanze divenute isolate a seguito di operazioni di cancellazione o aggiornamento
+== Definizione dei trigger per la gestione delle istanze isolate
 #annotation[Prima di procedere con l'implementazione di alcune operazioni notevoli, è essenziale definire opportuni trigger che consentano di gestire, in modo conforme a una politica ben definita, le operazioni di cancellazione e aggiornamento relative a determinate tabelle. Questi trigger servono a prevenire situazioni in cui alcune entry risultino "prive" di significato a seguito di modifiche o cancellazioni di altre entry a cui erano precedentemente collegate.]
 
 #linebreak()
@@ -658,7 +679,7 @@ Un altro aspetto fondamentale riguarda la gestione delle entry relative ai richi
 Per quanto concerne le altre tabelle del database, si ritiene non necessario implementare trigger per gestire le operazioni di cancellazione o aggiornamento. Queste tabelle, infatti, contengono entità sostanzialmente stabili che mantengono la loro validità anche in assenza di entry collegate, poiché potrebbero essere riutilizzate in futuro.
 
 Si riporta solamente il codice relativo alla definizione del trigger per la gestione delle operazioni di cancellazione di un'indagine ambientale.
-Altri trigger, analoghi a quello mostrato, sono stati implementati per le tabelle _Richiedente_ e _FollowUp_clinico_ e sono consultabili in appendice.
+Altri analoghi a quello mostrato sono stati implementati per le tabelle _Richiedente_ e _FollowUp_clinico_ e sono consultabili in appendice.
 
 ```SQL
 CREATE OR REPLACE FUNCTION delete_indagine()
@@ -684,11 +705,12 @@ EXECUTE FUNCTION delete_indagine();
 
 == Operazioni di inserimento e aggiornamento<query>
 
-#annotation[L'ultima sezione di questo elaborato è dedicata alla ridefinizione di alcune operazioni di inserimento o aggiornamento, con l'obbiettivo di aggevolare la fruizione della base di dati per gli utenti.]
+#annotation[L'ultima sezione di questo elaborato è dedicata alla ridefinizione di alcune operazioni di inserimento o aggiornamento, con l'obbiettivo di agevolare la fruizione della base di dati per gli utenti.]
 
-=== Inserimento e aggiornamento di una nuova stazione meteorologica
+#linebreak()
+*Stazione meteorologica*
 
-#annotation[Una prima operazione di rilievo riguarda l'inserimento di una nuova stazione meteo. Per questa operzione è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Questa soluzione è particolarmente utile per garantire la coerenza dei dati: infatti, evita che le coordinate geografiche e il punto geografico associato siano inseriti in modo non corrispondente e semplifica l'operazione per l'utente. Si sottolinea che l'operazione di aggiornamento è del tutto analoga a quella di inserimento; pertanto, di seguito, si riporta solamente il codice per l'inserimento di una nuova stazione meteo, mentre quello relativo all'aggiornamento è consultabile in appendice.]
+Una prima operazione di rilievo riguarda l'inserimento di una nuova stazione meteo. Per questa operzione è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Questa soluzione è particolarmente utile per garantire la coerenza dei dati: infatti, evita che le coordinate geografiche e il punto geografico associato siano inseriti in modo non corrispondente e semplifica l'operazione per l'utente. Si sottolinea che l'operazione di aggiornamento è del tutto analoga a quella di inserimento; pertanto, di seguito, si riporta solamente il codice per l'inserimento di una nuova stazione meteo, mentre quello relativo all'aggiornamento è visionabile in appendice.
 
 ```SQL
 CREATE OR REPLACE FUNCTION insert_stazione_meteorologica(
@@ -717,10 +739,10 @@ $$;
 ```
 
 #linebreak()
-=== Inserimento e aggiornamento di un nuovo sito
+*Sito*
 
-#annotation[Un secondo aspetto di rilievo riguarda l'inserimento o l'aggiornamento di sito. Anche in questo caso, è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Inoltre, è necessario referenziare automaticamente il sito alla stazione meteorologica più vicina. Tale collegamento al momento della creazione di una nuova entry nella tabella sito è garantita dall'impiego, nella funzione di inserimento, di una user define function quasi del tutto analoga a quelle viste nel @gestione_sito[paragrafo] che calcola la distanza tra il sito e le stazioni meteorologiche presenti nel database e associa il sito alla stazione più vicina.
-Di seguito si riporta il codice per l'operazione di aggiornamento. Per la consoltazione del codice relativo all'inserimento si rimanda all'appendice.]
+Un secondo punto di interesse riguarda l'inserimento o l'aggiornamento di sito. Anche in questo caso, è opportuno definire una funzione che, a partire dalle coordinate geografiche inserite dall'utente, calcoli il punto geografico associato. Inoltre, è necessario referenziare automaticamente il sito alla stazione meteorologica più vicina. Tale collegamento al momento della creazione di una nuova entry nella tabella sito è garantita dall'impiego, nella funzione di inserimento, di una user-defined function quasi del tutto analoga a quelle viste nel @gestione_sito[paragrafo] che calcola la distanza tra il sito e le stazioni meteorologiche presenti nel database e associa il sito alla stazione più vicina.
+Di seguito si riporta il codice per l'operazione di aggiornamento. Per la consoltazione del codice relativo all'inserimento si rimanda all'appendice.
 
 ```SQL
 CREATE OR REPLACE FUNCTION update_sito(
@@ -786,7 +808,7 @@ $$;
 #pagebreak()
 
 = Conclusioni
-#annotation[Questa tesi ha illustrato l'intero processo di sviluppo di un database relazionale per la gestione dei dati relativi al monitoraggio del batterio Legionella raccolti nell'ambito delle indagini svolte dall'ARPA FVG. In particolare, nei primi capitoli è stata condotta un'analisi approfondita di un progetto pre-esistente, evidenziandone i punti di forza e le criticità, e proponendo un nuovo modello concettuale in grado di risolvere le problematiche riscontrate e integrare nuove funzionalità richieste dagli stakeholders. Successivamente, nel @Progettazione_logica[capitolo] è stato definito lo schema logico del database, seguendo i principi del modello relazionale descritti nel volume "Database Systems#footnote[#cite(<DatabaseSystems>) «_Database Systems: Concepts, Languages & Architectures_»]".
+#annotation[Questa tesi ha illustrato l'intero processo di sviluppo di un database relazionale per la gestione dei dati relativi al monitoraggio del batterio Legionella raccolti nell'ambito delle indagini svolte dall'ARPA FVG. In particolare, nei primi capitoli è stata condotta un'analisi approfondita di un progetto pre-esistente, evidenziandone i punti di forza e le criticità, ed è stato proposto un nuovo modello concettuale in grado di risolvere le problematiche riscontrate e integrare alcune nuove funzionalità richieste dagli stakeholders. Successivamente, nel @Progettazione_logica[capitolo] è stato definito lo schema logico del database, seguendo i principi del modello relazionale descritti nel volume "Database Systems#footnote[#cite(<DatabaseSystems>) «_Database Systems: Concepts, Languages & Architectures_»]".
 Infine, nella @Progettazione_fisica[seizione] è stato presentato il codice SQL per la creazione delle tabelle, la definizione degli indici spaziali e dei vincoli di integrità, oltre che per la gestione di alcune operazioni di inserimento e aggiornamento, corredato delle motivazioni che ne hanno guidato l'implementazione.]
 
 Il prodotto di questo elaborato costituisce una risorsa iniziale per l'ARPA FVG per il monitoraggio della Legionella nella nostra regione e consente di costruire analisi per monitorare e prevedere la diffusione del batterio permettendo di definire le misure di prevenzione e controllo maggiormente efficaci.
@@ -1271,7 +1293,7 @@ FOR EACH ROW
 EXECUTE FUNCTION delete_richiedente_follow_up();
 ```
 
-== Creazione di user define function per inserimento e aggiornamento
+== Definizione di funzioni per le operazioni di inserimento e aggiornamento
 
 ```SQL
 -- 1. Inserimento di una stazione meteorologica
